@@ -66,7 +66,7 @@ export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius
             // Show tooltip
             const tooltip = d3.select('#tooltip');
             tooltip.style('display', 'block')
-                .html(`${d.n}\\${edoValue}, ${d.centValue.toFixed(2)} cents`);
+                .html(`${d.n}\\${edoValue}, ${d.centValue.toFixed(2)}¢`);
         })
         .on('mousemove', function(event, d) {
             // Update tooltip position as the mouse moves

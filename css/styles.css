@@ -45,3 +45,40 @@ body {
 .ji-line {
     cursor: pointer; /* Changes cursor to pointer when hovering over lines */
 }
+
+/* Style for MOS generator line and circle */
+#mos-group line {
+    cursor: pointer;
+}
+
+#mos-group circle {
+    cursor: pointer;
+}
+
+#mos-controls {
+    margin-top: 20px;
+}
+
+#mos-controls label {
+    margin-right: 10px;
+}
+
+#mos-stacks-input {
+    width: 50px;
+}
+
+.mos-generator-line {
+    cursor: pointer;
+}
+
+/* Style for the stationary line at 0 cents */
+.mos-stationary-line {
+    stroke: rgba(0, 0, 0, 0);
+    stroke-width: 1;
+}
+
+/* Style for MOS text */
+#mos-text {
+    font-size: 24px;
+    fill: black;
+}
