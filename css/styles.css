@@ -1,0 +1,41 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+#controls {
+    margin: 20px;
+}
+
+#controls h2 {
+    margin-top: 0;
+}
+
+#controls label {
+    margin-right: 10px;
+}
+
+#visualization {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    position: relative; /* Ensure tooltip positions correctly */
+}
+
+.tooltip {
+    position: absolute;
+    background-color: white;
+    border: 1px solid black;
+    padding: 5px;
+    pointer-events: none;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10; /* Ensure the tooltip appears above other elements */
+}
+
+/* Adjust the width of the EDO input box */
+#edo-input {
+    width: 60px; /* Adjust the width as needed */
+}
