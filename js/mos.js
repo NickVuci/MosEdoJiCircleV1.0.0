@@ -69,20 +69,26 @@ export function renderMOS(svg, centerX, centerY, radius) {
             }
         });
 
-        // Display "xL y s" above the circle (lowercase 's')
-        const mosTextContent = `${largeStepCount}L ${smallStepCount}s`;
-        const mosText = svg.select('#mos-text');
-        if (mosText.empty()) {
-            svg.append('text')
-                .attr('id', 'mos-text')
-                .attr('x', centerX)
-                .attr('y', centerY - radius - 20)
-                .attr('text-anchor', 'middle')
-                .attr('fill', 'black')
-                .attr('font-size', '24px')
-                .text(mosTextContent);
+        // Only display the label if smallStepCount is greater than zero
+        if (smallStepCount > 0) {
+            // Display "xL y s" above the circle (lowercase 's')
+            const mosTextContent = `${largeStepCount}L ${smallStepCount}s`;
+            const mosText = svg.select('#mos-text');
+            if (mosText.empty()) {
+                svg.append('text')
+                    .attr('id', 'mos-text')
+                    .attr('x', centerX)
+                    .attr('y', centerY - radius - 20)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', 'black')
+                    .attr('font-size', '24px')
+                    .text(mosTextContent);
+            } else {
+                mosText.text(mosTextContent);
+            }
         } else {
-            mosText.text(mosTextContent);
+            // Remove MOS text if it exists
+            svg.select('#mos-text').remove();
         }
     } else {
         // Remove MOS text if it exists
