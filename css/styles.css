@@ -41,6 +41,13 @@ body {
     width: 60px; /* Adjust the width as needed */
 }
 
+/* Adjust the size of input boxes */
+#mos-generator-input,
+#mos-stacks-input,
+#odd-limit-input {
+    width: 60px; /* Adjust as needed */
+}
+
 /* Style for JI lines */
 .ji-line {
     cursor: pointer; /* Changes cursor to pointer when hovering over lines */
