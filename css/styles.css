@@ -9,7 +9,7 @@ body {
 }
 
 #controls h2 {
-    margin-top: 0;
+    margin-top: 20px;
 }
 
 #controls label {
@@ -39,4 +39,9 @@ body {
 /* Adjust the width of the EDO input box */
 #edo-input {
     width: 60px; /* Adjust the width as needed */
+}
+
+/* Style for JI lines */
+.ji-line {
+    cursor: pointer; /* Changes cursor to pointer when hovering over lines */
 }
