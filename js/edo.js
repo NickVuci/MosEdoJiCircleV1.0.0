@@ -67,18 +67,25 @@ export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius
             const tooltip = d3.select('#tooltip');
             tooltip.style('display', 'block')
                 .html(`${d.n}\\${edoValue}, ${d.centValue.toFixed(2)} cents`);
-
-            // Position tooltip relative to the mouse pointer
-            const [mouseX, mouseY] = d3.pointer(event, svg.node());
-            tooltip.style('left', `${mouseX + 15}px`)
-                .style('top', `${mouseY + 15}px`);
         })
         .on('mousemove', function(event, d) {
             // Update tooltip position as the mouse moves
+
+            // Get the position of the #visualization div
+            const visualizationDiv = document.getElementById('visualization');
+            const rect = visualizationDiv.getBoundingClientRect();
+
+            // Get the mouse position relative to the visualization div
+            const mouseX = event.clientX - rect.left;
+            const mouseY = event.clientY - rect.top;
+
+            // Adjust the offset values as needed
+            const offsetX = 15; // Adjust this value to change horizontal distance
+            const offsetY = 15; // Adjust this value to change vertical distance
+
             const tooltip = d3.select('#tooltip');
-            const [mouseX, mouseY] = d3.pointer(event, svg.node());
-            tooltip.style('left', `${mouseX + 15}px`)
-                .style('top', `${mouseY + 15}px`);
+            tooltip.style('left', `${mouseX + offsetX}px`)
+                   .style('top', `${mouseY + offsetY}px`);
         })
         .on('mouseout', function(event, d) {
             d3.select(this)
