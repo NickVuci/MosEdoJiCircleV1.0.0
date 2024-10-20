@@ -1,7 +1,7 @@
 // ji.js
 
 export function renderJI(svg, centerX, centerY, radius) {
-    // Get selected primes
+    // Get selected primes (excluding 2, which is always included)
     const selectedPrimes = [];
     d3.selectAll('#prime-checkboxes input[type="checkbox"]:checked').each(function() {
         selectedPrimes.push(+this.value);
@@ -16,10 +16,17 @@ export function renderJI(svg, centerX, centerY, radius) {
     // Scale for line length (extend lines 20% beyond the circle's radius)
     const lineLength = radius * 1.2;
 
-    // Color scale for prime limits
-    const colorScale = d3.scaleOrdinal()
-        .domain(selectedPrimes)
-        .range(d3.schemeCategory10);
+    // Fixed color mapping for prime limits
+    const primeColors = {
+        2: '#1f77b4',   // Blue
+        3: '#ff7f0e',   // Orange
+        5: '#2ca02c',   // Green
+        7: '#d62728',   // Red
+        11: '#9467bd',  // Purple
+        13: '#8c564b',  // Brown
+        17: '#e377c2',  // Pink
+        19: '#7f7f7f',  // Gray
+    };
 
     // Draw lines and add tooltips
     const jiGroup = svg.select('#ji-group');
@@ -34,6 +41,9 @@ export function renderJI(svg, centerX, centerY, radius) {
         const x = centerX + lineLength * Math.cos(angle);
         const y = centerY + lineLength * Math.sin(angle);
 
+        // Determine line color based on prime limit
+        const lineColor = primeColors[interval.primeLimit];
+
         // Draw line
         svg.select('#ji-group')
             .append('line')
@@ -41,7 +51,7 @@ export function renderJI(svg, centerX, centerY, radius) {
             .attr('y1', centerY)
             .attr('x2', x)
             .attr('y2', y)
-            .attr('stroke', colorScale(interval.primeLimit))
+            .attr('stroke', lineColor)
             .attr('stroke-width', 2)
             .attr('class', 'ji-line')
             .on('mouseover', function(event) {
@@ -132,13 +142,16 @@ function generateIntervals(selectedPrimes, oddLimit) {
             // Only include intervals within 0 to 1200 cents
             if (cents < 0 || cents >= 1200) continue;
 
-            // Calculate prime limit
+            // Calculate prime limit (excluding 2)
             const primesInNum = primeFactors(simplifiedNum);
             const primesInDen = primeFactors(simplifiedDen);
             const allPrimes = [...new Set([...primesInNum, ...primesInDen])];
-            const primeLimit = Math.max(...allPrimes);
 
-            // Check if the interval's prime limit is in the selected primes
+            // Remove 2 from the list of primes for prime limit calculation
+            const primesExcludingTwo = allPrimes.filter(prime => prime !== 2);
+            const primeLimit = primesExcludingTwo.length > 0 ? Math.max(...primesExcludingTwo) : 2;
+
+            // Check if the interval's prime limit (excluding 2) is in the selected primes
             if (!selectedPrimes.includes(primeLimit)) continue;
 
             intervals.push({
