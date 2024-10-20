@@ -14,87 +14,18 @@ export function renderMOS(svg, centerX, centerY, radius) {
     // Initialize array to store cent values of the notes
     let scaleCents = [];
 
-    // Add the stationary line at 0 cents (invisible and non-interactive)
-    const zeroAngle = -Math.PI / 2;
-    const zeroX = centerX + radius * Math.cos(zeroAngle);
-    const zeroY = centerY + radius * Math.sin(zeroAngle);
-
-    mosGroup.append('line')
-        .attr('class', 'mos-stationary-line')
-        .attr('x1', centerX)
-        .attr('y1', centerY)
-        .attr('x2', zeroX)
-        .attr('y2', zeroY)
-        .attr('stroke', 'none') // Make the line invisible
-        .attr('pointer-events', 'none'); // Disable mouse events
-
     // Include 0 cents in scaleCents
     scaleCents.push(0);
 
     // Initialize cumulative generator
     let cumulativeCents = 0;
 
-    // Loop to draw lines for each stack
+    // Calculate all scale degrees first
     for (let i = 1; i <= numStacks; i++) {
         cumulativeCents += generatorCents;
         // Normalize cumulativeCents to 0-1200 cents
         const normalizedCents = ((cumulativeCents % 1200) + 1200) % 1200;
-
-        // Add to scaleCents array
         scaleCents.push(normalizedCents);
-
-        // Calculate the angle for the cumulative generator
-        const angle = (normalizedCents / 1200) * 2 * Math.PI - Math.PI / 2;
-
-        // Calculate the end point of the generator line
-        const x = centerX + radius * Math.cos(angle);
-        const y = centerY + radius * Math.sin(angle);
-
-        // Draw the generator line
-        mosGroup.append('line')
-            .attr('class', 'mos-generator-line')
-            .attr('x1', centerX)
-            .attr('y1', centerY)
-            .attr('x2', x)
-            .attr('y2', y)
-            .attr('stroke', 'purple')
-            .attr('stroke-width', 2);
-
-        // Add a circle at the end of the line
-        mosGroup.append('circle')
-            .attr('cx', x)
-            .attr('cy', y)
-            .attr('r', 4)
-            .attr('fill', 'purple')
-            .attr('stroke', 'black')
-            .on('mouseover', function(event) {
-                // Show tooltip
-                const tooltip = d3.select('#tooltip');
-                tooltip.style('display', 'block')
-                    .html(`Stack ${i}: ${normalizedCents.toFixed(2)}¢`);
-
-                // Position tooltip
-                const visualizationDiv = document.getElementById('visualization');
-                const rect = visualizationDiv.getBoundingClientRect();
-                const mouseX = event.clientX - rect.left;
-                const mouseY = event.clientY - rect.top;
-                tooltip.style('left', `${mouseX + 15}px`)
-                    .style('top', `${mouseY + 15}px`);
-            })
-            .on('mousemove', function(event) {
-                // Update tooltip position
-                const tooltip = d3.select('#tooltip');
-                const visualizationDiv = document.getElementById('visualization');
-                const rect = visualizationDiv.getBoundingClientRect();
-                const mouseX = event.clientX - rect.left;
-                const mouseY = event.clientY - rect.top;
-                tooltip.style('left', `${mouseX + 15}px`)
-                    .style('top', `${mouseY + 15}px`);
-            })
-            .on('mouseout', function() {
-                // Hide tooltip
-                d3.select('#tooltip').style('display', 'none');
-            });
     }
 
     // Now, check if the intervals between the notes have exactly two distinct sizes
@@ -116,9 +47,10 @@ export function renderMOS(svg, centerX, centerY, radius) {
     // Find the unique interval sizes
     const uniqueIntervals = [...new Set(intervals.map(interval => interval.toFixed(5)))]; // use toFixed to handle floating point inaccuracies
 
-    if (uniqueIntervals.length === 2) {
-        // It's a MOS scale
+    let isMOS = uniqueIntervals.length === 2;
 
+    // If it's an MOS, determine the counts
+    if (isMOS) {
         // Determine which interval is the large step and which is the small step
         const intervalValues = uniqueIntervals.map(parseFloat).sort((a, b) => a - b);
         const smallStepSize = intervalValues[0];
@@ -155,5 +87,66 @@ export function renderMOS(svg, centerX, centerY, radius) {
     } else {
         // Remove MOS text if it exists
         svg.select('#mos-text').remove();
+    }
+
+    // Now, draw the lines and dots
+    for (let i = 0; i < scaleCents.length; i++) {
+        const normalizedCents = scaleCents[i];
+        const angle = (normalizedCents / 1200) * 2 * Math.PI - Math.PI / 2;
+
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
+
+        // Determine line style
+        let lineStrokeWidth = isMOS ? 4 : 3; // Increase width when it's MOS
+        let lineColor = isMOS ? '#800080' : 'purple'; // Brighter color when MOS (using a hex code)
+        let lineOpacity = isMOS ? 1 : 0.7;
+
+        // Draw the generator line
+        mosGroup.append('line')
+            .attr('class', 'mos-generator-line')
+            .attr('x1', centerX)
+            .attr('y1', centerY)
+            .attr('x2', x)
+            .attr('y2', y)
+            .attr('stroke', lineColor)
+            .attr('stroke-width', lineStrokeWidth)
+            .attr('stroke-opacity', lineOpacity);
+
+        // Add a circle at the end of the line
+        mosGroup.append('circle')
+            .attr('cx', x)
+            .attr('cy', y)
+            .attr('r', 5)
+            .attr('fill', lineColor)
+            .attr('stroke', 'black')
+            .on('mouseover', function(event) {
+                // Show tooltip
+                const tooltip = d3.select('#tooltip');
+                tooltip.style('display', 'block')
+                    .html(`Stack ${i}: ${normalizedCents.toFixed(2)}¢`);
+
+                // Position tooltip
+                const visualizationDiv = document.getElementById('visualization');
+                const rect = visualizationDiv.getBoundingClientRect();
+                const mouseX = event.clientX - rect.left;
+                const mouseY = event.clientY - rect.top;
+                tooltip.style('left', `${mouseX + 15}px`)
+                    .style('top', `${mouseY + 15}px`);
+            })
+            .on('mousemove', function(event) {
+                // Update tooltip position
+                const tooltip = d3.select('#tooltip');
+                const visualizationDiv = document.getElementById('visualization');
+                const rect = visualizationDiv.getBoundingClientRect();
+                const mouseX = event.clientX - rect.left;
+                const mouseY = event.clientY - rect.top;
+                tooltip.style('left', `${mouseX + 15}px`)
+                    .style('top', `${mouseY + 15}px`);
+            })
+            .on('mouseout', function() {
+                // Hide tooltip
+                d3.select('#tooltip').style('display', 'none');
+            });
     }
 }

@@ -46,11 +46,12 @@ body {
     cursor: pointer; /* Changes cursor to pointer when hovering over lines */
 }
 
-/* Style for MOS generator line and circle */
-#mos-group line {
+/* Style for MOS lines */
+.mos-generator-line {
     cursor: pointer;
 }
 
+/* Style for MOS circles */
 #mos-group circle {
     cursor: pointer;
 }

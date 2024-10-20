@@ -37,7 +37,9 @@ const pointsGroup = edoGroup.append('g').attr('id', 'points-group');
 renderJI(svg, centerX, centerY, radius);
 
 // Initial rendering of MOS generator
-renderMOS(svg, centerX, centerY, radius);
+if (d3.select('#mos-toggle').property('checked')) {
+    renderMOS(svg, centerX, centerY, radius);
+}
 
 // Initial rendering of EDO points and lines
 renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius);
@@ -57,9 +59,12 @@ function synchronizeMOSInputs() {
     numStacksValue = Math.max(numStacksValue, 1);
     d3.select('#mos-stacks-input').property('value', numStacksValue);
 
-    // Remove and re-render the MOS visualization
-    svg.select('#mos-group').selectAll('*').remove();
-    renderMOS(svg, centerX, centerY, radius);
+    // Remove and re-render the MOS visualization if enabled
+    mosGroup.selectAll('*').remove();
+    svg.select('#mos-text').remove();
+    if (d3.select('#mos-toggle').property('checked')) {
+        renderMOS(svg, centerX, centerY, radius);
+    }
 }
 
 // Event listeners for MOS controls
@@ -79,26 +84,23 @@ d3.select('#mos-stacks-input').on('input', function() {
     synchronizeMOSInputs();
 });
 
-// Event listeners for EDO controls
-d3.select('#edo-input').on('input', () => {
-    linesGroup.selectAll('*').remove();
-    pointsGroup.selectAll('*').remove();
-    renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius);
+d3.select('#mos-toggle').on('change', function() {
+    synchronizeMOSInputs();
 });
 
-d3.select('#edo-lines').on('change', () => {
+// Event listeners for EDO controls
+function updateEDO() {
     linesGroup.selectAll('*').remove();
     pointsGroup.selectAll('*').remove();
     renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius);
-});
+}
+d3.select('#edo-input').on('input', updateEDO);
+d3.select('#edo-lines').on('change', updateEDO);
 
 // Event listeners for JI controls
-d3.selectAll('#prime-checkboxes input[type="checkbox"]').on('change', () => {
-    svg.select('#ji-group').selectAll('*').remove();
+function updateJI() {
+    jiGroup.selectAll('*').remove();
     renderJI(svg, centerX, centerY, radius);
-});
-
-d3.select('#odd-limit-input').on('input', () => {
-    svg.select('#ji-group').selectAll('*').remove();
-    renderJI(svg, centerX, centerY, radius);
-});
+}
+d3.selectAll('#prime-checkboxes input[type="checkbox"]').on('change', updateJI);
+d3.select('#odd-limit-input').on('input', updateJI);

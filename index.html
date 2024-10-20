@@ -22,7 +22,6 @@
         <div id="ji-controls">
             <h2>JI Function</h2>
             <div id="prime-checkboxes">
-                <!-- Removed the "2" prime checkbox -->
                 <label><input type="checkbox" value="3" checked> 3</label>
                 <label><input type="checkbox" value="5" checked> 5</label>
                 <label><input type="checkbox" value="7"> 7</label>
@@ -38,6 +37,9 @@
         <!-- MOS Controls -->
         <div id="mos-controls">
             <h2>MOS Function</h2>
+            <label for="mos-toggle">Enable MOS:</label>
+            <input type="checkbox" id="mos-toggle" checked>
+            <br>
             <label for="mos-generator-slider">Generator (cents):</label>
             <input type="range" id="mos-generator-slider" min="0" max="1200" value="700" step="1">
             <input type="number" id="mos-generator-input" min="0" max="1200" value="700" step="0.01">
