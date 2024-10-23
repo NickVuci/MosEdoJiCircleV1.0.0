@@ -69,8 +69,19 @@ export function renderMOS(svg, centerX, centerY, radius) {
             }
         });
 
-        // Only display the label if smallStepCount is greater than zero
-        if (smallStepCount > 0) {
+        // Function to calculate GCD of two numbers
+        function gcd(a, b) {
+            if (!b) {
+                return a;
+            }
+            return gcd(b, a % b);
+        }
+
+        // Calculate GCD of largeStepCount and smallStepCount
+        const stepsGCD = gcd(largeStepCount, smallStepCount);
+
+        // Only display the label if the counts are coprime (GCD is 1)
+        if (stepsGCD === 1 && smallStepCount > 0) {
             // Display "xL y s" above the circle (lowercase 's')
             const mosTextContent = `${largeStepCount}L ${smallStepCount}s`;
             const mosText = svg.select('#mos-text');
@@ -89,6 +100,8 @@ export function renderMOS(svg, centerX, centerY, radius) {
         } else {
             // Remove MOS text if it exists
             svg.select('#mos-text').remove();
+            // Also, set isMOS to false to prevent lines from highlighting
+            isMOS = false;
         }
     } else {
         // Remove MOS text if it exists
