@@ -127,3 +127,13 @@ function updateJI() {
 }
 d3.selectAll('#prime-checkboxes input[type="checkbox"]').on('change', updateJI);
 d3.select('#odd-limit-input').on('change', updateJI);
+
+// Dark Mode Toggle
+const darkModeCheckbox = document.getElementById('dark-mode-checkbox');
+darkModeCheckbox.addEventListener('change', function() {
+    if (this.checked) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+});

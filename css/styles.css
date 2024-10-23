@@ -1,92 +1,166 @@
 /* styles.css */
 
+/* Root variables for light and dark mode */
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --control-background: #f0f0f0;
+    --header-background: #e0e0e0;
+    --module-border: #cccccc;
+    --link-color: #0066cc;
+}
+
+.dark-mode {
+    --background-color: #121212;
+    --text-color: #e0e0e0;
+    --control-background: #1e1e1e;
+    --header-background: #1a1a1a;
+    --module-border: #333333;
+    --link-color: #3399ff;
+}
+
+/* Global Styles */
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
+/* Header Styles */
+header {
+    padding: 20px;
+    background-color: var(--header-background);
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+header h2 {
+    margin: 5px 0 0;
+    font-size: 1.2em;
+    font-weight: normal;
+}
+
+#dark-mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+#dark-mode-toggle label {
+    margin-right: 5px;
+}
+
+/* Controls Section */
 #controls {
-    margin: 20px;
-}
-
-#controls h2 {
-    margin-top: 20px;
-}
-
-#controls label {
-    margin-right: 10px;
-}
-
-#visualization {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    position: relative; /* Ensure tooltip positions correctly */
+    background-color: var(--control-background);
+    padding: 10px;
 }
 
+.control-module {
+    border: 1px solid var(--module-border);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    width: 280px;
+    box-sizing: border-box;
+    background-color: var(--background-color);
+}
+
+.control-module h3 {
+    margin-top: 0;
+    text-align: center;
+}
+
+.control-module label {
+    display: inline-block;
+    margin: 5px 0;
+}
+
+.control-module input[type="number"],
+.control-module input[type="range"] {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#prime-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#prime-checkboxes label {
+    width: 48%;
+    margin-bottom: 5px;
+}
+
+#mos-controls input[type="range"] {
+    width: calc(100% - 20px);
+    margin: 0 10px;
+}
+
+/* Visualization Section */
+#visualization {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+}
+
+#visualization svg {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Tooltip Styles */
 .tooltip {
     position: absolute;
-    background-color: rgba(255, 255, 255, 0.9); /* Slight transparency */
-    border: 1px solid black;
-    border-radius: 3px; /* Rounded corners */
+    background-color: var(--control-background);
+    color: var(--text-color);
     padding: 5px;
+    border: 1px solid var(--module-border);
+    border-radius: 3px;
     pointer-events: none;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 10; /* Ensure the tooltip appears above other elements */
 }
 
-/* Adjust the width of the EDO input box */
-#edo-input {
-    width: 60px; /* Adjust the width as needed */
+/* Responsive Design */
+@media (max-width: 600px) {
+    .control-module {
+        width: 90%;
+    }
 }
 
-/* Adjust the size of input boxes */
-#mos-generator-input,
-#mos-stacks-input,
-#odd-limit-input {
-    width: 60px; /* Adjust as needed */
+/* Dark Mode Specific Styles */
+.dark-mode svg {
+    stroke: var(--text-color);
 }
 
-/* Style for JI lines */
-.ji-line {
-    cursor: pointer; /* Changes cursor to pointer when hovering over lines */
+.dark-mode .tooltip {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--module-border);
 }
 
-/* Style for MOS lines */
-.mos-generator-line {
-    cursor: pointer;
+.control-module input[type="number"],
+.control-module input[type="range"],
+.control-module input[type="checkbox"] {
+    margin-bottom: 10px;
 }
 
-/* Style for MOS circles */
-#mos-group circle {
-    cursor: pointer;
+.control-module input[type="number"] {
+    width: calc(100% - 20px);
+    padding: 5px;
 }
 
-#mos-controls {
-    margin-top: 20px;
-}
-
-#mos-controls label {
-    margin-right: 10px;
-}
-
-#mos-stacks-input {
-    width: 50px;
-}
-
-.mos-generator-line {
-    cursor: pointer;
-}
-
-/* Style for the stationary line at 0 cents */
-.mos-stationary-line {
-    stroke: rgba(0, 0, 0, 0);
-    stroke-width: 1;
-}
-
-/* Style for MOS text */
-#mos-text {
-    font-size: 24px;
-    fill: black;
+.control-module input[type="checkbox"] {
+    transform: scale(1.2);
+    margin-right: 5px;
 }

@@ -1,17 +1,29 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Microtonal Concepts Visualization</title>
+    <title>A Tool for Visualizing Some Xenharmonic Concepts</title>
     <link rel="stylesheet" href="css/styles.css">
+    <!-- Add viewport meta tag for mobile responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+    <!-- Header Section -->
+    <header>
+        <h1>A Tool for Visualizing Some Xenharmonic Concepts</h1>
+        <h2>By Nick Vuci</h2>
+        <!-- Dark Mode Toggle -->
+        <div id="dark-mode-toggle">
+            <label for="dark-mode-checkbox">Dark Mode:</label>
+            <input type="checkbox" id="dark-mode-checkbox">
+        </div>
+    </header>
+
     <!-- Controls Section -->
     <div id="controls">
         <!-- EDO Controls -->
-        <div id="edo-controls">
-            <h2>EDO Function</h2>
+        <div id="edo-controls" class="control-module">
+            <h3>EDO</h3>
             <label for="edo-input">Enter EDO value:</label>
             <input type="number" id="edo-input" min="1" value="12" size="5">
             <label for="edo-lines">Show lines:</label>
@@ -19,8 +31,8 @@
         </div>
 
         <!-- JI Controls -->
-        <div id="ji-controls">
-            <h2>JI Function</h2>
+        <div id="ji-controls" class="control-module">
+            <h3>JI</h3>
             <div id="prime-checkboxes">
                 <label><input type="checkbox" value="3" checked> 3</label>
                 <label><input type="checkbox" value="5" checked> 5</label>
@@ -31,21 +43,21 @@
                 <label><input type="checkbox" value="19"> 19</label>
             </div>
             <label for="odd-limit-input">Odd Limit:</label>
-            <input type="number" id="odd-limit-input" min="1" step="2" value="15" size="4">
+            <input type="number" id="odd-limit-input" min="1" step="2" value="13" size="4">
         </div>
 
         <!-- MOS Controls -->
-        <div id="mos-controls">
-            <h2>MOS Function</h2>
+        <div id="mos-controls" class="control-module">
+            <h3>MOS</h3>
             <label for="mos-toggle">Enable MOS:</label>
             <input type="checkbox" id="mos-toggle" checked>
             <br>
             <label for="mos-generator-slider">Generator (cents):</label>
             <input type="range" id="mos-generator-slider" min="0" max="1200" value="700" step="1">
-            <input type="number" id="mos-generator-input" min="0" max="1200" value="700" step="0.01">
+            <input type="number" id="mos-generator-input" min="0" max="1200" value="700.00" step="0.01" size="4">
             <br>
             <label for="mos-stacks-input">Number of Stacks:</label>
-            <input type="number" id="mos-stacks-input" min="1" value="6" step="1">
+            <input type="number" id="mos-stacks-input" min="1" value="1" step="1" size="4">
         </div>
     </div>
 
