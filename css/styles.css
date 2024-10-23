@@ -8,6 +8,10 @@
     --header-background: #e0e0e0;
     --module-border: #cccccc;
     --link-color: #0066cc;
+    --circle-stroke-color: #000000;
+    --edo-line-color: #000000;
+    --mos-line-color: purple;
+    --mos-highlight-color: #800080;
 }
 
 .dark-mode {
@@ -17,6 +21,10 @@
     --header-background: #1a1a1a;
     --module-border: #333333;
     --link-color: #3399ff;
+    --circle-stroke-color: #ffffff;
+    --edo-line-color: #ffffff;
+    --mos-line-color: #cc66ff;
+    --mos-highlight-color: #ff66ff;
 }
 
 /* Global Styles */
@@ -32,6 +40,7 @@ header {
     padding: 20px;
     background-color: var(--header-background);
     text-align: center;
+    position: relative;
 }
 
 header h1 {
@@ -80,16 +89,24 @@ header h2 {
 }
 
 .control-module label {
-    display: inline-block;
-    margin: 5px 0;
+    display: block;
+    margin-top: 10px;
 }
 
 .control-module input[type="number"],
-.control-module input[type="range"] {
+.control-module input[type="range"],
+.control-module input[type="text"] {
     width: 100%;
+    box-sizing: border-box;
     margin-bottom: 10px;
+    padding: 5px;
 }
 
+.control-module input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* Prime checkboxes */
 #prime-checkboxes {
     display: flex;
     flex-wrap: wrap;
@@ -101,9 +118,10 @@ header h2 {
     margin-bottom: 5px;
 }
 
+/* MOS Controls */
 #mos-controls input[type="range"] {
-    width: calc(100% - 20px);
-    margin: 0 10px;
+    width: 100%;
+    margin: 0;
 }
 
 /* Visualization Section */
@@ -131,36 +149,44 @@ header h2 {
     pointer-events: none;
 }
 
+/* SVG Element Styles */
+.main-circle {
+    stroke: var(--circle-stroke-color);
+}
+
+.edo-line {
+    stroke: var(--edo-line-color);
+}
+
+
+.mos-generator-line {
+    stroke: var(--mos-line-color);
+}
+
+.mos-highlight-line {
+    stroke: var(--mos-highlight-color);
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
     .control-module {
         width: 90%;
+        margin: 10px auto;
+    }
+
+    .control-module label,
+    .control-module input {
+        font-size: 16px;
     }
 }
 
 /* Dark Mode Specific Styles */
-.dark-mode svg {
-    stroke: var(--text-color);
+.dark-mode svg text {
+    fill: var(--text-color);
 }
 
 .dark-mode .tooltip {
     background-color: var(--background-color);
     color: var(--text-color);
     border-color: var(--module-border);
-}
-
-.control-module input[type="number"],
-.control-module input[type="range"],
-.control-module input[type="checkbox"] {
-    margin-bottom: 10px;
-}
-
-.control-module input[type="number"] {
-    width: calc(100% - 20px);
-    padding: 5px;
-}
-
-.control-module input[type="checkbox"] {
-    transform: scale(1.2);
-    margin-right: 5px;
 }

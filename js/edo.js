@@ -1,43 +1,51 @@
 // edo.js
 
-// Helper function to check if a number is prime
-function isPrimeNumber(num) {
-    if (num <= 1) return false;
-    if (num === 2) return true;
-    if (num % 2 === 0) return false;
-
-    for (let i = 3; i <= Math.sqrt(num); i += 2) {
-        if (num % i === 0) return false;
-    }
-    return true;
-}
-
 export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius) {
-    const edoValue = parseInt(d3.select('#edo-input').property('value'));
+    // Get the EDO value from the input
+    const edoValue = parseInt(d3.select('#edo-input').property('value'), 10);
+
+    // Check if we should show lines
     const showLines = d3.select('#edo-lines').property('checked');
 
-    // Check if the EDO value itself is prime
-    const isEdoPrime = isPrimeNumber(edoValue);
+    // Function to check if a number is prime
+    function isPrime(n) {
+        if (n <= 1) return false;
+        if (n <= 3) return true;
+        if (n % 2 === 0 || n % 3 === 0) return false;
+        for (let i = 5; i * i <= n; i += 6) {
+            if (n % i === 0 || n % (i + 2) === 0) return false;
+        }
+        return true;
+    }
 
-    const pointsData = [];
-    for (let n = 0; n < edoValue; n++) {
-        const angle = (n / edoValue) * 2 * Math.PI - Math.PI / 2;
-        const x = centerX + radius * Math.cos(angle);
-        const y = centerY + radius * Math.sin(angle);
-        const centValue = (n / edoValue) * 1200;
+    // Function to determine point color based on EDO value and dark mode
+    function getPointFillColor(edoValue) {
+        const isPrimeEDO = isPrime(edoValue);
+        const darkModeEnabled = document.body.classList.contains('dark-mode');
+        if (isPrimeEDO) {
+            return 'gold'; // Gold color is visible in both modes
+        } else {
+            return darkModeEnabled ? '#ffffff' : '#000000'; // White in dark mode, black in light mode
+        }
+    }
 
-        pointsData.push({
-            n,
-            x,
-            y,
-            centValue
-        });
+    // Use the function to get the point fill color
+    const pointFillColor = getPointFillColor(edoValue);
+
+    // Generate EDO data
+    const edoData = [];
+    for (let i = 0; i < edoValue; i++) {
+        const angle = (i / edoValue) * 1200; // in cents
+        const radians = (angle / 1200) * 2 * Math.PI - Math.PI / 2;
+        const x = centerX + radius * Math.cos(radians);
+        const y = centerY + radius * Math.sin(radians);
+        edoData.push({ index: i, angle, x, y });
     }
 
     // Draw lines
     if (showLines) {
-        linesGroup.selectAll('.edo-line')
-            .data(pointsData)
+        linesGroup.selectAll('line')
+            .data(edoData)
             .enter()
             .append('line')
             .attr('class', 'edo-line')
@@ -45,52 +53,45 @@ export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius
             .attr('y1', centerY)
             .attr('x2', d => d.x)
             .attr('y2', d => d.y)
-            .attr('stroke', 'black');
+            .attr('stroke-width', 1);
     }
 
     // Draw points
-    pointsGroup.selectAll('.edo-point')
-        .data(pointsData)
+    pointsGroup.selectAll('circle')
+        .data(edoData)
         .enter()
         .append('circle')
         .attr('class', 'edo-point')
         .attr('cx', d => d.x)
         .attr('cy', d => d.y)
         .attr('r', 5)
-        .attr('fill', isEdoPrime ? 'gold' : 'grey') // Color based on EDO primality
+        .attr('fill', pointFillColor)
         .attr('stroke', 'black')
         .on('mouseover', function(event, d) {
-            d3.select(this)
-                .attr('fill', isEdoPrime ? 'darkgoldenrod' : 'black');
-
             // Show tooltip
             const tooltip = d3.select('#tooltip');
             tooltip.style('display', 'block')
-                .html(`${d.n}\\${edoValue}, ${d.centValue.toFixed(2)}¢`);
-        })
-        .on('mousemove', function(event, d) {
-            // Update tooltip position as the mouse moves
+                .html(`${d.index}\\${edoValue} EDO<br>${d.angle.toFixed(2)}¢`);
 
-            // Get the position of the #visualization div
+            // Position tooltip
             const visualizationDiv = document.getElementById('visualization');
             const rect = visualizationDiv.getBoundingClientRect();
-
-            // Get the mouse position relative to the visualization div
             const mouseX = event.clientX - rect.left;
             const mouseY = event.clientY - rect.top;
-
-            // Adjust the offset values as needed
-            const offsetX = 15; // Adjust this value to change horizontal distance
-            const offsetY = 15; // Adjust this value to change vertical distance
-
-            const tooltip = d3.select('#tooltip');
-            tooltip.style('left', `${mouseX + offsetX}px`)
-                   .style('top', `${mouseY + offsetY}px`);
+            tooltip.style('left', `${mouseX + 15}px`)
+                .style('top', `${mouseY + 15}px`);
         })
-        .on('mouseout', function(event, d) {
-            d3.select(this)
-                .attr('fill', isEdoPrime ? 'gold' : 'grey');
-
+        .on('mousemove', function(event) {
+            // Update tooltip position
+            const tooltip = d3.select('#tooltip');
+            const visualizationDiv = document.getElementById('visualization');
+            const rect = visualizationDiv.getBoundingClientRect();
+            const mouseX = event.clientX - rect.left;
+            const mouseY = event.clientY - rect.top;
+            tooltip.style('left', `${mouseX + 15}px`)
+                .style('top', `${mouseY + 15}px`);
+        })
+        .on('mouseout', function() {
             // Hide tooltip
             d3.select('#tooltip').style('display', 'none');
         });

@@ -91,7 +91,7 @@ export function renderMOS(svg, centerX, centerY, radius) {
                     .attr('x', centerX)
                     .attr('y', centerY - radius - 20)
                     .attr('text-anchor', 'middle')
-                    .attr('fill', 'black')
+                    .attr('fill', 'var(--text-color)')
                     .attr('font-size', '24px')
                     .text(mosTextContent);
             } else {
@@ -118,7 +118,7 @@ export function renderMOS(svg, centerX, centerY, radius) {
 
         // Determine line style
         let lineStrokeWidth = isMOS ? 4 : 3; // Increase width when it's MOS
-        let lineColor = isMOS ? '#800080' : 'purple'; // Brighter color when MOS (using a hex code)
+        let lineColor = isMOS ? 'var(--mos-highlight-color)' : 'var(--mos-line-color)';
         let lineOpacity = isMOS ? 1 : 0.7;
 
         // Draw the generator line

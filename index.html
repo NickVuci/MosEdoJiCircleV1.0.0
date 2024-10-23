@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>A Tool for Visualizing Some Xenharmonic Concepts</title>
     <link rel="stylesheet" href="css/styles.css">
-    <!-- Add viewport meta tag for mobile responsiveness -->
+    <!-- Viewport meta tag for mobile responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -25,7 +25,7 @@
         <div id="edo-controls" class="control-module">
             <h3>EDO</h3>
             <label for="edo-input">Enter EDO value:</label>
-            <input type="number" id="edo-input" min="1" value="12" size="5">
+            <input type="number" id="edo-input" min="1" value="12" inputmode="numeric" pattern="[0-9]*">
             <label for="edo-lines">Show lines:</label>
             <input type="checkbox" id="edo-lines" checked>
         </div>
@@ -43,7 +43,7 @@
                 <label><input type="checkbox" value="19"> 19</label>
             </div>
             <label for="odd-limit-input">Odd Limit:</label>
-            <input type="number" id="odd-limit-input" min="1" step="2" value="13" size="4">
+            <input type="number" id="odd-limit-input" min="1" step="2" value="13" inputmode="numeric" pattern="[0-9]*">
         </div>
 
         <!-- MOS Controls -->
@@ -51,13 +51,11 @@
             <h3>MOS</h3>
             <label for="mos-toggle">Enable MOS:</label>
             <input type="checkbox" id="mos-toggle" checked>
-            <br>
             <label for="mos-generator-slider">Generator (cents):</label>
             <input type="range" id="mos-generator-slider" min="0" max="1200" value="700" step="1">
-            <input type="number" id="mos-generator-input" min="0" max="1200" value="700.00" step="0.01" size="4">
-            <br>
+            <input type="number" id="mos-generator-input" min="0" max="1200" value="700.00" step="0.01" inputmode="decimal" pattern="[0-9]*">
             <label for="mos-stacks-input">Number of Stacks:</label>
-            <input type="number" id="mos-stacks-input" min="1" value="1" step="1" size="4">
+            <input type="number" id="mos-stacks-input" min="1" value="6" step="1" inputmode="numeric" pattern="[0-9]*">
         </div>
     </div>
 

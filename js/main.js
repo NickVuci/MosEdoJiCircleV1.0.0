@@ -12,20 +12,21 @@ const svg = d3.select('#visualization')
     .attr('width', width)
     .attr('height', height);
 
+// Define center and radius
 const centerX = width / 2;
 const centerY = height / 2;
 const radius = Math.min(width, height) / 2 - 50;
 
 // Draw the main circle first to ensure it is at the back
 svg.append('circle')
+    .attr('class', 'main-circle')
     .attr('cx', centerX)
     .attr('cy', centerY)
     .attr('r', radius)
-    .attr('fill', 'none')
-    .attr('stroke', 'black');
+    .attr('fill', 'none');
 
 // Create groups for organizing SVG elements
-const jiGroup = svg.append('g').attr('id', 'ji-group'); // JI lines group (behind other elements)
+const jiGroup = svg.append('g').attr('id', 'ji-group'); // JI lines group
 const edoGroup = svg.append('g').attr('id', 'edo-group'); // EDO group
 const mosGroup = svg.append('g').attr('id', 'mos-group'); // MOS group
 
@@ -33,7 +34,7 @@ const mosGroup = svg.append('g').attr('id', 'mos-group'); // MOS group
 const linesGroup = edoGroup.append('g').attr('id', 'lines-group');
 const pointsGroup = edoGroup.append('g').attr('id', 'points-group');
 
-// Initial rendering of JI intervals (behind other elements)
+// Initial rendering of JI intervals
 renderJI(svg, centerX, centerY, radius);
 
 // Initial rendering of EDO points and lines
@@ -136,4 +137,30 @@ darkModeCheckbox.addEventListener('change', function() {
     } else {
         document.body.classList.remove('dark-mode');
     }
+    // Re-render visualizations to update colors
+    updateVisualizations();
 });
+
+// Function to update all visualizations
+function updateVisualizations() {
+    // Update EDO visualization
+    linesGroup.selectAll('*').remove();
+    pointsGroup.selectAll('*').remove();
+    renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius);
+
+    // Update JI visualization
+    jiGroup.selectAll('*').remove();
+    renderJI(svg, centerX, centerY, radius);
+
+    // Update MOS visualization
+    mosGroup.selectAll('*').remove();
+    svg.select('#mos-text').remove();
+    if (d3.select('#mos-toggle').property('checked')) {
+        renderMOS(svg, centerX, centerY, radius);
+        // Move mosGroup to the end to bring it to the front
+        mosGroup.raise();
+    }
+}
+
+// Initial rendering
+updateVisualizations();
