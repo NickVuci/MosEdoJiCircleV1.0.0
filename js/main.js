@@ -34,18 +34,29 @@ const mosGroup = svg.append('g').attr('id', 'mos-group'); // MOS group
 const linesGroup = edoGroup.append('g').attr('id', 'lines-group');
 const pointsGroup = edoGroup.append('g').attr('id', 'points-group');
 
-// Initial rendering of JI intervals
-renderJI(svg, centerX, centerY, radius);
+// Function to update all visualizations
+function updateVisualizations() {
+    // Update EDO visualization
+    linesGroup.selectAll('*').remove();
+    pointsGroup.selectAll('*').remove();
+    renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius);
 
-// Initial rendering of EDO points and lines
-renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius);
+    // Update JI visualization
+    jiGroup.selectAll('*').remove();
+    renderJI(svg, centerX, centerY, radius);
 
-// Initial rendering of MOS generator
-if (d3.select('#mos-toggle').property('checked')) {
-    renderMOS(svg, centerX, centerY, radius);
-    // Move mosGroup to the end to bring it to the front
-    mosGroup.raise();
+    // Update MOS visualization
+    mosGroup.selectAll('*').remove();
+    svg.select('#mos-text').remove();
+    if (d3.select('#mos-toggle').property('checked')) {
+        renderMOS(svg, centerX, centerY, radius);
+        // Move mosGroup to the end to bring it to the front
+        mosGroup.raise();
+    }
 }
+
+// Initial rendering
+updateVisualizations();
 
 // Synchronize the MOS inputs
 function synchronizeMOSInputs() {
@@ -129,38 +140,23 @@ function updateJI() {
 d3.selectAll('#prime-checkboxes input[type="checkbox"]').on('change', updateJI);
 d3.select('#odd-limit-input').on('change', updateJI);
 
-// Dark Mode Toggle
-const darkModeCheckbox = document.getElementById('dark-mode-checkbox');
-darkModeCheckbox.addEventListener('change', function() {
-    if (this.checked) {
-        document.body.classList.add('dark-mode');
-    } else {
+// Dark Mode Toggle Button
+const darkModeButton = document.getElementById('dark-mode-button');
+darkModeButton.addEventListener('click', function() {
+    if (document.body.classList.contains('dark-mode')) {
         document.body.classList.remove('dark-mode');
+        darkModeButton.textContent = 'Dark Mode';
+    } else {
+        document.body.classList.add('dark-mode');
+        darkModeButton.textContent = 'Light Mode';
     }
     // Re-render visualizations to update colors
     updateVisualizations();
 });
 
-// Function to update all visualizations
-function updateVisualizations() {
-    // Update EDO visualization
-    linesGroup.selectAll('*').remove();
-    pointsGroup.selectAll('*').remove();
-    renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius);
-
-    // Update JI visualization
-    jiGroup.selectAll('*').remove();
-    renderJI(svg, centerX, centerY, radius);
-
-    // Update MOS visualization
-    mosGroup.selectAll('*').remove();
-    svg.select('#mos-text').remove();
-    if (d3.select('#mos-toggle').property('checked')) {
-        renderMOS(svg, centerX, centerY, radius);
-        // Move mosGroup to the end to bring it to the front
-        mosGroup.raise();
-    }
+// Set initial button text based on current mode
+if (document.body.classList.contains('dark-mode')) {
+    darkModeButton.textContent = 'Light Mode';
+} else {
+    darkModeButton.textContent = 'Dark Mode';
 }
-
-// Initial rendering
-updateVisualizations();
