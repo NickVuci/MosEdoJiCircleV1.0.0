@@ -97,8 +97,11 @@ export function renderJI(svg, centerX, centerY, radius) {
         index === self.findIndex((t) => Math.abs(t.cents - interval.cents) < 1e-6)
     );
 
+    // Handle labels
+    const alwaysOn = d3.select('#always-on-checkbox').property('checked');
+
     // Draw JI lines
-    svg.select('#ji-group').selectAll('line')
+    const jiLines = svg.select('#ji-group').selectAll('line')
         .data(intervals)
         .enter()
         .append('line')
@@ -118,33 +121,56 @@ export function renderJI(svg, centerX, centerY, radius) {
             const highestPrime = Math.max(...d.primes);
             return primeColors[highestPrime] || (darkModeEnabled ? '#ffffff' : '#000000');
         })
-        .attr('stroke-width', 2)
-        .on('mouseover', function(event, d) {
-            // Show tooltip
-            const tooltip = d3.select('#tooltip');
-            tooltip.style('display', 'block')
-                .html(`${d.fraction}<br>${d.cents.toFixed(2)}¢`);
+        .attr('stroke-width', 2);
 
-            // Position tooltip
-            const visualizationDiv = document.getElementById('visualization');
-            const rect = visualizationDiv.getBoundingClientRect();
-            const mouseX = event.clientX - rect.left;
-            const mouseY = event.clientY - rect.top;
-            tooltip.style('left', `${mouseX + 15}px`)
-                .style('top', `${mouseY + 15}px`);
-        })
-        .on('mousemove', function(event) {
-            // Update tooltip position
-            const tooltip = d3.select('#tooltip');
-            const visualizationDiv = document.getElementById('visualization');
-            const rect = visualizationDiv.getBoundingClientRect();
-            const mouseX = event.clientX - rect.left;
-            const mouseY = event.clientY - rect.top;
-            tooltip.style('left', `${mouseX + 15}px`)
-                .style('top', `${mouseY + 15}px`);
-        })
-        .on('mouseout', function() {
-            // Hide tooltip
-            d3.select('#tooltip').style('display', 'none');
-        });
+    if (alwaysOn) {
+        // Display labels for all intervals
+        svg.select('#ji-group').selectAll('text')
+            .data(intervals)
+            .enter()
+            .append('text')
+            .attr('x', d => {
+                const angle = (d.cents / 1200) * 2 * Math.PI - Math.PI / 2;
+                return centerX + (radius + 10) * Math.cos(angle);
+            })
+            .attr('y', d => {
+                const angle = (d.cents / 1200) * 2 * Math.PI - Math.PI / 2;
+                return centerY + (radius + 10) * Math.sin(angle);
+            })
+            .text(d => `${d.fraction}\n${d.cents.toFixed(2)}¢`)
+            .attr('font-size', '10px')
+            .attr('fill', 'var(--text-color)')
+            .attr('text-anchor', 'middle');
+    } else {
+        // Attach tooltip event handlers
+        jiLines
+            .on('mouseover', function(event, d) {
+                // Show tooltip
+                const tooltip = d3.select('#tooltip');
+                tooltip.style('display', 'block')
+                    .html(`Interval: ${d.fraction}<br>${d.cents.toFixed(2)}¢`);
+
+                // Position tooltip
+                const visualizationDiv = document.getElementById('visualization');
+                const rect = visualizationDiv.getBoundingClientRect();
+                const mouseX = event.clientX - rect.left;
+                const mouseY = event.clientY - rect.top;
+                tooltip.style('left', `${mouseX + 15}px`)
+                    .style('top', `${mouseY + 15}px`);
+            })
+            .on('mousemove', function(event) {
+                // Update tooltip position
+                const tooltip = d3.select('#tooltip');
+                const visualizationDiv = document.getElementById('visualization');
+                const rect = visualizationDiv.getBoundingClientRect();
+                const mouseX = event.clientX - rect.left;
+                const mouseY = event.clientY - rect.top;
+                tooltip.style('left', `${mouseX + 15}px`)
+                    .style('top', `${mouseY + 15}px`);
+            })
+            .on('mouseout', function() {
+                // Hide tooltip
+                d3.select('#tooltip').style('display', 'none');
+            });
+    }
 }

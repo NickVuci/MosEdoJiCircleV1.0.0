@@ -55,6 +55,31 @@ function updateVisualizations() {
     }
 }
 
+// Set default mode to dark mode on page load
+document.body.classList.add('dark-mode');
+
+// Set the dark mode button text to 'Light Mode'
+const darkModeButton = document.getElementById('dark-mode-button');
+darkModeButton.textContent = 'Light Mode';
+
+// Event listener for dark mode toggle button
+darkModeButton.addEventListener('click', function() {
+    if (document.body.classList.contains('dark-mode')) {
+        document.body.classList.remove('dark-mode');
+        darkModeButton.textContent = 'Dark Mode';
+    } else {
+        document.body.classList.add('dark-mode');
+        darkModeButton.textContent = 'Light Mode';
+    }
+    // Re-render visualizations to update colors
+    updateVisualizations();
+});
+
+// Event listener for "Labels Always On" checkbox
+d3.select('#always-on-checkbox').on('change', function() {
+    updateVisualizations();
+});
+
 // Initial rendering
 updateVisualizations();
 
@@ -139,24 +164,3 @@ function updateJI() {
 }
 d3.selectAll('#prime-checkboxes input[type="checkbox"]').on('change', updateJI);
 d3.select('#odd-limit-input').on('change', updateJI);
-
-// Dark Mode Toggle Button
-const darkModeButton = document.getElementById('dark-mode-button');
-darkModeButton.addEventListener('click', function() {
-    if (document.body.classList.contains('dark-mode')) {
-        document.body.classList.remove('dark-mode');
-        darkModeButton.textContent = 'Dark Mode';
-    } else {
-        document.body.classList.add('dark-mode');
-        darkModeButton.textContent = 'Light Mode';
-    }
-    // Re-render visualizations to update colors
-    updateVisualizations();
-});
-
-// Set default mode to dark mode on page load
-document.body.classList.add('dark-mode');
-darkModeButton.textContent = 'Light Mode';
-
-// Initial rendering
-updateVisualizations();

@@ -57,7 +57,7 @@ export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius
     }
 
     // Draw points
-    pointsGroup.selectAll('circle')
+    const points = pointsGroup.selectAll('circle')
         .data(edoData)
         .enter()
         .append('circle')
@@ -66,12 +66,29 @@ export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius
         .attr('cy', d => d.y)
         .attr('r', 5)
         .attr('fill', pointFillColor)
-        .attr('stroke', 'black')
-        .on('mouseover', function(event, d) {
+        .attr('stroke', 'black');
+
+    // Handle labels
+    const alwaysOn = d3.select('#always-on-checkbox').property('checked');
+
+    if (alwaysOn) {
+        // Display labels for all points
+        pointsGroup.selectAll('text')
+            .data(edoData)
+            .enter()
+            .append('text')
+            .attr('x', d => d.x + 8)
+            .attr('y', d => d.y - 8)
+            .text(d => `${d.index} \\ ${edoValue} EDO\n${d.angle.toFixed(2)}¢`)
+            .attr('font-size', '10px')
+            .attr('fill', 'var(--text-color)');
+    } else {
+        // Attach tooltip event handlers
+        points.on('mouseover', function(event, d) {
             // Show tooltip
             const tooltip = d3.select('#tooltip');
             tooltip.style('display', 'block')
-                .html(`${d.index}\\${edoValue} EDO<br>${d.angle.toFixed(2)}¢`);
+                .html(`${d.index} \\ ${edoValue} EDO<br>${d.angle.toFixed(2)}¢`);
 
             // Position tooltip
             const visualizationDiv = document.getElementById('visualization');
@@ -95,4 +112,5 @@ export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius
             // Hide tooltip
             d3.select('#tooltip').style('display', 'none');
         });
+    }
 }

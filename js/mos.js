@@ -50,6 +50,7 @@ export function renderMOS(svg, centerX, centerY, radius) {
     let isMOS = uniqueIntervals.length === 2;
 
     // If it's an MOS, determine the counts
+    let mosTextContent = '';
     if (isMOS) {
         // Determine which interval is the large step and which is the small step
         const intervalValues = uniqueIntervals.map(parseFloat).sort((a, b) => a - b);
@@ -83,7 +84,7 @@ export function renderMOS(svg, centerX, centerY, radius) {
         // Only display the label if the counts are coprime (GCD is 1)
         if (stepsGCD === 1 && smallStepCount > 0) {
             // Display "xL y s" above the circle (lowercase 's')
-            const mosTextContent = `${largeStepCount}L ${smallStepCount}s`;
+            mosTextContent = `${largeStepCount}L ${smallStepCount}s`;
             const mosText = svg.select('#mos-text');
             if (mosText.empty()) {
                 svg.append('text')
@@ -108,6 +109,9 @@ export function renderMOS(svg, centerX, centerY, radius) {
         svg.select('#mos-text').remove();
     }
 
+    // Handle labels
+    const alwaysOn = d3.select('#always-on-checkbox').property('checked');
+
     // Now, draw the lines and dots
     for (let i = 0; i < scaleCents.length; i++) {
         const normalizedCents = scaleCents[i];
@@ -122,7 +126,7 @@ export function renderMOS(svg, centerX, centerY, radius) {
         let lineOpacity = isMOS ? 1 : 0.7;
 
         // Draw the generator line
-        mosGroup.append('line')
+        const line = mosGroup.append('line')
             .attr('class', 'mos-generator-line')
             .attr('x1', centerX)
             .attr('y1', centerY)
@@ -133,13 +137,24 @@ export function renderMOS(svg, centerX, centerY, radius) {
             .attr('stroke-opacity', lineOpacity);
 
         // Add a circle at the end of the line
-        mosGroup.append('circle')
+        const circle = mosGroup.append('circle')
             .attr('cx', x)
             .attr('cy', y)
             .attr('r', 5)
             .attr('fill', lineColor)
-            .attr('stroke', 'black')
-            .on('mouseover', function(event) {
+            .attr('stroke', 'black');
+
+        if (alwaysOn) {
+            // Display labels
+            mosGroup.append('text')
+                .attr('x', x + 8)
+                .attr('y', y - 8)
+                .text(`Stack ${i}\n${normalizedCents.toFixed(2)}¢`)
+                .attr('font-size', '10px')
+                .attr('fill', 'var(--text-color)');
+        } else {
+            // Attach tooltip event handlers to the circle
+            circle.on('mouseover', function(event) {
                 // Show tooltip
                 const tooltip = d3.select('#tooltip');
                 tooltip.style('display', 'block')
@@ -167,5 +182,6 @@ export function renderMOS(svg, centerX, centerY, radius) {
                 // Hide tooltip
                 d3.select('#tooltip').style('display', 'none');
             });
+        }
     }
 }
