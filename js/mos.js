@@ -46,10 +46,60 @@ export function renderMOS(svg, centerX, centerY, radius) {
 
     let isMOS = uniqueIntervals.length === 2;
 
-    // MOS detection and labeling remains the same
+    // MOS detection and labeling
     if (isMOS) {
-        // ... existing code for MOS detection ...
-        // [Include code for determining large and small steps, counts, and displaying the MOS label]
+        // Determine which interval is the large step and which is the small step
+        const intervalValues = uniqueIntervals.map(parseFloat).sort((a, b) => a - b);
+        const smallStepSize = intervalValues[0];
+        const largeStepSize = intervalValues[1];
+
+        // Count how many times each interval occurs
+        let smallStepCount = 0;
+        let largeStepCount = 0;
+
+        intervals.forEach(interval => {
+            const intervalValue = parseFloat(interval.toFixed(5));
+            if (Math.abs(intervalValue - smallStepSize) < 1e-4) {
+                smallStepCount++;
+            } else if (Math.abs(intervalValue - largeStepSize) < 1e-4) {
+                largeStepCount++;
+            }
+        });
+
+        // Function to calculate GCD of two numbers
+        function gcd(a, b) {
+            if (!b) {
+                return a;
+            }
+            return gcd(b, a % b);
+        }
+
+        // Calculate GCD of largeStepCount and smallStepCount
+        const stepsGCD = gcd(largeStepCount, smallStepCount);
+
+        // Only display the label if the counts are coprime (GCD is 1)
+        if (stepsGCD === 1 && smallStepCount > 0) {
+            // Display "xL y s" above the circle (lowercase 's')
+            const mosTextContent = `${largeStepCount}L ${smallStepCount}s`;
+            const mosText = svg.select('#mos-text');
+            if (mosText.empty()) {
+                svg.append('text')
+                    .attr('id', 'mos-text')
+                    .attr('x', centerX)
+                    .attr('y', centerY - radius - 20)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', 'var(--text-color)')
+                    .attr('font-size', '24px')
+                    .text(mosTextContent);
+            } else {
+                mosText.text(mosTextContent);
+            }
+        } else {
+            // Remove MOS text if it exists
+            svg.select('#mos-text').remove();
+            // Also, set isMOS to false to prevent lines from highlighting
+            isMOS = false;
+        }
     } else {
         // Remove MOS text if it exists
         svg.select('#mos-text').remove();
