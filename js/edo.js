@@ -1,6 +1,10 @@
 // edo.js
 
 export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius) {
+    // Clear existing elements
+    linesGroup.selectAll('*').remove();
+    pointsGroup.selectAll('*').remove();
+
     // Get the EDO value from the input
     const edoValue = parseInt(d3.select('#edo-input').property('value'), 10);
 
@@ -20,15 +24,21 @@ export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius
 
     // Function to determine point color based on EDO value and dark mode
     function getPointFillColor(edoValue) {
-        const isPrimeEDO = isPrime(edoValue);
         const darkModeEnabled = document.body.classList.contains('dark-mode');
-        if (isPrimeEDO) {
-            return 'gold'; // Gold color is visible in both modes
+        const primeColorsEnabled = d3.select('#prime-colors-checkbox').property('checked');
+        
+        if (primeColorsEnabled) {
+            const isPrimeEDO = isPrime(edoValue);
+            if (isPrimeEDO) {
+                return 'gold'; // Gold color is visible in both modes
+            } else {
+                return darkModeEnabled ? '#ffffff' : '#000000'; // White in dark mode, black in light mode
+            }
         } else {
+            // Always use the non-prime colors when checkbox is unchecked
             return darkModeEnabled ? '#ffffff' : '#000000'; // White in dark mode, black in light mode
         }
     }
-
     // Use the function to get the point fill color
     const pointFillColor = getPointFillColor(edoValue);
 

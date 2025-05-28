@@ -115,10 +115,21 @@ header h2 {
     box-sizing: border-box;
     margin-bottom: 10px;
     padding: 5px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--module-border);
+    /* Make sure no input formatting is applied */
 }
 
 .control-module input[type="checkbox"] {
     margin-right: 5px;
+}
+
+/* EDO checkbox labels - make them inline */
+#edo-controls label {
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 /* Prime checkboxes */
@@ -204,4 +215,10 @@ header h2 {
     background-color: var(--background-color);
     color: var(--text-color);
     border-color: var(--module-border);
+}
+
+/* Error styling for invalid inputs */
+.control-module input.error {
+    border: 2px solid #ff4444 !important;
+    background-color: rgba(255, 68, 68, 0.1);
 }

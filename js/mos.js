@@ -1,9 +1,83 @@
 // mos.js
 
-export function renderMOS(svg, centerX, centerY, radius) {
-    // Get the generator value from the input (in cents)
-    const generatorCents = parseFloat(d3.select('#mos-generator-input').property('value'));
+// Function to automatically detect format and convert to cents
+export function convertToCents(inputValue) {
+    const value = inputValue.trim();
+    
+    // Check for EDO steps format (contains backslash)
+    if (value.includes('\\')) {
+        const parts = value.split('\\');
+        if (parts.length === 2) {
+            const steps = parseFloat(parts[0]);
+            const edoValue = parseFloat(parts[1]);
+            if (!isNaN(steps) && !isNaN(edoValue) && edoValue > 0) {
+                // Convert EDO steps to cents: (steps/edo) * 1200
+                return (steps / edoValue) * 1200;
+            }
+        }
+        throw new Error('Invalid EDO format. Use n\\edo (e.g., 7\\12)');
+    }
+    
+    // Check for JI ratio format (contains forward slash)
+    if (value.includes('/')) {
+        const parts = value.split('/');
+        if (parts.length === 2) {
+            const numerator = parseFloat(parts[0]);
+            const denominator = parseFloat(parts[1]);
+            if (!isNaN(numerator) && !isNaN(denominator) && numerator > 0 && denominator > 0) {
+                // Convert ratio to cents: 1200 * log2(n/d)
+                return 1200 * Math.log2(numerator / denominator);
+            }
+        }
+        throw new Error('Invalid ratio format. Use n/d (e.g., 3/2)');
+    }
+    
+    // Otherwise, treat as cents (plain number)
+    const cents = parseFloat(value);
+    if (!isNaN(cents)) {
+        return cents;
+    }
+    
+    throw new Error('Invalid input. Use cents (e.g., 701.955), ratio (e.g., 3/2), or EDO steps (e.g., 7\\12)');
+}
 
+// Function to detect and return format info
+function detectInputFormat(inputValue) {
+    const value = inputValue.trim();
+    
+    if (value.includes('\\')) {
+        return { format: 'EDO steps', example: 'e.g., 7\\12' };
+    } else if (value.includes('/')) {
+        return { format: 'JI ratio', example: 'e.g., 3/2' };
+    } else {
+        return { format: 'Cents', example: 'e.g., 701.955' };
+    }
+}
+
+export function renderMOS(svg, centerX, centerY, radius) {
+    // Get the generator input value
+    const generatorInput = d3.select('#mos-generator-input').property('value');
+    
+    let generatorCents;
+    try {
+        generatorCents = convertToCents(generatorInput);
+    } catch (error) {
+        console.error('Generator input error:', error.message);
+        // Clear any previous error styling and add error styling
+        d3.select('#mos-generator-input')
+            .classed('error', true)
+            .attr('title', error.message); // Show error as tooltip
+        
+        // Use default value and exit early
+        generatorCents = 701.955; // Default to perfect fifth
+        return;
+    }
+    
+    // Clear any previous error styling
+    d3.select('#mos-generator-input')
+        .classed('error', false)
+        .attr('title', null);
+    
     // Get the number of stacks from the input
     const numStacks = parseInt(d3.select('#mos-stacks-input').property('value'), 10);
 
