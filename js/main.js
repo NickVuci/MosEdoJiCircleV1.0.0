@@ -82,52 +82,81 @@ d3.select('#always-on-checkbox').on('change', function() {
 // Initial rendering
 updateVisualizations();
 
-// Synchronize the MOS inputs
-function synchronizeMOSInputs() {
-    // Get and clamp number of stacks only - don't touch the generator input
-    let numStacksValue = parseInt(d3.select('#mos-stacks-input').property('value'), 10);
-    numStacksValue = Math.max(numStacksValue, 1);
-    d3.select('#mos-stacks-input').property('value', numStacksValue);
-
-    // Re-render the MOS visualization
-    updateVisualizations();
-}
-
-// Event listeners for MOS controls
-d3.select('#mos-stacks-input').on('change', function() {
-    synchronizeMOSInputs();
-});
-
 d3.select('#mos-toggle').on('change', function() {
     updateVisualizations(); // Just update visualizations, don't synchronize inputs
 });
 
-// Event listeners for EDO controls
-function updateEDO() {
+
+// Unified input validation and correction
+const inputConfigs = [
+  {
+    selector: '#edo-input',
+    type: 'positiveInt',
+    allowZero: true
+  },
+  {
+    selector: '#mos-stacks-input',
+    type: 'positiveInt',
+    allowZero: true
+  },
+  {
+    selector: '#odd-limit-input',
+    type: 'oddPositiveInt',
+    allowZero: false
+  },
+  {
+    selector: '#mos-generator-input',
+    type: 'mos'
+  }
+];
+
+function handleInput(e, config) {
+  let val = e.target.value;
+
+  // Filter characters
+  if (config.type === 'mos') {
+    val = val.replace(/[^0-9.\\/\-]/g, ''); // Only allow digits, dot, minus, backslash, slash
+  } else {
+    val = val.replace(/[^0-9]/g, ''); // Only allow digits
+  }
+
+  // Correction logic
+  if (config.type === 'positiveInt' || config.type === 'oddPositiveInt') {
+    let num = parseInt(val, 10);
+    if (isNaN(num)) num = config.allowZero ? 0 : 1;
+    if (!config.allowZero && num === 0) num = 1;
+    if (config.type === 'oddPositiveInt' && num % 2 === 0) num = num > 1 ? num - 1 : 1;
+    val = num.toString();
+  }
+
+  // Set the corrected value
+  e.target.value = val;
+
+  // Trigger visualization update if needed
+  if (config.selector === '#edo-input' || config.selector === '#edo-lines') {
     linesGroup.selectAll('*').remove();
     pointsGroup.selectAll('*').remove();
     renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius);
-}
-d3.select('#edo-input').on('input', updateEDO);
-d3.select('#edo-lines').on('change', updateEDO);
-
-// Event listeners for JI controls
-function updateJI() {
-    // Ensure odd-limit-input is an odd positive integer
-    let oddLimitValue = parseInt(d3.select('#odd-limit-input').property('value'), 10);
-    if (isNaN(oddLimitValue) || oddLimitValue < 1) {
-        oddLimitValue = 1;
-    } else if (oddLimitValue % 2 === 0) {
-        // If even, adjust to the nearest lower odd number
-        oddLimitValue -= 1;
-    }
-    d3.select('#odd-limit-input').property('value', oddLimitValue);
-
+  } else if (config.selector === '#mos-stacks-input') {
+    updateVisualizations();
+  } else if (config.selector === '#odd-limit-input') {
     jiGroup.selectAll('*').remove();
     renderJI(svg, centerX, centerY, radius);
+  } else if (config.selector === '#mos-generator-input') {
+    updateSliderFromText();
+    clearTimeout(e.target.validationTimeout);
+    e.target.validationTimeout = setTimeout(() => {
+      updateVisualizations();
+    }, 500);
+  }
 }
-d3.selectAll('#prime-checkboxes input[type="checkbox"]').on('change', updateJI);
-d3.select('#odd-limit-input').on('change', updateJI);
+
+inputConfigs.forEach(config => {
+  const input = document.querySelector(config.selector);
+  if (!input) return;
+  input.addEventListener('input', e => handleInput(e, config));
+  input.addEventListener('blur', e => handleInput(e, config));
+});
 
 // Add this where you set up other event listeners
 d3.select('#prime-colors-checkbox').on('change', function() {
@@ -163,15 +192,7 @@ function updateTextFromSlider() {
     textInput.property('value', formattedValue);
 }
 
-// Event listener for text input changes
-d3.select('#mos-generator-input').on('input', function() {
-    updateSliderFromText();
-    
-    clearTimeout(this.validationTimeout);
-    this.validationTimeout = setTimeout(() => {
-        updateVisualizations();
-    }, 500);
-});
+// (Removed redundant event listener for #mos-generator-input; unified handler now manages this)
 
 // Event listener for slider changes
 d3.select('#mos-generator-slider').on('input', function() {
