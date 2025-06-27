@@ -74,9 +74,19 @@ darkModeButton.addEventListener('click', function() {
     updateVisualizations();
 });
 
-// Event listener for "Labels Always On" checkbox
-d3.select('#always-on-checkbox').on('change', function() {
-    updateVisualizations();
+// Config-driven checkbox event binding
+const checkboxConfigs = [
+  { selector: '#always-on-checkbox', handler: updateVisualizations },
+  { selector: '#prime-colors-checkbox', handler: updateVisualizations },
+  { selector: '#edo-lines', handler: updateVisualizations },
+  // Add more checkboxes and handlers here as needed
+];
+
+checkboxConfigs.forEach(cfg => {
+  const el = document.querySelector(cfg.selector);
+  if (el) {
+    d3.select(el).on('change', cfg.handler);
+  }
 });
 
 // Initial rendering
@@ -157,12 +167,6 @@ inputConfigs.forEach(config => {
   input.addEventListener('input', e => handleInput(e, config));
   input.addEventListener('blur', e => handleInput(e, config));
 });
-
-// Add this where you set up other event listeners
-d3.select('#prime-colors-checkbox').on('change', function() {
-    updateVisualizations();
-});
-
 
 // Unified MOS generator value adjustment utility
 function adjustMosGeneratorValue(deltaCents, source) {
