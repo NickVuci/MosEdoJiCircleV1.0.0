@@ -74,27 +74,28 @@ darkModeButton.addEventListener('click', function() {
     updateVisualizations();
 });
 
-// Config-driven checkbox event binding
+// Config-driven checkbox event binding (now includes JI prime checkboxes)
+
 const checkboxConfigs = [
   { selector: '#always-on-checkbox', handler: updateVisualizations },
   { selector: '#prime-colors-checkbox', handler: updateVisualizations },
   { selector: '#edo-lines', handler: updateVisualizations },
+  { selector: '#prime-checkboxes input[type=checkbox]', handler: updateVisualizations },
+  { selector: '#mos-toggle', handler: updateVisualizations },
   // Add more checkboxes and handlers here as needed
 ];
 
 checkboxConfigs.forEach(cfg => {
-  const el = document.querySelector(cfg.selector);
-  if (el) {
-    d3.select(el).on('change', cfg.handler);
+  const selection = d3.selectAll(cfg.selector);
+  if (!selection.empty()) {
+    selection.on('change', cfg.handler);
   }
 });
 
 // Initial rendering
 updateVisualizations();
 
-d3.select('#mos-toggle').on('change', function() {
-    updateVisualizations(); // Just update visualizations, don't synchronize inputs
-});
+
 
 
 // Unified input validation and correction
