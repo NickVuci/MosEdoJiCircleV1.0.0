@@ -143,7 +143,7 @@ function handleInput(e, config) {
     jiGroup.selectAll('*').remove();
     renderJI(svg, centerX, centerY, radius);
   } else if (config.selector === '#mos-generator-input') {
-    updateSliderFromText();
+    syncMosSliderToInput();
     clearTimeout(e.target.validationTimeout);
     e.target.validationTimeout = setTimeout(() => {
       updateVisualizations();
@@ -163,110 +163,94 @@ d3.select('#prime-colors-checkbox').on('change', function() {
     updateVisualizations();
 });
 
-// Function to update slider from text input
-function updateSliderFromText() {
+
+// Unified MOS generator value adjustment utility
+function adjustMosGeneratorValue(deltaCents, source) {
     const textInput = d3.select('#mos-generator-input');
     const slider = d3.select('#mos-generator-slider');
-    const inputValue = textInput.property('value');
-    
+    let currentCents;
     try {
-        // Import convertToCents function or redefine it here
-        const cents = convertToCents(inputValue);
-        // Clamp value to slider range
+        // Always parse from the text input for consistency
+        currentCents = convertToCents(textInput.property('value'));
+    } catch (error) {
+        // If invalid, fall back to slider value
+        currentCents = parseFloat(slider.property('value')) || 0;
+    }
+    let newCents = currentCents + deltaCents;
+    newCents = Math.max(0, Math.min(1200, newCents));
+    // Format to 3 decimal places, remove trailing zeros
+    const formattedValue = parseFloat(newCents.toFixed(3)).toString();
+    // Update both input and slider
+    textInput.property('value', formattedValue);
+    slider.property('value', newCents);
+    updateVisualizations();
+}
+
+// Keep input and slider in sync (text to slider)
+function syncMosSliderToInput() {
+    const textInput = d3.select('#mos-generator-input');
+    const slider = d3.select('#mos-generator-slider');
+    try {
+        const cents = convertToCents(textInput.property('value'));
         const clampedCents = Math.max(0, Math.min(1200, cents));
         slider.property('value', clampedCents);
     } catch (error) {
         // If conversion fails, don't update slider
-        console.log('Invalid input for slider conversion:', error.message);
     }
 }
 
-// Function to update text input from slider
-function updateTextFromSlider() {
+// Keep input and slider in sync (slider to text)
+function syncMosInputToSlider() {
     const slider = d3.select('#mos-generator-slider');
     const textInput = d3.select('#mos-generator-input');
     const sliderValue = parseFloat(slider.property('value'));
-    
-    // Format to 3 decimal places and remove trailing zeros
     const formattedValue = parseFloat(sliderValue.toFixed(3)).toString();
     textInput.property('value', formattedValue);
 }
 
 // (Removed redundant event listener for #mos-generator-input; unified handler now manages this)
 
+
 // Event listener for slider changes
 d3.select('#mos-generator-slider').on('input', function() {
-    updateTextFromSlider();
+    syncMosInputToSlider();
     updateVisualizations();
 });
 
-// Arrow key functionality for slider
+// Arrow key functionality for slider (special increments)
 d3.select('#mos-generator-slider').on('keydown', function(event) {
-    const slider = d3.select(this);
-    let currentValue = parseFloat(slider.property('value'));
-    let newValue = currentValue;
-    
     switch(event.key) {
         case 'ArrowLeft':
-            newValue = Math.max(0, currentValue - 0.1);
+            adjustMosGeneratorValue(-0.1, 'slider');
             event.preventDefault();
             break;
         case 'ArrowRight':
-            newValue = Math.min(1200, currentValue + 0.1);
+            adjustMosGeneratorValue(0.1, 'slider');
             event.preventDefault();
             break;
         case 'ArrowUp':
-            newValue = Math.min(1200, currentValue + 0.01);
+            adjustMosGeneratorValue(0.01, 'slider');
             event.preventDefault();
             break;
         case 'ArrowDown':
-            newValue = Math.max(0, currentValue - 0.01);
+            adjustMosGeneratorValue(-0.01, 'slider');
             event.preventDefault();
             break;
         default:
-            return; // Don't handle other keys
-    }
-    
-    if (newValue !== currentValue) {
-        slider.property('value', newValue);
-        updateTextFromSlider();
-        updateVisualizations();
+            return;
     }
 });
 
-// Arrow key functionality for text input
+// Arrow key functionality for text input (whole cents)
 d3.select('#mos-generator-input').on('keydown', function(event) {
-    const textInput = d3.select(this);
-    const currentValue = textInput.property('value');
-    
-    // Only handle arrow keys when input contains pure cents (numbers only)
-    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-        try {
-            const cents = convertToCents(currentValue);
-            let newCents;
-            
-            if (event.key === 'ArrowUp') {
-                newCents = cents + 1;
-                event.preventDefault();
-            } else if (event.key === 'ArrowDown') {
-                newCents = Math.max(0, cents - 1); // Don't go below 0
-                event.preventDefault();
-            }
-            
-            // Format to remove unnecessary decimal places
-            const formattedValue = parseFloat(newCents.toFixed(3)).toString();
-            textInput.property('value', formattedValue);
-            
-            // Update slider and visualization
-            updateSliderFromText();
-            updateVisualizations();
-            
-        } catch (error) {
-            // If input is not a valid format, don't handle arrow keys
-            console.log('Arrow keys not applicable for current input format:', error.message);
-        }
+    if (event.key === 'ArrowUp') {
+        adjustMosGeneratorValue(1, 'input');
+        event.preventDefault();
+    } else if (event.key === 'ArrowDown') {
+        adjustMosGeneratorValue(-1, 'input');
+        event.preventDefault();
     }
 });
 
 // Initial synchronization
-updateSliderFromText();
+syncMosSliderToInput();
