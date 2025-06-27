@@ -1,4 +1,5 @@
 // mos.js
+import { attachTooltipHandlers } from './utils.js';
 
 // Function to automatically detect format and convert to cents
 export function convertToCents(inputValue) {
@@ -236,35 +237,10 @@ export function renderMOS(svg, centerX, centerY, radius) {
             .attr('fill', 'var(--text-color)')
             .attr('text-anchor', 'middle');
     } else {
-        // Attach tooltip event handlers to circles
-        mosGroup.selectAll('circle')
-            .on('mouseover', function(event, d) {
-                // Show tooltip
-                const tooltip = d3.select('#tooltip');
-                tooltip.style('display', 'block')
-                    .html(`Stack ${d.stack}: ${d.cents.toFixed(2)}¢`);
-
-                // Position tooltip
-                const visualizationDiv = document.getElementById('visualization');
-                const rect = visualizationDiv.getBoundingClientRect();
-                const mouseX = event.clientX - rect.left;
-                const mouseY = event.clientY - rect.top;
-                tooltip.style('left', `${mouseX + 15}px`)
-                    .style('top', `${mouseY + 15}px`);
-            })
-            .on('mousemove', function(event) {
-                // Update tooltip position
-                const tooltip = d3.select('#tooltip');
-                const visualizationDiv = document.getElementById('visualization');
-                const rect = visualizationDiv.getBoundingClientRect();
-                const mouseX = event.clientX - rect.left;
-                const mouseY = event.clientY - rect.top;
-                tooltip.style('left', `${mouseX + 15}px`)
-                    .style('top', `${mouseY + 15}px`);
-            })
-            .on('mouseout', function() {
-                // Hide tooltip
-                d3.select('#tooltip').style('display', 'none');
-            });
+        // Attach tooltip event handlers to circles using shared utility
+        attachTooltipHandlers(
+            mosGroup.selectAll('circle'),
+            d => `Stack ${d.stack}: ${d.cents.toFixed(2)}¢`
+        );
     }
 }

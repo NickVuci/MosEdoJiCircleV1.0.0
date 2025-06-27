@@ -93,34 +93,10 @@ export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius
             .attr('font-size', '10px')
             .attr('fill', 'var(--text-color)');
     } else {
-        // Attach tooltip event handlers
-        points.on('mouseover', function(event, d) {
-            // Show tooltip
-            const tooltip = d3.select('#tooltip');
-            tooltip.style('display', 'block')
-                .html(`${d.index} \\ ${edoValue} EDO<br>${d.angle.toFixed(2)}¢`);
-
-            // Position tooltip
-            const visualizationDiv = document.getElementById('visualization');
-            const rect = visualizationDiv.getBoundingClientRect();
-            const mouseX = event.clientX - rect.left;
-            const mouseY = event.clientY - rect.top;
-            tooltip.style('left', `${mouseX + 15}px`)
-                .style('top', `${mouseY + 15}px`);
-        })
-        .on('mousemove', function(event) {
-            // Update tooltip position
-            const tooltip = d3.select('#tooltip');
-            const visualizationDiv = document.getElementById('visualization');
-            const rect = visualizationDiv.getBoundingClientRect();
-            const mouseX = event.clientX - rect.left;
-            const mouseY = event.clientY - rect.top;
-            tooltip.style('left', `${mouseX + 15}px`)
-                .style('top', `${mouseY + 15}px`);
-        })
-        .on('mouseout', function() {
-            // Hide tooltip
-            d3.select('#tooltip').style('display', 'none');
+        // Attach tooltip event handlers using shared utility
+        // Lazy import to avoid circular dependency if needed
+        import('./utils.js').then(({ attachTooltipHandlers }) => {
+            attachTooltipHandlers(points, d => `${d.index} \\ ${edoValue} EDO<br>${d.angle.toFixed(2)}¢`);
         });
     }
 }
