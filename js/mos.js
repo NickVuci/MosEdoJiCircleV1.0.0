@@ -55,32 +55,24 @@ function detectInputFormat(inputValue) {
 }
 
 export function renderMOS(svg, centerX, centerY, radius) {
+
     // Get the generator input value
     const generatorInput = d3.select('#mos-generator-input').property('value');
-    
     let generatorCents;
     try {
         generatorCents = convertToCents(generatorInput);
     } catch (error) {
         console.error('Generator input error:', error.message);
-        // Clear any previous error styling and add error styling
         d3.select('#mos-generator-input')
             .classed('error', true)
             .attr('title', error.message); // Show error as tooltip
-        
-        // Use default value and exit early
-        generatorCents = 701.955; // Default to perfect fifth
+        generatorCents = 701.955;
         return;
     }
-    
-    // Clear any previous error styling
     d3.select('#mos-generator-input')
         .classed('error', false)
         .attr('title', null);
-    
-    // Get the number of stacks from the input
     const numStacks = parseInt(d3.select('#mos-stacks-input').property('value'), 10);
-
     // Select the MOS group
     let mosGroup = svg.select('#mos-group');
     mosGroup.selectAll('*').remove();
@@ -155,9 +147,9 @@ export function renderMOS(svg, centerX, centerY, radius) {
         if (stepsGCD === 1 && smallStepCount > 0) {
             // Display "xL y s" above the circle (lowercase 's')
             const mosTextContent = `${largeStepCount}L ${smallStepCount}s`;
-            const mosText = svg.select('#mos-text');
+            const mosText = mosGroup.select('#mos-text');
             if (mosText.empty()) {
-                svg.append('text')
+                mosGroup.append('text')
                     .attr('id', 'mos-text')
                     .attr('x', centerX)
                     .attr('y', centerY - radius - 20)
@@ -170,13 +162,13 @@ export function renderMOS(svg, centerX, centerY, radius) {
             }
         } else {
             // Remove MOS text if it exists
-            svg.select('#mos-text').remove();
+            mosGroup.select('#mos-text').remove();
             // Also, set isMOS to false to prevent lines from highlighting
             isMOS = false;
         }
     } else {
         // Remove MOS text if it exists
-        svg.select('#mos-text').remove();
+        mosGroup.select('#mos-text').remove();
     }
 
     // Handle labels

@@ -47,7 +47,6 @@ function updateVisualizations() {
 
     // Update MOS visualization
     mosGroup.selectAll('*').remove();
-    svg.select('#mos-text').remove();
     if (d3.select('#mos-toggle').property('checked')) {
         renderMOS(svg, centerX, centerY, radius);
         // Move mosGroup to the end to bring it to the front
