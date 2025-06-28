@@ -1,6 +1,6 @@
 # Code Duplication Issues in MosEdoJiCircleV1.0.0
 
-This document summarizes areas of code duplication in the codebase, listing them by both priority (impact on maintainability and user experience) and by ease of implementation (how quickly they can be refactored).
+This document summarizes areas of code duplication in the codebase, listing them by both priority (impact on maintainability and user experience) and by ease of implementation (how quickly they can be refactored). Status for each item is shown below.
 
 ---
 
@@ -8,34 +8,30 @@ This document summarizes areas of code duplication in the codebase, listing them
 
 ### High Priority
 1. **Tooltip Logic**
-   - Tooltip event handlers for note circles are repeated in multiple modules (e.g., `mos.js`, `ji.js`, `edo.js`).
-   - Inconsistent or duplicated tooltip code increases maintenance burden and risk of UI inconsistency.
+   - ✅ Tooltip event handlers are now unified via the shared `attachTooltipHandlers` utility in `utils.js`.
+   - All modules (`edo.js`, `mos.js`, `ji.js`) use this for consistent, DRY tooltips.
 
 2. **Input Validation and Correction**
-   - While mostly unified, any remaining per-module input validation/parsing should be routed through shared utilities.
-   - Ensures all user input is handled consistently and robustly.
+   - ✅ Input validation and correction is unified and config-driven in `main.js`.
+   - Minor per-module parsing remains, but is minimal and not error-prone. Further DRYing is possible by moving all parsing to shared utilities if desired.
 
 3. **Error Feedback**
-   - Error styling and feedback logic is (or will be) repeated for MOS, EDO, and possibly JI inputs.
-   - Consistent error feedback improves user experience and reduces bugs.
+   - ⚠️ Partially unified. Some error styling and feedback is consistent, but not all modules use a shared utility for error display. Creating a utility for error styling/messaging and using it everywhere would complete this.
 
 ### Medium Priority
 4. **Label Rendering**
-   - The logic for rendering note labels (position, formatting, style) is similar across all visualizations.
-   - Unifying this logic ensures consistent appearance and easier updates.
+   - ✅ The logic for rendering note labels (position, formatting, style) is now unified across all visualizations using the shared `renderLabels` utility in `utils.js`.
+   - All modules (`edo.js`, `mos.js`, `ji.js`) use this utility for consistent appearance and easier updates.
 
 5. **SVG Group and Element Management**
-   - Each module manages SVG groups and clearing logic in a similar way.
-   - Shared utilities can reduce boilerplate and prevent subtle bugs.
+   - ⚠️ Not yet unified. Each module still manages SVG groups and clearing logic in a similar way. Creating `ensureGroup` and `clearGroup` utilities and using them everywhere would address this.
 
 ### Lower Priority
 6. **Value Clamping and Formatting**
-   - Clamping and formatting numbers (e.g., cents, stack numbers) is repeated in several places.
-   - Utility functions can make this code DRY and less error-prone.
+   - ⚠️ Not yet unified. Clamping and formatting logic is still repeated. Implement `clamp` and `formatCents` utilities in `utils.js` and refactor all manual clamping/formatting to use them.
 
 7. **Checkbox/Event Handler Patterns**
-   - The pattern for setting up D3 event listeners for checkboxes and toggles is repeated.
-   - A config-driven approach could further streamline this as the UI grows.
+   - ✅ Checkbox and toggle event handling is config-driven and unified in `main.js`.
 
 ---
 
@@ -43,49 +39,39 @@ This document summarizes areas of code duplication in the codebase, listing them
 
 ### Easy Fixes
 1. **Value Clamping and Formatting**
-   - Create `clamp(value, min, max)` and `formatCents(value)` utilities.
-   - Replace all manual clamping/formatting with these functions.
-
+   - ⚠️ Not yet done. Implement and use `clamp` and `formatCents` utilities.
 2. **SVG Group and Element Management**
-   - Create `ensureGroup(parent, id)` and `clearGroup(group)` utilities.
-   - Use these for all group creation/clearing in visualizations.
-
+   - ⚠️ Not yet done. Implement and use `ensureGroup` and `clearGroup` utilities.
 3. **Checkbox/Event Handler Patterns**
-   - Use a config array or helper for event binding if more controls are added.
+   - ✅ Done. All event handler patterns are config-driven and unified.
 
 ### Moderate Effort
 4. **Tooltip Logic**
-   - Refactor all tooltip event handlers into a shared function (e.g., `attachTooltipHandlers`).
-   - Update all modules to use this utility for consistent tooltips.
-
+   - ✅ Done. All modules use the shared utility.
 5. **Label Rendering**
-   - Create a shared `renderLabels` function for all visualizations.
-   - Use callbacks for label text and position to keep it flexible.
+   - ✅ Done. All modules use the shared utility.
 
 ### Significant Effort
 6. **Input Validation and Correction**
-   - Audit all modules for any remaining per-input validation/parsing.
-   - Refactor to ensure all input handling is routed through shared utilities.
-
+   - ✅ Mostly done. Only minor per-module parsing remains.
 7. **Error Feedback**
-   - Create a utility for error styling and messaging.
-   - Update all input fields to use this for consistent feedback.
+   - ⚠️ Not yet done. Needs a shared utility and consistent usage.
 
 ---
 
 ## Summary Table
 
-| Area                | Priority        | Ease of Implementation |
-|---------------------|----------------|-----------------------|
-| Tooltip logic       | High           | Moderate              |
-| Input validation    | High           | Significant           |
-| Error feedback      | High           | Significant           |
-| Label rendering     | Medium         | Moderate              |
-| SVG group mgmt      | Medium         | Easy                  |
-| Value clamping      | Low            | Easy                  |
-| Event handler setup | Low            | Easy                  |
+| Area                | Status         |
+|---------------------|---------------|
+| Tooltip logic       | ✅ Done        |
+| Input validation    | ✅ Mostly done |
+| Error feedback      | ⚠️ Partial     |
+| Label rendering     | ✅ Done        |
+| SVG group mgmt      | ⚠️ Not done    |
+| Value clamping      | ⚠️ Not done    |
+| Event handler setup | ✅ Done        |
 
 ---
 
 **Recommendation:**
-Start with the easy fixes (clamping, SVG group utilities), then refactor tooltips and labels, and finally unify all input validation and error feedback for maximum maintainability.
+Start with the remaining easy fixes (clamping, SVG group utilities), then finish error feedback, and optionally further DRY input parsing for maximum maintainability and consistency.

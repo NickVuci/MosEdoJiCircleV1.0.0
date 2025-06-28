@@ -72,3 +72,24 @@ export function renderLabels({ selection, data, getText, getX, getY, fontSize = 
     .attr('fill', fill)
     .attr('text-anchor', anchor);
 }
+
+/**
+ * Clamp a value between min and max.
+ * @param {number} value - The value to clamp.
+ * @param {number} min - Minimum allowed value.
+ * @param {number} max - Maximum allowed value.
+ * @returns {number} The clamped value.
+ */
+export function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+/**
+ * Format a value as cents with a specified number of decimals.
+ * @param {number} value - The value to format.
+ * @param {number} [decimals=2] - Number of decimal places.
+ * @returns {string} The formatted cents string (e.g., '701.96¢').
+ */
+export function formatCents(value, decimals = 2) {
+  return `${Number(value).toFixed(decimals)}¢`;
+}
