@@ -1,4 +1,5 @@
 // edo.js
+import { renderLabels } from './utils.js';
 
 export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius) {
     // Clear existing elements
@@ -82,16 +83,16 @@ export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius
     const alwaysOn = d3.select('#always-on-checkbox').property('checked');
 
     if (alwaysOn) {
-        // Display labels for all points
-        pointsGroup.selectAll('text')
-            .data(edoData)
-            .enter()
-            .append('text')
-            .attr('x', d => d.x + 8)
-            .attr('y', d => d.y - 8)
-            .text(d => `${d.index} \\ ${edoValue} EDO\n${d.angle.toFixed(2)}¢`)
-            .attr('font-size', '10px')
-            .attr('fill', 'var(--text-color)');
+        // Display labels for all points using shared utility
+        renderLabels({
+            selection: pointsGroup,
+            data: edoData,
+            getText: d => `${d.index} \\ ${edoValue} EDO\n${d.angle.toFixed(2)}¢`,
+            getX: d => d.x + 8,
+            getY: d => d.y - 8,
+            fontSize: '10px',
+            fill: 'var(--text-color)'
+        });
     } else {
         // Attach tooltip event handlers using shared utility
         // Lazy import to avoid circular dependency if needed

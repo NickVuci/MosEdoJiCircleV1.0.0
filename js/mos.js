@@ -1,5 +1,5 @@
 // mos.js
-import { attachTooltipHandlers } from './utils.js';
+import { attachTooltipHandlers, renderLabels } from './utils.js';
 
 // Function to automatically detect format and convert to cents
 export function convertToCents(inputValue) {
@@ -219,23 +219,23 @@ export function renderMOS(svg, centerX, centerY, radius) {
         .attr('stroke', 'black');
 
     if (alwaysOn) {
-        // Display labels for all notes
-        mosGroup.selectAll('text')
-            .data(scaleNotes)
-            .enter()
-            .append('text')
-            .attr('x', d => {
+        // Display labels for all notes using shared utility
+        renderLabels({
+            selection: mosGroup,
+            data: scaleNotes,
+            getText: d => `Stack ${d.stack}: ${d.cents.toFixed(2)}¢`,
+            getX: d => {
                 const angle = (d.cents / 1200) * 2 * Math.PI - Math.PI / 2;
                 return centerX + (radius + 10) * Math.cos(angle);
-            })
-            .attr('y', d => {
+            },
+            getY: d => {
                 const angle = (d.cents / 1200) * 2 * Math.PI - Math.PI / 2;
                 return centerY + (radius + 10) * Math.sin(angle);
-            })
-            .text(d => `Stack ${d.stack}: ${d.cents.toFixed(2)}¢`)
-            .attr('font-size', '10px')
-            .attr('fill', 'var(--text-color)')
-            .attr('text-anchor', 'middle');
+            },
+            fontSize: '10px',
+            fill: 'var(--text-color)',
+            anchor: 'middle'
+        });
     } else {
         // Attach tooltip event handlers to circles using shared utility
         attachTooltipHandlers(
