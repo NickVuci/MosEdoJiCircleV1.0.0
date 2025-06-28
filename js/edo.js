@@ -1,10 +1,10 @@
 // edo.js
-import { renderLabels } from './utils.js';
+import { renderLabels, ensureGroup, clearGroup } from './utils.js';
 
 export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius) {
-    // Clear existing elements
-    linesGroup.selectAll('*').remove();
-    pointsGroup.selectAll('*').remove();
+    // Clear existing elements using shared utility
+    clearGroup(linesGroup);
+    clearGroup(pointsGroup);
 
     // Get the EDO value from the input
     const edoValue = parseInt(d3.select('#edo-input').property('value'), 10);

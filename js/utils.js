@@ -145,3 +145,25 @@ export function clamp(value, min, max) {
 export function formatCents(value, decimals = 2) {
   return `${Number(value).toFixed(decimals)}¢`;
 }
+
+/**
+ * Ensure a group with the given id exists in the SVG. Returns the D3 selection for the group.
+ * @param {d3.Selection} svg - The D3 SVG selection.
+ * @param {string} id - The id for the group.
+ * @returns {d3.Selection} The D3 selection for the group.
+ */
+export function ensureGroup(svg, id) {
+  let group = svg.select(`#${id}`);
+  if (group.empty()) {
+    group = svg.append('g').attr('id', id);
+  }
+  return group;
+}
+
+/**
+ * Remove all children from a D3 group selection.
+ * @param {d3.Selection} group - The D3 group selection.
+ */
+export function clearGroup(group) {
+  group.selectAll('*').remove();
+}

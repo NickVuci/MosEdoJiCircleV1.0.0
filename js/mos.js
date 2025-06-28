@@ -1,5 +1,5 @@
 // mos.js
-import { attachTooltipHandlers, renderLabels, showError, clearError } from './utils.js';
+import { attachTooltipHandlers, renderLabels, showError, clearError, ensureGroup, clearGroup } from './utils.js';
 
 // Function to automatically detect format and convert to cents
 export function convertToCents(inputValue) {
@@ -70,9 +70,9 @@ export function renderMOS(svg, centerX, centerY, radius) {
     }
     clearError('#mos-generator-input');
     const numStacks = parseInt(d3.select('#mos-stacks-input').property('value'), 10);
-    // Select the MOS group
-    let mosGroup = svg.select('#mos-group');
-    mosGroup.selectAll('*').remove();
+    // Select and clear the MOS group using shared utilities
+    let mosGroup = ensureGroup(svg, 'mos-group');
+    clearGroup(mosGroup);
 
     // Initialize array to store notes with stack index and cents
     let scaleNotes = [];

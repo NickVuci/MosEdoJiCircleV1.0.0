@@ -3,7 +3,7 @@
 import { renderEDO } from './edo.js';
 import { renderJI } from './ji.js';
 import { renderMOS, convertToCents } from './mos.js';
-import { showError, clearError } from './utils.js';
+import { showError, clearError, ensureGroup, clearGroup } from './utils.js';
 
 // SVG Canvas Setup
 const width = 600;
@@ -26,28 +26,27 @@ svg.append('circle')
     .attr('r', radius)
     .attr('fill', 'none');
 
-// Create groups for organizing SVG elements
-const jiGroup = svg.append('g').attr('id', 'ji-group'); // JI lines group
-const edoGroup = svg.append('g').attr('id', 'edo-group'); // EDO group
-const mosGroup = svg.append('g').attr('id', 'mos-group'); // MOS group
-
+// Create groups for organizing SVG elements using shared utilities
+const jiGroup = ensureGroup(svg, 'ji-group');
+const edoGroup = ensureGroup(svg, 'edo-group');
+const mosGroup = ensureGroup(svg, 'mos-group');
 // Inside edoGroup, create subgroups for lines and points
-const linesGroup = edoGroup.append('g').attr('id', 'lines-group');
-const pointsGroup = edoGroup.append('g').attr('id', 'points-group');
+const linesGroup = ensureGroup(edoGroup, 'lines-group');
+const pointsGroup = ensureGroup(edoGroup, 'points-group');
 
 // Function to update all visualizations
 function updateVisualizations() {
     // Update EDO visualization
-    linesGroup.selectAll('*').remove();
-    pointsGroup.selectAll('*').remove();
+    clearGroup(linesGroup);
+    clearGroup(pointsGroup);
     renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius);
 
     // Update JI visualization
-    jiGroup.selectAll('*').remove();
+    clearGroup(jiGroup);
     renderJI(svg, centerX, centerY, radius);
 
     // Update MOS visualization
-    mosGroup.selectAll('*').remove();
+    clearGroup(mosGroup);
     if (d3.select('#mos-toggle').property('checked')) {
         renderMOS(svg, centerX, centerY, radius);
         // Move mosGroup to the end to bring it to the front

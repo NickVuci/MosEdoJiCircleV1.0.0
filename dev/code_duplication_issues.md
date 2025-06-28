@@ -24,11 +24,11 @@ This document summarizes areas of code duplication in the codebase, listing them
    - All modules (`edo.js`, `mos.js`, `ji.js`) use this utility for consistent appearance and easier updates.
 
 5. **SVG Group and Element Management**
-   - ⚠️ Not yet unified. Each module still manages SVG groups and clearing logic in a similar way. Creating `ensureGroup` and `clearGroup` utilities and using them everywhere would address this.
+   - ✅ All SVG group and element management is now unified via shared `ensureGroup` and `clearGroup` utilities in `utils.js`. All modules use these for consistent, DRY group logic.
 
 ### Lower Priority
 6. **Value Clamping and Formatting**
-   - ⚠️ Not yet unified. Clamping and formatting logic is still repeated. Implement `clamp` and `formatCents` utilities in `utils.js` and refactor all manual clamping/formatting to use them.
+   - ✅ All clamping and formatting logic is now unified via `clamp` and `formatCents` utilities in `utils.js`. All modules use these for DRY value handling.
 
 7. **Checkbox/Event Handler Patterns**
    - ✅ Checkbox and toggle event handling is config-driven and unified in `main.js`.
@@ -39,9 +39,9 @@ This document summarizes areas of code duplication in the codebase, listing them
 
 ### Easy Fixes
 1. **Value Clamping and Formatting**
-   - ⚠️ Not yet done. Implement and use `clamp` and `formatCents` utilities.
+   - ✅ Done. All modules use the shared utilities.
 2. **SVG Group and Element Management**
-   - ⚠️ Not yet done. Implement and use `ensureGroup` and `clearGroup` utilities.
+   - ✅ Done. All modules use the shared utilities.
 3. **Checkbox/Event Handler Patterns**
    - ✅ Done. All event handler patterns are config-driven and unified.
 
@@ -50,10 +50,8 @@ This document summarizes areas of code duplication in the codebase, listing them
    - ✅ Done. All modules use the shared utility.
 5. **Label Rendering**
    - ✅ Done. All modules use the shared utility.
-
 6. **SVG Group and Element Management**
-   - ⏳ In progress. Shared `ensureGroup` and `clearGroup` utilities are being implemented in `utils.js` and will be adopted by all modules.
-
+   - ✅ Done. All modules use the shared utilities.
 7. **Error Feedback**
    - ✅ Done. All modules use the shared utility for error feedback.
 
@@ -70,10 +68,10 @@ This document summarizes areas of code duplication in the codebase, listing them
 | Input validation    | ✅ Mostly done |
 | Error feedback      | ✅ Done        |
 | Label rendering     | ✅ Done        |
-| SVG group mgmt      | ⏳ In progress |
+| SVG group mgmt      | ✅ Done        |
 | Value clamping      | ✅ Done        |
 | Event handler setup | ✅ Done        |
 
 
 **Recommendation:**
-SVG group and element management refactor is in progress. Once complete, finish error feedback unification, and optionally further DRY input parsing for maximum maintainability and consistency.
+All major code duplication issues are now resolved. The codebase is DRY, maintainable, and easy to extend. Continue to monitor for new duplication as features are added.

@@ -1,7 +1,11 @@
 // ji.js
-import { attachTooltipHandlers, renderLabels } from './utils.js';
+import { attachTooltipHandlers, renderLabels, ensureGroup, clearGroup } from './utils.js';
 
 export function renderJI(svg, centerX, centerY, radius) {
+    // Ensure and clear the JI group using shared utilities
+    const jiGroup = ensureGroup(svg, 'ji-group');
+    clearGroup(jiGroup);
+
     // Get selected primes
     const selectedPrimes = d3.selectAll('#prime-checkboxes input[type="checkbox"]')
         .nodes()
