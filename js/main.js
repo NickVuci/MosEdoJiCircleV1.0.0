@@ -2,7 +2,8 @@
 
 import { renderEDO } from './edo.js';
 import { renderJI } from './ji.js';
-import { renderMOS, convertToCents } from './mos.js'; // Import renderMOS and convertToCents
+import { renderMOS, convertToCents } from './mos.js';
+import { showError, clearError } from './utils.js';
 
 // SVG Canvas Setup
 const width = 600;
@@ -199,7 +200,9 @@ function syncMosSliderToInput() {
         const cents = convertToCents(textInput.property('value'));
         const clampedCents = Math.max(0, Math.min(1200, cents));
         slider.property('value', clampedCents);
+        clearError('#mos-generator-input');
     } catch (error) {
+        showError('#mos-generator-input', error.message);
         // If conversion fails, don't update slider
     }
 }

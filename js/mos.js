@@ -1,5 +1,5 @@
 // mos.js
-import { attachTooltipHandlers, renderLabels } from './utils.js';
+import { attachTooltipHandlers, renderLabels, showError, clearError } from './utils.js';
 
 // Function to automatically detect format and convert to cents
 export function convertToCents(inputValue) {
@@ -64,15 +64,11 @@ export function renderMOS(svg, centerX, centerY, radius) {
         generatorCents = convertToCents(generatorInput);
     } catch (error) {
         console.error('Generator input error:', error.message);
-        d3.select('#mos-generator-input')
-            .classed('error', true)
-            .attr('title', error.message); // Show error as tooltip
+        showError('#mos-generator-input', error.message);
         generatorCents = 701.955;
         return;
     }
-    d3.select('#mos-generator-input')
-        .classed('error', false)
-        .attr('title', null);
+    clearError('#mos-generator-input');
     const numStacks = parseInt(d3.select('#mos-stacks-input').property('value'), 10);
     // Select the MOS group
     let mosGroup = svg.select('#mos-group');

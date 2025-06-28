@@ -16,7 +16,7 @@ This document summarizes areas of code duplication in the codebase, listing them
    - Minor per-module parsing remains, but is minimal and not error-prone. Further DRYing is possible by moving all parsing to shared utilities if desired.
 
 3. **Error Feedback**
-   - ⚠️ Partially unified. Some error styling and feedback is consistent, but not all modules use a shared utility for error display. Creating a utility for error styling/messaging and using it everywhere would complete this.
+   - ✅ All error feedback is now unified via shared utilities (`showError`, `clearError`, etc.) in `utils.js`. All modules use these for consistent, accessible error display.
 
 ### Medium Priority
 4. **Label Rendering**
@@ -51,13 +51,16 @@ This document summarizes areas of code duplication in the codebase, listing them
 5. **Label Rendering**
    - ✅ Done. All modules use the shared utility.
 
+6. **SVG Group and Element Management**
+   - ⏳ In progress. Shared `ensureGroup` and `clearGroup` utilities are being implemented in `utils.js` and will be adopted by all modules.
+
+7. **Error Feedback**
+   - ✅ Done. All modules use the shared utility for error feedback.
+
 ### Significant Effort
 6. **Input Validation and Correction**
    - ✅ Mostly done. Only minor per-module parsing remains.
-7. **Error Feedback**
-   - ⚠️ Not yet done. Needs a shared utility and consistent usage.
 
----
 
 ## Summary Table
 
@@ -65,13 +68,12 @@ This document summarizes areas of code duplication in the codebase, listing them
 |---------------------|---------------|
 | Tooltip logic       | ✅ Done        |
 | Input validation    | ✅ Mostly done |
-| Error feedback      | ⚠️ Partial     |
+| Error feedback      | ✅ Done        |
 | Label rendering     | ✅ Done        |
-| SVG group mgmt      | ⚠️ Not done    |
-| Value clamping      | ⚠️ Not done    |
+| SVG group mgmt      | ⏳ In progress |
+| Value clamping      | ✅ Done        |
 | Event handler setup | ✅ Done        |
 
----
 
 **Recommendation:**
-Start with the remaining easy fixes (clamping, SVG group utilities), then finish error feedback, and optionally further DRY input parsing for maximum maintainability and consistency.
+SVG group and element management refactor is in progress. Once complete, finish error feedback unification, and optionally further DRY input parsing for maximum maintainability and consistency.

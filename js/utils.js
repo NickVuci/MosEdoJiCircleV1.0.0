@@ -1,3 +1,55 @@
+/**
+ * Show an error on a given input or UI element.
+ * @param {string} selector - CSS selector for the input or element.
+ * @param {string} message - Error message to display (as tooltip/title).
+ */
+export function showError(selector, message) {
+  const el = d3.select(selector);
+  el.classed('error', true)
+    .attr('title', message)
+    .attr('aria-invalid', 'true');
+}
+
+/**
+ * Clear the error from a given input or UI element.
+ * @param {string} selector - CSS selector for the input or element.
+ */
+export function clearError(selector) {
+  const el = d3.select(selector);
+  el.classed('error', false)
+    .attr('title', null)
+    .attr('aria-invalid', null);
+}
+
+/**
+ * Show a global error message in a dedicated error area.
+ * @param {string} message - Error message to display.
+ */
+export function showGlobalError(message) {
+  let errorArea = document.getElementById('global-error-area');
+  if (!errorArea) {
+    errorArea = document.createElement('div');
+    errorArea.id = 'global-error-area';
+    errorArea.setAttribute('role', 'alert');
+    errorArea.style.color = 'var(--error-color, red)';
+    errorArea.style.margin = '1em 0';
+    errorArea.style.fontWeight = 'bold';
+    document.body.prepend(errorArea);
+  }
+  errorArea.textContent = message;
+  errorArea.style.display = 'block';
+}
+
+/**
+ * Clear the global error message area.
+ */
+export function clearGlobalError() {
+  const errorArea = document.getElementById('global-error-area');
+  if (errorArea) {
+    errorArea.textContent = '';
+    errorArea.style.display = 'none';
+  }
+}
 // utils.js
 // Shared utility for attaching consistent tooltip handlers to D3 selections
 
