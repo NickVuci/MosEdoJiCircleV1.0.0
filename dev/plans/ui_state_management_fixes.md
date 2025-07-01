@@ -6,9 +6,9 @@
 - [x] MOS generator and stacks input validation and feedback are robust and consistent
 - [x] JI odd limit input validation and feedback are robust and consistent
 - [x] MOS text is grouped correctly in the SVG (code organization improved)
-- [ ] Checkbox state visibility: "Labels Always On" effect is still not visually obvious to new users (outstanding)
+- [x] Checkbox state visibility: "Labels Always On" effect is now visually obvious to new users (complete)
 - [ ] Enhanced error feedback for MOS generator (dedicated error message element) not yet implemented
-- [ ] Brief description or highlight for "Labels Always On" checkbox not yet implemented
+- [x] Brief description or highlight for "Labels Always On" checkbox implemented
 
 ## Overview
 
@@ -55,7 +55,7 @@ This document outlines the inconsistent UI state management issues in the MosEdo
   ```
 
 ### 3. Checkbox State Consistency
-**Status:** Outstanding. The "Labels Always On" checkbox state is functionally correct, but the effect is still not visually obvious to new users. (July 2025)
+**Status:** Complete. The "Labels Always On" checkbox now provides clear visual and descriptive feedback, making its effect obvious to new users. (July 2025)
 
 **Location:**
 - The event listener is in `main.js`:
