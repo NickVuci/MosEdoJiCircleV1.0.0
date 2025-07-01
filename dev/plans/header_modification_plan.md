@@ -7,7 +7,7 @@ Remove the traditional header to maximize space for the main circle visualizatio
 ## Actionable Step-by-Step Plan
 1. **Create the Universal Controls Div**
    - Add a new `#universal-controls` div inside the `#controls` div, before the other control modules.
-   - Style this area to be visually distinct and accessible from anywhere in the app.
+   - Style this the same as the other modules.
 
 2. **Relocate "Always Show Labels" and Light/Dark Mode Button**
    - Move these controls into the new `#universal-controls` div.
