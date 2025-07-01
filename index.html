@@ -8,78 +8,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <!-- Header Section -->
-    <header>
-        <h1>A Tool for Visualizing Some Xenharmonic Concepts</h1>
-        <h2>By Nick Vuci</h2>
-        <!-- Dark Mode Toggle Button -->
-        <div id="header-controls">
-            <button id="dark-mode-button">Light Mode</button>
-            <label id="labels-toggle-label">
-                <input type="checkbox" id="always-on-checkbox">
-                Labels Always On
-            </label>
-        </div>
-    </header>
-
-    <!-- Controls Section -->
-    <div id="controls">
-        <!-- EDO Controls -->
-        <div id="edo-controls" class="control-module">
-            <h3>EDO</h3>
-            <label for="edo-input">Enter EDO value:</label>
-            <input type="number" id="edo-input" min="0" step="1" value="12" inputmode="numeric" pattern="[0-9]*">
-            <label>
-                <input type="checkbox" id="edo-lines" checked>
-                Show Lines
-            </label>
-            <label>
-                <input type="checkbox" id="prime-colors-checkbox"> 
-                Color Prime EDOs
-            </label>
-        </div>
-
-        <!-- JI Controls -->
-        <div id="ji-controls" class="control-module">
-            <h3>JI</h3>
-            <div id="prime-checkboxes">
-                <label><input type="checkbox" value="3" checked> 3</label>
-                <label><input type="checkbox" value="5" checked> 5</label>
-                <label><input type="checkbox" value="7"> 7</label>
-                <label><input type="checkbox" value="11"> 11</label>
-                <label><input type="checkbox" value="13"> 13</label>
-                <label><input type="checkbox" value="17"> 17</label>
-                <label><input type="checkbox" value="19"> 19</label>
+    <div id="main-wrapper">
+        <!-- Controls Section -->
+        <div id="controls">
+            <!-- Universal Controls -->
+            <div id="universal-controls" class="control-module">
+                <h3 style="font-size:1.1em;margin-bottom:8px;">Universal Controls</h3>
+                <button id="dark-mode-button">Light Mode</button>
+                <label id="labels-toggle-label" style="margin-left:12px;">
+                    <input type="checkbox" id="always-on-checkbox">
+                    Labels Always On
+                </label>
             </div>
-            <label for="odd-limit-input">Odd Limit:</label>
-            <input type="number" id="odd-limit-input" min="1" step="2" value="15" inputmode="numeric" pattern="[0-9]*">
+            <!-- EDO Controls -->
+            <div id="edo-controls" class="control-module">
+                <h3>EDO</h3>
+                <label for="edo-input">Enter EDO value:</label>
+                <input type="number" id="edo-input" min="0" step="1" value="12" inputmode="numeric" pattern="[0-9]*">
+                <label>
+                    <input type="checkbox" id="edo-lines" checked>
+                    Show Lines
+                </label>
+                <label>
+                    <input type="checkbox" id="prime-colors-checkbox"> 
+                    Color Prime EDOs
+                </label>
+            </div>
+
+            <!-- JI Controls -->
+            <div id="ji-controls" class="control-module">
+                <h3>JI</h3>
+                <div id="prime-checkboxes">
+                    <label><input type="checkbox" value="3" checked> 3</label>
+                    <label><input type="checkbox" value="5" checked> 5</label>
+                    <label><input type="checkbox" value="7"> 7</label>
+                    <label><input type="checkbox" value="11"> 11</label>
+                    <label><input type="checkbox" value="13"> 13</label>
+                    <label><input type="checkbox" value="17"> 17</label>
+                    <label><input type="checkbox" value="19"> 19</label>
+                </div>
+                <label for="odd-limit-input">Odd Limit:</label>
+                <input type="number" id="odd-limit-input" min="1" step="2" value="15" inputmode="numeric" pattern="[0-9]*">
+            </div>
+
+            <!-- MOS Controls -->
+            <div id="mos-controls" class="control-module">
+                <h3>MOS</h3>
+                <label for="mos-toggle">Enable MOS:</label>
+                <input type="checkbox" id="mos-toggle" checked>
+                <label for="mos-generator-input">Generator:</label>
+                <input type="text" id="mos-generator-input" value="701.955" 
+                       placeholder="cents, ratio (3/2), or EDO steps (7\12)">
+                <input type="range" id="mos-generator-slider" min="0" max="1200" value="701.955" step="0.01">
+                <label for="mos-stacks-input">Number of Stacks:</label>
+                <input type="number" id="mos-stacks-input" min="0" value="6" step="1" inputmode="numeric" pattern="[0-9]*">
+            </div>
         </div>
 
-        <!-- MOS Controls -->
-        <div id="mos-controls" class="control-module">
-            <h3>MOS</h3>
-            
-            <label for="mos-toggle">Enable MOS:</label>
-            <input type="checkbox" id="mos-toggle" checked>
-            
-            <label for="mos-generator-input">Generator:</label>
-            <input type="text" id="mos-generator-input" value="701.955" 
-                   placeholder="cents, ratio (3/2), or EDO steps (7\12)">
-            
-
-            <input type="range" id="mos-generator-slider" min="0" max="1200" value="701.955" step="0.01">
-            
-            <label for="mos-stacks-input">Number of Stacks:</label>
-            <input type="number" id="mos-stacks-input" min="0" value="6" step="1" inputmode="numeric" pattern="[0-9]*">
+        <!-- Visualization Section -->
+        <div id="visualization" style="position: relative;">
+            <!-- Tooltip -->
+            <div id="tooltip" class="tooltip" style="display: none;"></div>
         </div>
     </div>
-
-    <!-- Visualization Section -->
-    <div id="visualization" style="position: relative;">
-        <!-- Tooltip -->
-        <div id="tooltip" class="tooltip" style="display: none;"></div>
-    </div>
-
+    <!-- Footer for Title and Credit -->
+    <footer id="main-footer">
+        <span style="pointer-events:auto;">A Tool for Visualizing Some Xenharmonic Concepts &mdash; By Nick Vuci</span>
+    </footer>
     <!-- Include D3.js Library (local bundle) -->
     <script src="js/lib/d3.v7.min.js"></script>
     <!-- Include Main JavaScript File -->

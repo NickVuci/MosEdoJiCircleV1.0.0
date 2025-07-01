@@ -1,3 +1,31 @@
+/* Footer Styles */
+
+footer#main-footer {
+    color: #b0b0b0;
+    background: transparent;
+    font-size: 0.95em;
+    text-align: center;
+    padding: 8px 0;
+    width: 100%;
+    pointer-events: none;
+    flex-shrink: 0;
+}
+/* Flexbox layout for sticky footer */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#main-wrapper {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.dark-mode footer#main-footer {
+    color: #b0b0b0;
+}
 /* styles.css */
 
 /* Root variables for light and dark mode */
@@ -5,7 +33,7 @@
     --background-color: #ffffff;
     --text-color: #000000;
     --control-background: #f0f0f0;
-    --header-background: #e0e0e0;
+    /* --header-background: #e0e0e0; (legacy, unused) */
     --module-border: #cccccc;
     --link-color: #0066cc;
     --circle-stroke-color: #000000;
@@ -21,7 +49,7 @@
     --background-color: #121212;
     --text-color: #e0e0e0;
     --control-background: #1e1e1e;
-    --header-background: #1a1a1a;
+    /* --header-background: #1a1a1a; (legacy, unused) */
     --module-border: #333333;
     --link-color: #3399ff;
     --circle-stroke-color: #ffffff;
@@ -41,24 +69,7 @@ body {
     color: var(--text-color);
 }
 
-/* Header Styles */
-header {
-    padding: 20px;
-    background-color: var(--header-background);
-    text-align: center;
-    /* Removed position: relative; */
-}
-
-header h1 {
-    margin: 0;
-    font-size: 1.8em;
-}
-
-header h2 {
-    margin: 5px 0 10px;
-    font-size: 1.2em;
-    font-weight: normal;
-}
+/* Header removed: see header_modification_plan.md (no header styles remain) */
 
 /* Dark Mode Toggle Button Styles */
 #dark-mode-toggle {
@@ -94,6 +105,7 @@ header h2 {
     padding: 10px;
     margin: 10px;
     width: 280px;
+    min-height: 120px;
     box-sizing: border-box;
     background-color: var(--background-color);
 }

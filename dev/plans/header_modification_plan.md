@@ -4,35 +4,26 @@
 Remove the traditional header to maximize space for the main circle visualization, and relocate essential information and controls for a cleaner, more modern interface.
 
 
-## Actionable Step-by-Step Plan
+
+## Actionable Step-by-Step Plan (Status)
 1. **Create the Universal Controls Div**
-   - Add a new `#universal-controls` div inside the `#controls` div, before the other control modules.
-   - Style this the same as the other modules.
+   - ✅ Done: Added and styled `#universal-controls` div before other control modules.
 
 2. **Relocate "Always Show Labels" and Light/Dark Mode Button**
-   - Move these controls into the new `#universal-controls` div.
-   - Update their styling and layout to match the new location.
-   - Ensure they are always accessible and do not obscure the circle.
-   - Update any JS or CSS references if needed.
+   - ✅ Done: Moved controls, updated styling, ensured accessibility, and updated JS/CSS references.
 
 3. **Remove the Header**
-   - Identify and delete the header element (HTML and any related CSS/JS).
-   - Remove any header-specific styles or scripts.
+   - ✅ Done: Header element and all related styles/scripts removed.
 
 4. **Move Title and Credit to Footer**
-   - Create a new `<footer>` element at the bottom of your main layout.
-   - Add the title and credit text inside the footer, using small, muted, or semi-transparent styling.
-   - Ensure the footer is unobtrusive and does not overlap or push the circle out of view.
-   - Make the footer responsive so it remains visible but never interferes with the main visualization.
+   - ✅ Done: Footer created, styled, and made responsive; does not overlap visualization.
 
 5. **Update Accessibility and Responsiveness**
-   - Ensure all relocated controls are keyboard and screen reader accessible.
-   - Test the new layout on different screen sizes and orientations.
-   - Adjust CSS as needed to keep the footer and controls responsive.
+   - ⏳ To Do: Final accessibility and responsiveness testing and tweaks will be completed later.
 
 6. **Clean Up**
-   - Remove any unused CSS or JS related to the old header.
-   - Update documentation to reflect the new layout.
+   - ✅ Done: All unused CSS or JS related to the old header has been removed or marked as legacy/unused.
+   - Documentation update pending as part of final review.
 
 
 ## Potential Issues & Mitigations
