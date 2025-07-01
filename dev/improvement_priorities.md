@@ -3,8 +3,8 @@
 **Status Summary (as of July 2025):**
 - D3.js dependency is now bundled locally (✅ complete)
 - Code duplication (tooltips, SVG group mgmt, error feedback, label rendering, clamping, event patterns) is resolved (✅ complete)
-- Input validation is mostly DRY, but some modules still use direct parsing (🟡 in progress)
-- UI state management: MOS text grouping and MOS error feedback are complete; EDO input validation and checkbox feedback still needed (🟡 in progress)
+- Input validation and error handling are now fully DRY and consistent across all modules (✅ complete)
+- UI state management: MOS text grouping, EDO input validation, and error feedback are complete; checkbox feedback/visibility for "Labels Always On" is still outstanding (🟡 in progress)
 - All other items remain as described below
 
 This document outlines the key issues identified in the current codebase, organized by importance and implementation difficulty.
@@ -17,7 +17,7 @@ This document outlines the key issues identified in the current codebase, organi
 3. **Performance Concerns** - Inefficient rendering approach for complex visualizations (high EDO values, many JI intervals) could cause performance issues. (**Outstanding**)
 
 ### Medium Priority
-4. **Inconsistent UI State Management** - Issues like the MOS text remaining visible when the feature is disabled cause confusion. (🟡 MOS text grouping fixed, EDO input validation and checkbox feedback still needed)
+4. **Inconsistent UI State Management** - MOS text grouping, EDO input validation, and error feedback are complete. Checkbox feedback/visibility for "Labels Always On" is still outstanding. (🟡 in progress)
 5. **Mobile Responsiveness Limitations** - Fixed-size SVG (600x600px) and small touch targets reduce usability on mobile devices. (**Outstanding**)
 6. **Code Duplication** - Repeated tooltip code and other duplicated functionality across modules increases maintenance burden. (✅ Complete)
 7. **Accessibility Issues** - Reliance on color for distinguishing components and lack of ARIA attributes limits accessibility. (**Outstanding**)

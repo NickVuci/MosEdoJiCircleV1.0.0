@@ -1,5 +1,15 @@
 # UI State Management Fixes
 
+## Status Summary (as of July 2025)
+
+- [x] EDO input validation is robust and consistent (shared utility, user feedback, allows 0)
+- [x] MOS generator and stacks input validation and feedback are robust and consistent
+- [x] JI odd limit input validation and feedback are robust and consistent
+- [x] MOS text is grouped correctly in the SVG (code organization improved)
+- [ ] Checkbox state visibility: "Labels Always On" effect is still not visually obvious to new users (outstanding)
+- [ ] Enhanced error feedback for MOS generator (dedicated error message element) not yet implemented
+- [ ] Brief description or highlight for "Labels Always On" checkbox not yet implemented
+
 ## Overview
 
 This document outlines the inconsistent UI state management issues in the MosEdoJiCircleV1.0.0 application and provides solutions. These issues are high-priority but relatively easy to fix, making them ideal first improvements for the codebase.
@@ -45,16 +55,15 @@ This document outlines the inconsistent UI state management issues in the MosEdo
   ```
 
 ### 3. Checkbox State Consistency
-**Problem**: The "Labels Always On" checkbox state affects all visualizations, but the effect isn't immediately apparent.
+**Status:** Outstanding. The "Labels Always On" checkbox state is functionally correct, but the effect is still not visually obvious to new users. (July 2025)
 
-**Location**:
+**Location:**
 - The event listener is in `main.js`:
   ```javascript
   d3.select('#always-on-checkbox').on('change', function() {
       updateVisualizations();
   });
   ```
-
 
 ### 4. EDO Input Validation Issues
 **Status:** Fixed. EDO input now uses the shared `parseInput` utility for robust validation and user feedback, allowing 0 as a valid value. All numeric input fields in EDO, JI, and MOS modules are now validated consistently. (July 2025)
