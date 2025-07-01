@@ -1,26 +1,33 @@
 # MosEdoJiCircleV1.0.0 Development Priorities
 
+**Status Summary (as of July 2025):**
+- D3.js dependency is now bundled locally (✅ complete)
+- Code duplication (tooltips, SVG group mgmt, error feedback, label rendering, clamping, event patterns) is resolved (✅ complete)
+- Input validation is mostly DRY, but some modules still use direct parsing (🟡 in progress)
+- UI state management: MOS text grouping and MOS error feedback are complete; EDO input validation and checkbox feedback still needed (🟡 in progress)
+- All other items remain as described below
+
 This document outlines the key issues identified in the current codebase, organized by importance and implementation difficulty.
 
 ## Issues By Importance
 
 ### High Priority
-1. **Missing Sound Integration** - The sound functionality is implemented in `sound.js` but not connected to the UI, making it inaccessible to users.
-2. **Error Handling Inconsistencies** - Error handling exists in the MOS module but is missing in EDO and JI modules, potentially leading to crashes.
-3. **Performance Concerns** - Inefficient rendering approach for complex visualizations (high EDO values, many JI intervals) could cause performance issues.
+1. **Missing Sound Integration** - The sound functionality is implemented in `sound.js` but not connected to the UI, making it inaccessible to users. (**Outstanding**)
+2. **Error Handling Inconsistencies** - Error handling exists in the MOS module but is missing in EDO and JI modules, potentially leading to crashes. (**Outstanding**)
+3. **Performance Concerns** - Inefficient rendering approach for complex visualizations (high EDO values, many JI intervals) could cause performance issues. (**Outstanding**)
 
 ### Medium Priority
-4. **Inconsistent UI State Management** - Issues like the MOS text remaining visible when the feature is disabled cause confusion.
-5. **Mobile Responsiveness Limitations** - Fixed-size SVG (600x600px) and small touch targets reduce usability on mobile devices.
-6. **Code Duplication** - Repeated tooltip code and other duplicated functionality across modules increases maintenance burden.
-7. **Accessibility Issues** - Reliance on color for distinguishing components and lack of ARIA attributes limits accessibility.
+4. **Inconsistent UI State Management** - Issues like the MOS text remaining visible when the feature is disabled cause confusion. (🟡 MOS text grouping fixed, EDO input validation and checkbox feedback still needed)
+5. **Mobile Responsiveness Limitations** - Fixed-size SVG (600x600px) and small touch targets reduce usability on mobile devices. (**Outstanding**)
+6. **Code Duplication** - Repeated tooltip code and other duplicated functionality across modules increases maintenance burden. (✅ Complete)
+7. **Accessibility Issues** - Reliance on color for distinguishing components and lack of ARIA attributes limits accessibility. (**Outstanding**)
 
 ### Lower Priority
-8. **Limited Features** - Missing functionality like saving/sharing configurations would enhance the application.
-9. **Dependency Management** - Reliance on an external CDN for D3.js creates a potential point of failure.
-10. **Missing Documentation** - Lacks comprehensive documentation explaining the applied mathematical concepts.
-11. **Browser Compatibility** - Web Audio API implementation uses some older patterns that might cause issues in certain browsers.
-12. **No Testing Framework** - Lack of automated tests for mathematical functions and core functionality.
+8. **Limited Features** - Missing functionality like saving/sharing configurations would enhance the application. (**Outstanding**)
+9. **Dependency Management** - Reliance on an external CDN for D3.js creates a potential point of failure. (✅ Complete)
+10. **Missing Documentation** - Lacks comprehensive documentation explaining the applied mathematical concepts. (**Outstanding**)
+11. **Browser Compatibility** - Web Audio API implementation uses some older patterns that might cause issues in certain browsers. (**Outstanding**)
+12. **No Testing Framework** - Lack of automated tests for mathematical functions and core functionality. (**Outstanding**)
 
 ## Issues By Ease of Implementation
 
