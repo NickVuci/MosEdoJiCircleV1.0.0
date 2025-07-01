@@ -12,8 +12,7 @@ This document summarizes areas of code duplication in the codebase, listing them
    - All modules (`edo.js`, `mos.js`, `ji.js`) use this for consistent, DRY tooltips.
 
 2. **Input Validation and Correction**
-   - ✅ Input validation and correction is unified and config-driven in `main.js`.
-   - Minor per-module parsing remains, but is minimal and not error-prone. Further DRYing is possible by moving all parsing to shared utilities if desired.
+   - ✅ Input validation and correction is now fully unified and DRY across all modules via the shared `parseInput` utility in `utils.js`. No per-module parsing remains. (Complete as of July 2025)
 
 3. **Error Feedback**
    - ✅ All error feedback is now unified via shared utilities (`showError`, `clearError`, etc.) in `utils.js`. All modules use these for consistent, accessible error display.
@@ -57,7 +56,7 @@ This document summarizes areas of code duplication in the codebase, listing them
 
 ### Significant Effort
 6. **Input Validation and Correction**
-   - ✅ Mostly done. Only minor per-module parsing remains.
+   - ✅ Done. All modules use the shared utility.
 
 
 ## Summary Table
@@ -65,7 +64,7 @@ This document summarizes areas of code duplication in the codebase, listing them
 | Area                | Status         |
 |---------------------|---------------|
 | Tooltip logic       | ✅ Done        |
-| Input validation    | ✅ Mostly done |
+| Input validation    | ✅ Done        |
 | Error feedback      | ✅ Done        |
 | Label rendering     | ✅ Done        |
 | SVG group mgmt      | ✅ Done        |
