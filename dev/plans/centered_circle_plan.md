@@ -1,7 +1,11 @@
 # Centered, Uncut, and Stable Circle Plan
 
 ## Objective
-Ensure the main circle visualization is always perfectly centered, fully visible, and stable—never cut off or moving—regardless of screen size, orientation, or user interaction.
+Ensure the main circle visualization is always fully visible, never off screen or obscured, and stable—never cut off or moving—regardless of screen size, orientation, or user interaction. The layout should adapt so that:
+- The circle is always fully on screen and never obscured by UI elements.
+- The header and menus never push the circle out of view.
+- In landscape (wide) mode, the circle is centered vertically and left-aligned horizontally, with menus to the left side.
+- In portrait (tall/narrow) mode, the circle is centered horizontally and bottom-aligned vertically, with menus above or hidden/collapsible.
 
 ## Key Considerations
 
@@ -14,10 +18,21 @@ Ensure the main circle visualization is always perfectly centered, fully visible
 - Prevent panning/dragging/zooming on the SVG unless explicitly desired. Use `touch-action: none;` if needed.
 
 ### Layout and Controls
-- Place all controls (menus, sliders, checkboxes) outside the SVG area, either above, below, or in a sidebar.
-- On mobile, stack controls vertically below the SVG using Flexbox or Grid.
-- Ensure controls never overlap the SVG/circle. Avoid fixed overlays unless transparent and non-blocking.
+- Place all controls (menus, sliders, checkboxes) outside the SVG area, either in a sidebar, above, or below, depending on screen orientation.
+- In landscape (wide) mode: use a horizontal flex or grid layout with the menu/sidebar on the left and the circle SVG container on the right, both vertically centered.
+- In portrait (tall/narrow) mode: use a vertical flex or grid layout with the menu above (or collapsible/hidden) and the circle SVG container at the bottom, both horizontally centered.
+- The header should be minimal, overlay, or collapsible, and must never push the circle out of view.
+- Use media queries or JavaScript to switch layouts based on aspect ratio (`window.innerWidth > window.innerHeight`).
+- Ensure controls never overlap or obscure the SVG/circle. Avoid fixed overlays unless transparent and non-blocking.
 - Use CSS to prevent layout shifts and scrollbars. The SVG and controls should always fit within the viewport.
+- Always recalculate SVG size and circle position after layout changes.
+## Responsive Layout Requirements
+
+- Dynamically switch between landscape and portrait layouts using CSS or JS based on aspect ratio.
+- The circle container must always have enough space for the full circle, regardless of UI elements.
+- Explicitly set a max radius in JS to ensure the circle never exceeds the available space, accounting for all UI elements (header, menus, etc.).
+- On very small screens, use collapsible menus, overlays, or hide less-used controls to ensure the circle remains usable.
+
 
 ## Step 1: Refactor SVG to use `viewBox` and `preserveAspectRatio="xMidYMid meet"`
 
@@ -34,10 +49,11 @@ Ensure the main circle visualization is always perfectly centered, fully visible
 ## Implementation Steps
 1. Refactor SVG to use `viewBox` and `preserveAspectRatio="xMidYMid meet"`.
 2. Set SVG and container to 100% width/height, with CSS constraints.
-3. In JS, always center the circle and recalculate radius on resize/orientation change.
-4. Move all controls outside the SVG, using a responsive layout.
-5. Prevent unwanted touch/pan/zoom on the SVG.
-6. Test on various devices and orientations to ensure the circle is always centered, stable, and never cut off.
+3. In JS, always center the circle and recalculate radius on resize/orientation change, and after any layout change.
+4. Move all controls outside the SVG, using a responsive layout that adapts to landscape/portrait mode as described above.
+5. Ensure the header and menus never push the circle out of view; use overlays, drawers, or sidebars as needed.
+6. Prevent unwanted touch/pan/zoom on the SVG.
+7. Test on various devices and orientations to ensure the circle is always fully visible, stable, and never cut off or obscured.
 
 ## Potential Issues & Mitigations
 
