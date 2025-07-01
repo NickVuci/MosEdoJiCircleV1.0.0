@@ -50,6 +50,59 @@ export function clearGlobalError() {
     errorArea.style.display = 'none';
   }
 }
+/**
+ * Robust input parsing and validation utility.
+ * @param {string} value - The input value to parse.
+ * @param {Object} options - Parsing options.
+ * @param {'int'|'float'} options.type - Type to parse ('int' or 'float').
+ * @param {boolean} [options.required=true] - Whether the value is required.
+ * @param {number} [options.min] - Minimum allowed value (inclusive).
+ * @param {number} [options.max] - Maximum allowed value (inclusive).
+ * @param {string} [options.selector] - CSS selector for error feedback (optional).
+ * @param {string} [options.label] - Human-readable label for error messages.
+ * @returns {number|null} Parsed value, or null if invalid and not required.
+ * @throws {Error} Throws with a user-friendly message if invalid.
+ */
+export function parseInput(value, {
+  type,
+  required = true,
+  min,
+  max,
+  selector,
+  label = 'Value',
+} = {}) {
+  const trimmed = (value ?? '').toString().trim();
+  if (required && trimmed === '') {
+    const msg = `${label} is required.`;
+    if (selector) showError(selector, msg);
+    throw new Error(msg);
+  }
+  let parsed;
+  if (type === 'int') {
+    parsed = parseInt(trimmed, 10);
+  } else if (type === 'float') {
+    parsed = parseFloat(trimmed);
+  } else {
+    throw new Error('Invalid parseInput type. Use "int" or "float".');
+  }
+  if (isNaN(parsed)) {
+    const msg = `${label} must be a valid ${type === 'int' ? 'integer' : 'number'}.`;
+    if (selector) showError(selector, msg);
+    throw new Error(msg);
+  }
+  if (typeof min === 'number' && parsed < min) {
+    const msg = `${label} must be at least ${min}.`;
+    if (selector) showError(selector, msg);
+    throw new Error(msg);
+  }
+  if (typeof max === 'number' && parsed > max) {
+    const msg = `${label} must be at most ${max}.`;
+    if (selector) showError(selector, msg);
+    throw new Error(msg);
+  }
+  if (selector) clearError(selector);
+  return parsed;
+}
 // utils.js
 // Shared utility for attaching consistent tooltip handlers to D3 selections
 

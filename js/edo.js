@@ -1,13 +1,28 @@
 // edo.js
-import { renderLabels, ensureGroup, clearGroup } from './utils.js';
+import { renderLabels, ensureGroup, clearGroup, parseInput, showError, clearError } from './utils.js';
 
 export function renderEDO(svg, linesGroup, pointsGroup, centerX, centerY, radius) {
     // Clear existing elements using shared utility
     clearGroup(linesGroup);
     clearGroup(pointsGroup);
 
-    // Get the EDO value from the input
-    const edoValue = parseInt(d3.select('#edo-input').property('value'), 10);
+    // Get the EDO value from the input using robust validation
+    let edoValue;
+    try {
+        edoValue = parseInput(
+            d3.select('#edo-input').property('value'),
+            {
+                type: 'int',
+                min: 0,
+                selector: '#edo-input',
+                label: 'EDO'
+            }
+        );
+    } catch (err) {
+        // Optionally, show a global error or return early
+        showError('#edo-input', err.message);
+        return;
+    }
 
     // Check if we should show lines
     const showLines = d3.select('#edo-lines').property('checked');
