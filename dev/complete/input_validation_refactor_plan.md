@@ -43,4 +43,4 @@ Eliminate all per-module input parsing/validation logic. Route all user input ha
 ---
 
 **Result:**  
-All input parsing and validation is DRY, robust, and easy to update. Any changes to input handling can be made in one place, ensuring consistency and maintainability across the codebase.
+All input parsing and validation is DRY, robust, and easy to update. All modules (`edo.js`, `ji.js`, `mos.js`) now use the shared `parseInput` utility for all numeric input fields, with consistent error handling and user feedback. Any changes to input handling can be made in one place, ensuring consistency and maintainability across the codebase. **(Complete as of July 2025)**

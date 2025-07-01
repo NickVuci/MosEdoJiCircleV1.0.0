@@ -55,26 +55,9 @@ This document outlines the inconsistent UI state management issues in the MosEdo
   });
   ```
 
+
 ### 4. EDO Input Validation Issues
-**Problem**: Unlike the MOS generator, the EDO input (`edo-input`) lacks input validation. Users can enter invalid values (like 0 or negative numbers) which can cause unexpected behavior. There's a `min="1"` attribute on the HTML element, but this isn't enforced in all browsers and there's no JavaScript validation.
-
-**Location**:
-- In `edo.js`, the EDO value is read without validation:
-  ```javascript
-  const edoValue = parseInt(d3.select('#edo-input').property('value'), 10);
-  ```
-
-- In contrast, the odd limit input for JI has validation in `main.js`:
-  ```javascript
-  let oddLimitValue = parseInt(d3.select('#odd-limit-input').property('value'), 10);
-  if (isNaN(oddLimitValue) || oddLimitValue < 1) {
-      oddLimitValue = 1;
-  } else if (oddLimitValue % 2 === 0) {
-      // If even, adjust to the nearest lower odd number
-      oddLimitValue -= 1;
-  }
-  d3.select('#odd-limit-input').property('value', oddLimitValue);
-  ```
+**Status:** Fixed. EDO input now uses the shared `parseInput` utility for robust validation and user feedback, allowing 0 as a valid value. All numeric input fields in EDO, JI, and MOS modules are now validated consistently. (July 2025)
 
 ## Recommended Fixes
 

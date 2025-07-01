@@ -1,5 +1,5 @@
 // mos.js
-import { attachTooltipHandlers, renderLabels, showError, clearError, ensureGroup, clearGroup } from './utils.js';
+import { attachTooltipHandlers, renderLabels, showError, clearError, ensureGroup, clearGroup, parseInput } from './utils.js';
 
 // Function to automatically detect format and convert to cents
 export function convertToCents(inputValue) {
@@ -69,7 +69,22 @@ export function renderMOS(svg, centerX, centerY, radius) {
         return;
     }
     clearError('#mos-generator-input');
-    const numStacks = parseInt(d3.select('#mos-stacks-input').property('value'), 10);
+    // Get the number of stacks using robust validation
+    let numStacks;
+    try {
+        numStacks = parseInput(
+            d3.select('#mos-stacks-input').property('value'),
+            {
+                type: 'int',
+                min: 0,
+                selector: '#mos-stacks-input',
+                label: 'Number of Stacks'
+            }
+        );
+    } catch (err) {
+        showError('#mos-stacks-input', err.message);
+        return;
+    }
     // Select and clear the MOS group using shared utilities
     let mosGroup = ensureGroup(svg, 'mos-group');
     clearGroup(mosGroup);
@@ -77,16 +92,18 @@ export function renderMOS(svg, centerX, centerY, radius) {
     // Initialize array to store notes with stack index and cents
     let scaleNotes = [];
 
-    // Include 0 cents as Stack 0
+    // Always include 0 cents as Stack 0
     scaleNotes.push({ stack: 0, cents: 0 });
 
-    // Calculate all scale degrees
-    let cumulativeCents = 0;
-    for (let i = 1; i <= numStacks; i++) {
-        cumulativeCents += generatorCents;
-        // Normalize cumulativeCents to 0-1200 cents
-        const normalizedCents = ((cumulativeCents % 1200) + 1200) % 1200;
-        scaleNotes.push({ stack: i, cents: normalizedCents });
+    if (numStacks > 0) {
+        // Calculate all scale degrees
+        let cumulativeCents = 0;
+        for (let i = 1; i <= numStacks; i++) {
+            cumulativeCents += generatorCents;
+            // Normalize cumulativeCents to 0-1200 cents
+            const normalizedCents = ((cumulativeCents % 1200) + 1200) % 1200;
+            scaleNotes.push({ stack: i, cents: normalizedCents });
+        }
     }
 
     // For interval calculations, extract cents values and sort them

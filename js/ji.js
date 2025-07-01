@@ -1,5 +1,5 @@
 // ji.js
-import { attachTooltipHandlers, renderLabels, ensureGroup, clearGroup } from './utils.js';
+import { attachTooltipHandlers, renderLabels, ensureGroup, clearGroup, parseInput, showError, clearError } from './utils.js';
 
 export function renderJI(svg, centerX, centerY, radius) {
     // Ensure and clear the JI group using shared utilities
@@ -10,10 +10,37 @@ export function renderJI(svg, centerX, centerY, radius) {
     const selectedPrimes = d3.selectAll('#prime-checkboxes input[type="checkbox"]')
         .nodes()
         .filter(node => node.checked)
-        .map(node => parseInt(node.value));
+        .map(node => {
+            try {
+                return parseInput(node.value, {
+                    type: 'int',
+                    min: 2,
+                    selector: null, // No selector for checkboxes
+                    label: 'Prime'
+                });
+            } catch (err) {
+                // Ignore invalid primes (should not happen)
+                return null;
+            }
+        })
+        .filter(v => v !== null);
 
-    // Get the odd limit
-    const oddLimit = parseInt(d3.select('#odd-limit-input').property('value'), 10);
+    // Get the odd limit using robust validation
+    let oddLimit;
+    try {
+        oddLimit = parseInput(
+            d3.select('#odd-limit-input').property('value'),
+            {
+                type: 'int',
+                min: 1,
+                selector: '#odd-limit-input',
+                label: 'Odd Limit'
+            }
+        );
+    } catch (err) {
+        showError('#odd-limit-input', err.message);
+        return;
+    }
 
     // Check if dark mode is enabled
     const darkModeEnabled = document.body.classList.contains('dark-mode');
