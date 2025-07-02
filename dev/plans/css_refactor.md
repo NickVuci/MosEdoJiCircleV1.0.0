@@ -16,9 +16,7 @@
 - Ensure sufficient color contrast for all text and controls.
 - Add `:focus` styles for interactive elements for better keyboard accessibility.
 
-- Combine shared properties for wide and narrow views, override only what's needed in the media query.
-## 5. Combine Similar Rules (Low Cost, Medium Benefit) ✅ Complete
-- Combine shared properties for wide and narrow views, override only what's needed in the media query.
+## 5. Combine Similar Rules (Low Cost, Medium Benefit) ⏳ To Do
 - Combine shared properties for wide and narrow views, override only what's needed in the media query.
 
 ## 6. Remove Redundant Selectors (Low-Medium Cost, Medium Benefit) ⏳ To Do
