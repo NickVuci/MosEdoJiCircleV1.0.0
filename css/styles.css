@@ -1,5 +1,88 @@
-/* Footer Styles */
+/* ================= Controls Section ================= */
+#controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: var(--control-background);
+    padding: 10px;
+}
 
+/* ================= EDO Controls ================= */
+#edo-controls label {
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* ================= Prime Checkboxes ================= */
+#prime-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+#prime-checkboxes label {
+    width: 48%;
+    margin-bottom: 5px;
+}
+
+/* ================= MOS Controls ================= */
+#mos-controls input[type="range"] {
+    width: 100%;
+    margin: 0;
+}
+/* ================= Visualization Section ================= */
+#visualization {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+}
+#visualization svg {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+/* ================= Tooltip Styles ================= */
+.tooltip {
+    position: absolute;
+    background-color: var(--control-background);
+    color: var(--text-color);
+    padding: 5px;
+    border: 1px solid var(--module-border);
+    border-radius: 3px;
+    pointer-events: none;
+}
+/* ================= SVG Element Styles ================= */
+.main-circle {
+    stroke: var(--circle-stroke-color);
+}
+.edo-line {
+    stroke: var(--edo-line-color);
+}
+.mos-generator-line {
+    stroke: var(--mos-line-color);
+}
+.mos-highlight-line {
+    stroke: var(--mos-highlight-color);
+}
+/* ================= Dark Mode Specific Styles ================= */
+.dark-mode svg text {
+    fill: var(--text-color);
+}
+.dark-mode .tooltip {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--module-border);
+}
+.dark-mode footer#main-footer {
+    color: #b0b0b0;
+}
+/* ================= Error Styling ================= */
+.control-module input.error {
+    border: 2px solid #ff4444 !important;
+    background-color: rgba(255, 68, 68, 0.1);
+}
+/* ================= Footer Styles ================= */
 footer#main-footer {
     color: #b0b0b0;
     background: transparent;
@@ -10,14 +93,51 @@ footer#main-footer {
     pointer-events: none;
     flex-shrink: 0;
 }
-/* Flexbox layout for sticky footer */
+
+/* ================= Custom Properties ================= */
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --control-background: #f0f0f0;
+    --module-border: #cccccc;
+    --link-color: #0066cc;
+    --circle-stroke-color: #000000;
+    --edo-line-color: #000000;
+    --mos-line-color: purple;
+    --mos-highlight-color: #800080;
+    --button-background: #e0e0e0;
+    --button-text-color: #000000;
+    --button-hover-background: #cccccc;
+}
+
+.dark-mode {
+    --background-color: #121212;
+    --text-color: #e0e0e0;
+    --control-background: #1e1e1e;
+    --module-border: #333333;
+    --link-color: #3399ff;
+    --circle-stroke-color: #ffffff;
+    --edo-line-color: #ffffff;
+    --mos-line-color: #cc66ff;
+    --mos-highlight-color: #ff66ff;
+    --button-background: #333333;
+    --button-text-color: #ffffff;
+    --button-hover-background: #444444;
+}
+
+/* ================= Global Styles ================= */
 body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
+/* ================= Layout Containers ================= */
 #main-wrapper {
     flex: 1 0 auto;
     display: flex;
@@ -26,16 +146,18 @@ body {
     min-height: 0;
 }
 
+/* ================= Sidebar Styles ================= */
 #sidebar {
-    width: 320px;
-    min-width: 220px;
-    max-width: 400px;
+    width: 230px;
+    min-width: 158px;
+    max-width: 288px;
     background: var(--control-background);
     border-right: 1px solid var(--module-border);
     display: flex;
     flex-direction: column;
     align-items: stretch;
     padding: 8px;
+    gap: 8px;
     box-sizing: border-box;
     z-index: 2;
     overflow-y: auto;
@@ -45,15 +167,68 @@ body {
     top: 0;
 }
 
-
-/* Sidebar module spacing for normal (left) sidebar */
-#sidebar .control-module {
-    margin: 0 0 8px 0;
+/* ================= Control Module Styles ================= */
+.control-module {
+    border: 1px solid var(--module-border);
+    border-radius: 5px;
+    padding: 12px 14px;
+    box-sizing: border-box;
+    background-color: var(--background-color);
+    flex: 0 0 auto;
+    margin: 0;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
 }
-#sidebar .control-module:last-child {
-    margin-bottom: 0;
+.control-module h3 {
+    margin-top: 0;
+    text-align: center;
+}
+.control-module label {
+    display: block;
+    margin-top: 10px;
+}
+.control-module input[type="number"],
+.control-module input[type="range"],
+.control-module input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--module-border);
+    /* Make sure no input formatting is applied */
+}
+.control-module input[type="checkbox"] {
+    margin-right: 5px;
 }
 
+/* EDO checkbox labels - make them inline */
+#edo-controls label {
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Prime checkboxes */
+#prime-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+#prime-checkboxes label {
+    width: 48%;
+    margin-bottom: 5px;
+}
+
+/* MOS Controls */
+#mos-controls input[type="range"] {
+    width: 100%;
+    margin: 0;
+}
+
+/* ================= Main Content Styles ================= */
 #main-content {
     flex: 1 1 0%;
     display: flex;
@@ -84,24 +259,16 @@ body {
         top: auto;
         z-index: 2;
         padding: 8px;
+        gap: 8px;
         box-sizing: border-box;
     }
-    #sidebar .control-module {
-        min-width: 260px;
-        max-width: 320px;
-        width: 280px;
-        flex: 0 0 auto;
-        margin: 0 8px 0 0;
+    .control-module {
+        min-width: 187px;
+        max-width: 230px;
+        width: 202px;
+        margin: 0;
     }
-    #sidebar .control-module:last-child {
-        margin-right: 0;
-    }
-    #main-content {
-        min-width: 0;
-        min-height: 0;
-        flex: 1 1 0%;
-        overflow: auto;
-    }
+    
 }
 
 .dark-mode footer#main-footer {
@@ -114,7 +281,6 @@ body {
     --background-color: #ffffff;
     --text-color: #000000;
     --control-background: #f0f0f0;
-    /* --header-background: #e0e0e0; (legacy, unused) */
     --module-border: #cccccc;
     --link-color: #0066cc;
     --circle-stroke-color: #000000;
@@ -130,7 +296,6 @@ body {
     --background-color: #121212;
     --text-color: #e0e0e0;
     --control-background: #1e1e1e;
-    /* --header-background: #1a1a1a; (legacy, unused) */
     --module-border: #333333;
     --link-color: #3399ff;
     --circle-stroke-color: #ffffff;
@@ -150,7 +315,6 @@ body {
     color: var(--text-color);
 }
 
-/* Header removed: see header_modification_plan.md (no header styles remain) */
 
 /* Dark Mode Toggle Button Styles */
 #dark-mode-toggle {
