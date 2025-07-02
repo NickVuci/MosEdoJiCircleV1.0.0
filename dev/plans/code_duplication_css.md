@@ -2,6 +2,40 @@
 
 This document identifies specific instances of code duplication and other issues in the current CSS that will be addressed during refactoring.
 
+## Implementation Priority Order
+
+Based on risk assessment and impact, the duplication issues should be addressed in this order:
+
+1. **Create CSS Custom Properties for Spacing** - Replace hardcoded spacing values with variables (Low Risk, High Impact)
+   
+   **Detailed Implementation Steps:**
+   - Audit current CSS for all spacing values (4px, 5px, 8px, 10px, 12px, 14px, 16px, etc.)
+   - Create a logical spacing scale following this pattern:
+     ```css
+     :root {
+       --space-xxs: 2px;
+       --space-xs: 4px; 
+       --space-sm: 8px;
+       --space-md: 16px;
+       --space-lg: 24px;
+       --space-xl: 32px;
+     }
+     ```
+   - Update CSS in this order:
+     1. Non-layout critical padding/margins inside components (low risk)
+     2. Form control spacing (inputs, labels, checkboxes)
+     3. Component gaps and margins (moderate risk) 
+     4. Main layout spacing (higher risk - test thoroughly)
+   - When replacing values, use the closest spacing variable (e.g., replace 5px with `var(--space-xs)`)
+   - Document any spacing that doesn't fit the scale for later consideration
+
+2. **Consolidate SVG Element Styles** - Create base classes for stroke properties (Low Risk, Clear Duplication)
+3. **Address Height/Width Redundancies** - Standardize container dimensions (Medium Risk, High Impact)
+4. **Simplify Form Control Styling** - Standardize inputs and labels (Medium Risk, Clear Duplication)
+5. **Media Query Consolidation** - Refactor responsive styles (Higher Risk, Complex)
+6. **Dark Mode Optimization** - Improve theme switching implementation (Medium Risk, Moderate Impact)
+7. **State Management Consolidation** - Standardize hover/focus states (Medium Risk, UX Impact)
+
 ## Identified Duplications
 
 ### 1. Input Styling Duplications
@@ -124,4 +158,110 @@ The media query for portrait mode contains several redundant declarations.
 2. **Conflicting Flex Settings:**
    - Some containers have multiple flex-related properties that may conflict
 
-This analysis will guide the refactoring process to ensure all duplications and inconsistencies are addressed systematically.
+## Additional Areas for Consolidation
+
+### 1. Dark Mode Duplication
+
+```css
+/* Dark mode styles are scattered and repeat color assignments */
+.dark-mode svg text {
+    fill: var(--text-color);
+}
+.dark-mode .tooltip {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--module-border);
+}
+.dark-mode footer#main-footer {
+    color: #b0b0b0;
+}
+```
+
+**Solution:** Improve theme variable usage to minimize duplicate color assignments. Create a more systematic approach to dark mode styling.
+
+### 2. Footer Styling
+
+The footer styling should be analyzed for potential consolidation with other text-based elements.
+
+### 3. State Management
+
+```css
+/* Hover states are only defined for some elements */
+#dark-mode-button:hover {
+    background-color: var(--button-hover-background);
+}
+```
+
+**Solution:** Create consistent state management classes for hover, focus, and active states.
+
+### 4. Transitions and Animations
+
+There's an opportunity to standardize transition effects across interactive elements.
+
+**Solution:** Define standard transition variables (duration, easing) and apply them consistently.
+
+## Sample Implementation for First Task (Spacing Variables)
+
+Here's a concrete example of how we'll implement the spacing variables:
+
+### Current Spacing Values Audit
+
+From analyzing the CSS, these are the current spacing values in use:
+
+| Current Value | Frequency | Recommended Variable | Context |
+|---------------|-----------|---------------------|---------|
+| 4px           | High      | `--space-xs`        | Small margins, small gaps |
+| 5px           | Medium    | `--space-xs`        | Input padding, small spaces |
+| 8px           | High      | `--space-sm`        | Container padding, component gaps |
+| 10px          | Medium    | `--space-sm`        | Section padding, some margins |
+| 12px          | Low       | `--space-md`        | Module padding (left/right) |
+| 14px          | Low       | `--space-md`        | Module padding (top/bottom) |
+| 16px          | Low       | `--space-md`        | Button padding (horizontal) |
+| 24px+         | Very Low  | `--space-lg`        | Larger spacing |
+
+### Implementation Example
+
+```css
+/* Step 1: Add spacing variables to :root */
+:root {
+  /* Existing variables */
+  --background-color: #ffffff;
+  /* ... */
+  
+  /* New spacing system */
+  --space-xxs: 2px;
+  --space-xs: 4px; 
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+}
+
+/* Step 2: Update a safe, isolated component first */
+.tooltip {
+  position: absolute;
+  background-color: var(--control-background);
+  color: var(--text-color);
+  padding: var(--space-xs); /* Was 5px */
+  border: 1px solid var(--module-border);
+  border-radius: 3px;
+  pointer-events: none;
+}
+```
+
+### Testing Checklist
+
+After each component update:
+- [ ] Visual comparison with previous state
+- [ ] Check all states (hover, focus, etc.)
+- [ ] Test at different viewport sizes
+- [ ] Ensure no layout shifts
+
+### Expected Outcome
+
+1. More consistent spacing throughout the UI
+2. Easier adjustments to spacing by changing variables
+3. Reduced CSS size through variable reuse
+4. Better maintainability through standardized spacing
+
+This analysis will guide the refactoring process to ensure all duplications and inconsistencies are addressed systematically in a safe, prioritized order.
