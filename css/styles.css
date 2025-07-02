@@ -35,7 +35,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding: 16px 16px 16px 16px;
+    padding: 16px;
     box-sizing: border-box;
     z-index: 2;
     overflow-y: auto;
@@ -83,7 +83,7 @@ body {
         position: static;
         top: auto;
         z-index: 2;
-        padding: 16px 16px 16px 16px;
+        padding: 16px;
         box-sizing: border-box;
     }
     #sidebar .control-module {
@@ -282,14 +282,6 @@ body {
 
 .mos-highlight-line {
     stroke: var(--mos-highlight-color);
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-    .control-module label,
-    .control-module input {
-        font-size: 16px;
-    }
 }
 
 /* Dark Mode Specific Styles */
