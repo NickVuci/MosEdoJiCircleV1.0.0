@@ -6,6 +6,7 @@ Ensure the main circle visualization is always fully visible, never off screen o
 - The header and menus never push the circle out of view.
 - In landscape (wide) mode, the circle is centered vertically and left-aligned horizontally, with menus to the left side.
 - In portrait (tall/narrow) mode, the circle is centered horizontally and bottom-aligned vertically, with menus above or hidden/collapsible.
+- The circle is always rendered within its own dedicated container area, separate from all controls and headers. All sizing and centering logic is based on this container, not the window or body.
 
 ## Key Considerations
 
@@ -14,7 +15,8 @@ Ensure the main circle visualization is always fully visible, never off screen o
 - Set SVG width/height to 100% of its container, and constrain the container with CSS to avoid overflow.
 - Always draw the circle at the center of the SVG (`cx=width/2`, `cy=height/2`).
 - Dynamically calculate the radius as the minimum of half the SVG’s width or height, minus a margin for labels.
-- On window resize or orientation change, recalculate the SVG size, center, and radius so the circle is never cut off.
+- All calculations for centering and sizing the circle must use the dimensions of the dedicated circle area/container (e.g., `#circle-area`), not the window or document body.
+- On window resize, orientation change, or layout change, recalculate the available space in the dedicated area and update the SVG/circle accordingly.
 - Prevent panning/dragging/zooming on the SVG unless explicitly desired. Use `touch-action: none;` if needed.
 
 ### Layout and Controls
@@ -25,14 +27,16 @@ Ensure the main circle visualization is always fully visible, never off screen o
 - Use media queries or JavaScript to switch layouts based on aspect ratio (`window.innerWidth > window.innerHeight`).
 - Ensure controls never overlap or obscure the SVG/circle. Avoid fixed overlays unless transparent and non-blocking.
 - Use CSS to prevent layout shifts and scrollbars. The SVG and controls should always fit within the viewport.
-- Always recalculate SVG size and circle position after layout changes.
+- Always recalculate SVG size and circle position after layout changes, using the dedicated circle area/container as the reference.
+- The dedicated circle area/container must never be overlapped or obscured by other UI elements, and must always have enough space for the full circle.
+
 ## Responsive Layout Requirements
 
 - Dynamically switch between landscape and portrait layouts using CSS or JS based on aspect ratio.
 - The circle container must always have enough space for the full circle, regardless of UI elements.
 - Explicitly set a max radius in JS to ensure the circle never exceeds the available space, accounting for all UI elements (header, menus, etc.).
 - On very small screens, use collapsible menus, overlays, or hide less-used controls to ensure the circle remains usable.
-
+- All dynamic sizing and centering logic must reference the size of the dedicated circle area/container, not the window.
 
 ## Step 1: Refactor SVG to use `viewBox` and `preserveAspectRatio="xMidYMid meet"`
 
@@ -49,7 +53,7 @@ Ensure the main circle visualization is always fully visible, never off screen o
 ## Implementation Steps
 1. Refactor SVG to use `viewBox` and `preserveAspectRatio="xMidYMid meet"`.
 2. Set SVG and container to 100% width/height, with CSS constraints.
-3. In JS, always center the circle and recalculate radius on resize/orientation change, and after any layout change.
+3. In JS, always center the circle and recalculate radius on resize/orientation change, and after any layout change, using the dedicated circle area/container as the reference.
 4. Move all controls outside the SVG, using a responsive layout that adapts to landscape/portrait mode as described above.
 5. Ensure the header and menus never push the circle out of view; use overlays, drawers, or sidebars as needed.
 6. Prevent unwanted touch/pan/zoom on the SVG.
@@ -64,6 +68,8 @@ Ensure the main circle visualization is always fully visible, never off screen o
   - **Mitigation:** Accept extra space as a tradeoff for centering, or use CSS to visually balance the layout.
 - **Issue:** Margin for labels may be insufficient for long text or large fonts, causing cut-off.
   - **Mitigation:** Dynamically calculate margin based on label size, or set a minimum margin in JS/CSS.
+- **Issue:** If the dedicated circle area/container is not sized or positioned correctly, the circle may be cut off or not centered.
+  - **Mitigation:** Always use the container's dimensions for all calculations, and test thoroughly on all layouts.
 
 ### Window Resize and Orientation Change
 - **Issue:** Frequent recalculation/redraw on resize can cause performance issues.
@@ -82,6 +88,8 @@ Ensure the main circle visualization is always fully visible, never off screen o
   - **Mitigation:** Use collapsible menus, overlays, or hide less-used controls on small screens. Set min/max sizes for SVG and controls.
 - **Issue:** SVG and controls together may exceed viewport height, causing unwanted scrolling.
   - **Mitigation:** Use CSS to constrain max heights and enable vertical scrolling only for controls if needed.
+- **Issue:** The dedicated circle area/container may be overlapped by other UI elements if not properly managed.
+  - **Mitigation:** Use CSS z-index, layout rules, and testing to ensure the circle area is always unobstructed.
 
 ### Safe Areas and Notches
 - **Issue:** Not all browsers/devices support `env(safe-area-inset-*)`.
