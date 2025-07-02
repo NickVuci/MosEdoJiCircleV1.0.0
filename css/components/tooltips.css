@@ -1,0 +1,10 @@
+/* Tooltip Styles */
+.tooltip {
+    position: absolute;
+    background-color: var(--control-background);
+    color: var(--text-color);
+    padding: var(--space-xs);
+    border: 1px solid var(--module-border);
+    border-radius: var(--border-radius-sm);
+    pointer-events: none;
+}

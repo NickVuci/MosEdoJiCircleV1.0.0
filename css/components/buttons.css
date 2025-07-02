@@ -1,0 +1,66 @@
+/* Button Base Class */
+.btn {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--font-size-md);
+    background-color: var(--button-background);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast) var(--transition-timing-default);
+    line-height: var(--line-height-normal);
+    display: inline-block;
+    text-align: center;
+}
+
+/* Button States */
+.btn:hover {
+    background-color: var(--button-hover-background);
+}
+
+.btn:focus {
+    outline: 2px solid var(--link-color);
+    outline-offset: 2px;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+/* Button Sizes */
+.btn--small {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-sm);
+}
+
+.btn--large {
+    padding: var(--space-md) var(--space-lg);
+    font-size: var(--font-size-lg);
+}
+
+/* Button Variants */
+.btn--primary {
+    background-color: var(--link-color);
+    color: white;
+}
+
+.btn--primary:hover {
+    background-color: color-mix(in srgb, var(--link-color), black 15%);
+}
+
+.btn--outline {
+    background-color: transparent;
+    border: 1px solid var(--button-background);
+    color: var(--text-color);
+}
+
+.btn--outline:hover {
+    background-color: var(--control-background);
+}
+
+/* Dark Mode Toggle Button Styles */
+#dark-mode-toggle {
+    margin-bottom: var(--space-sm);
+}
+
+/* Note: The #dark-mode-button will inherit styles from the .btn class */

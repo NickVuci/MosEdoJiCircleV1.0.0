@@ -1,0 +1,68 @@
+/* ================= Custom Properties ================= */
+:root {
+    /* Color variables */
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --control-background: #f0f0f0;
+    --module-border: #cccccc;
+    --link-color: #0066cc;
+    --circle-stroke-color: #000000;
+    --edo-line-color: #000000;
+    --mos-line-color: purple;
+    --mos-highlight-color: #800080;
+    --button-background: #e0e0e0;
+    --button-text-color: #000000;
+    --button-hover-background: #cccccc;
+    
+    /* Spacing variables */
+    --space-xxs: 2px;
+    --space-xs: 4px; 
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    
+    /* Border radius variables */
+    --border-radius-sm: 3px;
+    --border-radius-md: 5px;
+    --border-radius-lg: 8px;
+    
+    /* Transition variables */
+    --transition-fast: 150ms;
+    --transition-medium: 250ms;
+    --transition-slow: 350ms;
+    --transition-timing-default: ease;
+    --transition-timing-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --transition-timing-smooth: cubic-bezier(0.25, 0.1, 0.25, 1.0);
+    
+    /* Typography variables */
+    --font-size-xs: 0.75rem;    /* 12px at 16px base */
+    --font-size-sm: 0.875rem;   /* 14px at 16px base */
+    --font-size-md: 1rem;       /* 16px at 16px base */
+    --font-size-lg: 1.125rem;   /* 18px at 16px base */
+    --font-size-xl: 1.25rem;    /* 20px at 16px base */
+    --font-size-xxl: 1.5rem;    /* 24px at 16px base */
+    
+    /* Line heights */
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.8;
+} 
+
+.dark-mode {
+    /* Color variables */
+    --background-color: #121212;
+    --text-color: #e0e0e0;
+    --control-background: #1e1e1e;
+    --module-border: #333333;
+    --link-color: #3399ff;
+    --circle-stroke-color: #ffffff;
+    --edo-line-color: #ffffff;
+    --mos-line-color: #cc66ff;
+    --mos-highlight-color: #ff66ff;
+    --button-background: #333333;
+    --button-text-color: #ffffff;
+    --button-hover-background: #444444;
+    
+    /* Dark mode specific values remain unchanged as spacing is theme-independent */
+}

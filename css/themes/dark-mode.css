@@ -1,0 +1,14 @@
+/* ================= Dark Mode Specific Styles ================= */
+.dark-mode svg text {
+    fill: var(--text-color);
+}
+
+.dark-mode .tooltip {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--module-border);
+}
+
+.dark-mode footer#main-footer {
+    color: #b0b0b0;
+}

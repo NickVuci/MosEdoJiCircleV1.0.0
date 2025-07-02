@@ -1,0 +1,127 @@
+/* Base Form Element Styles */
+.form-control {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: var(--space-xs);
+    padding: var(--space-xs);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--module-border);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    transition: all var(--transition-fast) var(--transition-timing-default);
+}
+
+/* Form Element States */
+.form-control:hover {
+    border-color: color-mix(in srgb, var(--module-border) 80%, var(--link-color));
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
+
+/* Form Label */
+.form-label {
+    display: inline-block;
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-xs);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    font-weight: normal;
+}
+
+/* Form Group (container for label + input) */
+.form-group {
+    margin-bottom: var(--space-sm);
+}
+
+/* Input Type Specific Styling */
+input[type="range"].form-control {
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+input[type="checkbox"].form-control,
+input[type="radio"].form-control {
+    width: auto;
+    margin-right: var(--space-xs);
+    vertical-align: middle;
+}
+
+/* Legacy Compatibility */
+.control-module input[type="number"],
+.control-module input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: var(--space-xs);
+    padding: var(--space-xs);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--module-border);
+    font-size: var(--font-size-sm);
+    transition: border-color var(--transition-fast) var(--transition-timing-default);
+    border-radius: var(--border-radius-sm);
+}
+
+.control-module input[type="range"] {
+    width: 100%;
+    margin-bottom: var(--space-xs);
+}
+
+.control-module input[type="checkbox"] {
+    margin-right: var(--space-xs);
+}
+
+.control-module label,
+#edo-controls label,
+#prime-checkboxes label {
+    display: inline-block;
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-xs);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+}
+
+/* Prime checkboxes */
+#prime-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* MOS Controls */
+#mos-controls input[type="range"] {
+    width: 100%;
+    margin: 0;
+}
+
+/* Error and Validation States */
+.form-control.error,
+.control-module input.error {
+    border: 2px solid #ff4444 !important;
+    background-color: rgba(255, 68, 68, 0.1);
+}
+
+.form-control.success {
+    border-color: #00cc66;
+    background-color: rgba(0, 204, 102, 0.05);
+}
+
+.form-message {
+    display: block;
+    font-size: var(--font-size-xs);
+    margin-top: var(--space-xxs);
+}
+
+.form-message.error {
+    color: #ff4444;
+}
+
+.form-message.success {
+    color: #00cc66;
+}

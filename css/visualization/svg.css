@@ -1,0 +1,21 @@
+/* SVG Element Styles */
+.main-circle {
+    stroke: var(--circle-stroke-color);
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+}
+
+.edo-line {
+    stroke: var(--edo-line-color);
+    vector-effect: non-scaling-stroke;
+}
+
+.mos-generator-line {
+    stroke: var(--mos-line-color);
+    vector-effect: non-scaling-stroke;
+}
+
+.mos-highlight-line {
+    stroke: var(--mos-highlight-color);
+    vector-effect: non-scaling-stroke;
+}
