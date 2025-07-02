@@ -1,4 +1,80 @@
-/* ================= Control Module Styles ================= */
+/* ================= Module Base Styles ================= */
+.module {
+    border: 1px solid var(--module-border);
+    border-radius: var(--border-radius-md);
+    padding: var(--space-md);
+    box-sizing: border-box;
+    background-color: var(--background-color);
+    flex: 0 0 auto;
+    margin: 0 0 var(--space-sm) 0;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow var(--transition-medium) var(--transition-timing-default),
+                border-color var(--transition-medium) var(--transition-timing-default);
+}
+
+/* Module Header */
+.module__header {
+    margin: calc(-1 * var(--space-md));
+    margin-bottom: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--module-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.module__title {
+    margin: 0;
+    text-align: center;
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-tight);
+    flex-grow: 1;
+}
+
+/* Module Content */
+.module__content {
+    padding: 0;
+}
+
+/* Module Footer */
+.module__footer {
+    margin: 0 calc(-1 * var(--space-md)) calc(-1 * var(--space-md));
+    padding: var(--space-sm) var(--space-md);
+    border-top: 1px solid var(--module-border);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Module States */
+.module:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.module--active {
+    border-color: var(--link-color);
+}
+
+/* Module Variations */
+.module--compact {
+    padding: var(--space-sm);
+}
+
+.module--compact .module__header {
+    margin: calc(-1 * var(--space-sm));
+    margin-bottom: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+}
+
+.module--compact .module__footer {
+    margin: 0 calc(-1 * var(--space-sm)) calc(-1 * var(--space-sm));
+    padding: var(--space-xs) var(--space-sm);
+}
+
+/* Legacy Control Module Support */
 .control-module {
     border: 1px solid var(--module-border);
     border-radius: var(--border-radius-md);
@@ -6,15 +82,19 @@
     box-sizing: border-box;
     background-color: var(--background-color);
     flex: 0 0 auto;
-    margin: 0;
+    margin: 0 0 var(--space-sm) 0;
     width: 100%;
     min-width: 0;
     max-width: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .control-module h3 {
     margin-top: 0;
+    margin-bottom: var(--space-sm);
     text-align: center;
     font-size: var(--font-size-lg);
     line-height: var(--line-height-tight);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--module-border);
 }

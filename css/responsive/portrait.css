@@ -22,13 +22,20 @@
         padding: var(--space-sm);
         gap: var(--space-sm);
         box-sizing: border-box;
+        scroll-snap-type: x proximity;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch;
     }
     
+    .module,
     .control-module {
-        min-width: 180px;
-        max-width: 230px;
-        width: 180px;
-        margin: 0;
+        min-width: 200px;
+        max-width: 250px;
+        width: 200px;
+        margin: 0 var(--space-xs);
+        flex-shrink: 0;
+        scroll-snap-align: start;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
     
     #main-content {
@@ -38,5 +45,24 @@
     
     #visualization {
         height: 100%;
+    }
+    
+    /* Add a scroll indicator for portrait mode */
+    #sidebar::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 20px;
+        background: linear-gradient(to right, transparent, var(--control-background) 80%);
+        pointer-events: none;
+        opacity: 0.8;
+    }
+    
+    /* Make the last module have proper margin */
+    #sidebar .module:last-child,
+    #sidebar .control-module:last-child {
+        margin-right: var(--space-md);
     }
 }
