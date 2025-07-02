@@ -5,18 +5,24 @@ import { renderJI } from './ji.js';
 import { renderMOS, convertToCents } from './mos.js';
 import { showError, clearError, ensureGroup, clearGroup } from './utils.js';
 
-// SVG Canvas Setup
-const width = 600;
-const height = 600;
+// Get the visualization container
+const container = document.getElementById('visualization');
+// Calculate available width and height
+let width = container.clientWidth;
+let height = container.clientHeight;
+
+// SVG Canvas Setup with responsive attributes
 const svg = d3.select('#visualization')
     .append('svg')
-    .attr('width', width)
-    .attr('height', height);
+    .attr('width', '100%')
+    .attr('height', '100%')
+    .attr('viewBox', `0 0 ${width} ${height}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
 
-// Define center and radius
-const centerX = width / 2;
-const centerY = height / 2;
-const radius = Math.min(width, height) / 2 - 50;
+// Define center and radius (these will be updated in updateDimensions)
+let centerX = width / 2;
+let centerY = height / 2;
+let radius = Math.min(width, height) / 2 - 50;
 
 // Draw the main circle first to ensure it is at the back
 svg.append('circle')
@@ -36,6 +42,7 @@ const pointsGroup = ensureGroup(edoGroup, 'points-group');
 
 // Function to update all visualizations
 function updateVisualizations() {
+    // Always use current centerX, centerY, and radius values
     // Update EDO visualization
     clearGroup(linesGroup);
     clearGroup(pointsGroup);
@@ -92,8 +99,39 @@ checkboxConfigs.forEach(cfg => {
   }
 });
 
+// Function to update dimensions and redraw SVG on resize
+function updateDimensions() {
+  // Get container dimensions
+  width = container.clientWidth;
+  height = container.clientHeight;
+  
+  // Update SVG viewBox
+  svg.attr('viewBox', `0 0 ${width} ${height}`);
+  
+  // Recalculate center and radius
+  centerX = width / 2;
+  centerY = height / 2;
+  radius = Math.min(width, height) / 2 - 50;
+  
+  // Update the main circle position and size
+  svg.select('.main-circle')
+    .attr('cx', centerX)
+    .attr('cy', centerY)
+    .attr('r', radius);
+    
+  // Update all visualizations with new dimensions
+  updateVisualizations();
+}
+
+// Add window resize listener with debounce for performance
+let resizeTimeout;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(updateDimensions, 250);
+});
+
 // Initial rendering
-updateVisualizations();
+updateDimensions();
 
 
 
