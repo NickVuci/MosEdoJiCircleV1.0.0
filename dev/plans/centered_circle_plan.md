@@ -47,6 +47,7 @@ Ensure the main circle visualization is always fully visible, never off screen o
 4. Remove any fixed `width` and `height` attributes from the SVG in HTML; set them to `100%` via CSS instead.
 5. Ensure the SVG’s parent container is responsive (uses `%`, `vw`, `vh`, flex, or grid units).
 6. Test the SVG in the browser: verify it scales and remains centered as the window size changes.
+   - Test with both landscape and portrait orientations, and with various sidebar/header states.
 7. Adjust the SVG’s parent container or add wrappers as needed to prevent overflow or scrollbars.
 8. Document any issues or edge cases encountered during this step.
 
@@ -54,10 +55,12 @@ Ensure the main circle visualization is always fully visible, never off screen o
 1. Refactor SVG to use `viewBox` and `preserveAspectRatio="xMidYMid meet"`.
 2. Set SVG and container to 100% width/height, with CSS constraints.
 3. In JS, always center the circle and recalculate radius on resize/orientation change, and after any layout change, using the dedicated circle area/container as the reference.
+   - Use `container.clientWidth` and `container.clientHeight` for all calculations, not `window.innerWidth/Height`.
 4. Move all controls outside the SVG, using a responsive layout that adapts to landscape/portrait mode as described above.
 5. Ensure the header and menus never push the circle out of view; use overlays, drawers, or sidebars as needed.
 6. Prevent unwanted touch/pan/zoom on the SVG.
 7. Test on various devices and orientations to ensure the circle is always fully visible, stable, and never cut off or obscured.
+   - Test with accessibility tools to ensure the SVG and controls remain accessible.
 
 ## Potential Issues & Mitigations
 
