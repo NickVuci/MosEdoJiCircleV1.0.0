@@ -55,11 +55,11 @@
 - [ ] Test that this extraction alone doesn't break anything
 
 #### Phase 2: Create Common Variables
-- [ ] Add spacing variables (--space-xs, --space-sm, etc.)
-- [ ] Add border-radius variables
+- [x] Add spacing variables (--space-xs, --space-sm, etc.)
+- [x] Add border-radius variables
 - [ ] Add transition timing variables
 - [ ] Add font-size and line-height variables
-- [ ] Replace hardcoded values in all files with these variables
+- [x] Replace spacing and border-radius values with variables
 
 #### Phase 3: Refactor and Enhance Components
 - [ ] Create reusable button classes

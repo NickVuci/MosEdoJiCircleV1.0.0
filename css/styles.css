@@ -12,6 +12,7 @@
 }
 /* ================= Custom Properties ================= */
 :root {
+    /* Color variables */
     --background-color: #ffffff;
     --text-color: #000000;
     --control-background: #f0f0f0;
@@ -24,9 +25,23 @@
     --button-background: #e0e0e0;
     --button-text-color: #000000;
     --button-hover-background: #cccccc;
+    
+    /* Spacing variables */
+    --space-xxs: 2px;
+    --space-xs: 4px; 
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    
+    /* Border radius variables */
+    --border-radius-sm: 3px;
+    --border-radius-md: 5px;
+    --border-radius-lg: 8px;
 } 
 
 .dark-mode {
+    /* Color variables */
     --background-color: #121212;
     --text-color: #e0e0e0;
     --control-background: #1e1e1e;
@@ -39,6 +54,8 @@
     --button-background: #333333;
     --button-text-color: #ffffff;
     --button-hover-background: #444444;
+    
+    /* Dark mode specific values remain unchanged as spacing is theme-independent */
 } 
 
 /* ================= Global Styles ================= */
@@ -72,8 +89,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding: 8px;
-    gap: 8px;
+    padding: var(--space-sm);
+    gap: var(--space-sm);
     box-sizing: border-box;
     z-index: 2;
     overflow-y: auto;
@@ -86,8 +103,8 @@ body {
 /* ================= Control Module Styles ================= */
 .control-module {
     border: 1px solid var(--module-border);
-    border-radius: 5px;
-    padding: 12px 14px;
+    border-radius: var(--border-radius-md);
+    padding: var(--space-md);
     box-sizing: border-box;
     background-color: var(--background-color);
     flex: 0 0 auto;
@@ -105,8 +122,8 @@ body {
 #edo-controls label,
 #prime-checkboxes label {
     display: inline-block;
-    margin-top: 4px;
-    margin-bottom: 4px;
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-xs);
 }
 
 .control-module input[type="number"],
@@ -114,14 +131,14 @@ body {
 .control-module input[type="text"] {
     width: 100%;
     box-sizing: border-box;
-    margin-bottom: 4px;
-    padding: 5px;
+    margin-bottom: var(--space-xs);
+    padding: var(--space-xs);
     background-color: var(--background-color);
     color: var(--text-color);
     border: 1px solid var(--module-border);
 }
 .control-module input[type="checkbox"] {
-    margin-right: 5px;
+    margin-right: var(--space-xs);
 }
 
 /* Prime checkboxes */
@@ -168,8 +185,8 @@ body {
         position: static;
         top: auto;
         z-index: 2;
-        padding: 8px;
-        gap: 8px;
+        padding: var(--space-sm);
+        gap: var(--space-sm);
         box-sizing: border-box;
     }
     .control-module {
@@ -190,16 +207,16 @@ body {
 
 /* Dark Mode Toggle Button Styles */
 #dark-mode-toggle {
-    margin-bottom: 10px;
+    margin-bottom: var(--space-sm);
 }
 
 #dark-mode-button {
-    padding: 8px 16px;
+    padding: var(--space-sm) var(--space-md);
     font-size: 1em;
     background-color: var(--button-background);
     color: var(--button-text-color);
     border: none;
-    border-radius: 5px;
+    border-radius: var(--border-radius-md);
     cursor: pointer;
 }
 
@@ -213,7 +230,7 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     background-color: var(--control-background);
-    padding: 10px;
+    padding: var(--space-sm);
 }
 
 /* Visualization Section */
@@ -244,9 +261,9 @@ body {
     position: absolute;
     background-color: var(--control-background);
     color: var(--text-color);
-    padding: 5px;
+    padding: var(--space-xs);
     border: 1px solid var(--module-border);
-    border-radius: 3px;
+    border-radius: var(--border-radius-sm);
     pointer-events: none;
 }
 
