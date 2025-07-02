@@ -3,7 +3,7 @@
 import { renderEDO } from './edo.js';
 import { renderJI } from './ji.js';
 import { renderMOS, convertToCents } from './mos.js';
-import { showError, clearError, ensureGroup, clearGroup } from './utils.js';
+import { showError, clearError, ensureGroup, clearGroup, throttleAnimationFrame } from './utils.js';
 
 // Get the visualization container
 const container = document.getElementById('visualization');
@@ -113,22 +113,21 @@ function updateDimensions() {
   centerY = height / 2;
   radius = Math.min(width, height) / 2 - 50;
   
-  // Update the main circle position and size
+  // Update the main circle position and size immediately for smooth resizing
   svg.select('.main-circle')
     .attr('cx', centerX)
     .attr('cy', centerY)
     .attr('r', radius);
     
   // Update all visualizations with new dimensions
+  // During active resizing, this could be too expensive, so we might want to
+  // debounce the full update in a real-world high-complexity visualization
   updateVisualizations();
 }
 
-// Add window resize listener with debounce for performance
-let resizeTimeout;
-window.addEventListener('resize', function() {
-  clearTimeout(resizeTimeout);
-  resizeTimeout = setTimeout(updateDimensions, 250);
-});
+// Add window resize listener using the throttleAnimationFrame utility for smooth resizing
+const throttledUpdateDimensions = throttleAnimationFrame(updateDimensions);
+window.addEventListener('resize', throttledUpdateDimensions);
 
 // Initial rendering
 updateDimensions();

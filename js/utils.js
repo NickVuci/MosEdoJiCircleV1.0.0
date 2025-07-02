@@ -220,3 +220,26 @@ export function ensureGroup(svg, id) {
 export function clearGroup(group) {
   group.selectAll('*').remove();
 }
+
+/**
+ * Creates a throttled function that only invokes the provided function at most once per 
+ * animation frame. Useful for smooth, performance-optimized resize or scroll handlers.
+ * 
+ * @param {Function} func - The function to throttle.
+ * @return {Function} The throttled function.
+ */
+export function throttleAnimationFrame(func) {
+  let scheduled = false;
+  return function() {
+    const context = this;
+    const args = arguments;
+    
+    if (!scheduled) {
+      scheduled = true;
+      requestAnimationFrame(() => {
+        func.apply(context, args);
+        scheduled = false;
+      });
+    }
+  };
+}
