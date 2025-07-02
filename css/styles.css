@@ -101,10 +101,14 @@ body {
     margin-top: 0;
     text-align: center;
 }
-.control-module label {
-    display: block;
+.control-module label,
+#edo-controls label,
+#prime-checkboxes label {
+    display: inline-block;
     margin-top: 10px;
+    margin-bottom: 10px;
 }
+
 .control-module input[type="number"],
 .control-module input[type="range"],
 .control-module input[type="text"] {
@@ -115,17 +119,9 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     border: 1px solid var(--module-border);
-    /* Make sure no input formatting is applied */
 }
 .control-module input[type="checkbox"] {
     margin-right: 5px;
-}
-
-/* EDO checkbox labels - make them inline */
-#edo-controls label {
-    display: inline-block;
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 /* Prime checkboxes */
@@ -133,10 +129,6 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-}
-#prime-checkboxes label {
-    width: 48%;
-    margin-bottom: 5px;
 }
 
 /* MOS Controls */
@@ -258,7 +250,6 @@ body {
 
 .mos-highlight-line {
     stroke: var(--mos-highlight-color);
-/* DUPLICATE: see canonical SVG element styles above */
 }
 
 /* Error styling for invalid inputs */

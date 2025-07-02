@@ -1,88 +1,75 @@
-# CSS: Combine Similar Rules – Survey & Suggestions
+# CSS: Combine Similar Rules – Survey & Suggestions (Updated July 2, 2025)
 
-This document surveys the current CSS for similar or overlapping rules that can be combined, and provides suggestions for further simplification and maintainability.
+This document surveys the current CSS for similar or overlapping rules that can be combined, and provides suggestions for further simplification and maintainability, based on the latest file state.
 
 ---
 
 ## 1. `.control-module` and Related Inputs
-- Multiple `.control-module` blocks (some now marked as DUPLICATE).
-- Related selectors: `.control-module h3`, `.control-module label`, `.control-module input[type="number"], ...`, `.control-module input[type="checkbox"]`.
-- **Suggestion:** Group all `.control-module`-related rules together, and combine input selectors where possible. For example, combine all input types that share the same styles.
+- All `.control-module` rules are now grouped, with only one canonical block.
+- Related selectors: `.control-module h3`, `.control-module label`, `.control-module input[type="number"], ...`, `.control-module input[type="checkbox"]` are already grouped.
+- **Status:** Good. No further combination needed unless you want to merge label styles with other label selectors (see below).
 
 ---
 
 ## 2. Checkbox Label Styles
-- `.control-module label { ... }`
-- `#edo-controls label { ... }`
-- `#prime-checkboxes label { ... }`
-- **Suggestion:** If the label styles are similar, combine them using a comma-separated selector, or use a class for shared styles.
+- `.control-module label { ... }`, `#edo-controls label { ... }`, `#prime-checkboxes label { ... }` remain separate.
+- **Suggestion:** If the label styles are similar, combine them using a comma-separated selector, or use a class for shared styles. Currently, `.control-module label` uses `display: block; margin-top: 10px;`, while `#edo-controls label` and `#prime-checkboxes label` use `display: inline-block;` and have both top and bottom margin. Consider unifying if possible.
 
 ---
 
 ## 3. Range Input Styles
-- `.control-module input[type="range"] { ... }`
-- `#mos-controls input[type="range"] { ... }`
-- **Suggestion:** If the styles are the same, combine these selectors.
+- `.control-module input[type="range"]` is grouped with other input types.
+- `#mos-controls input[type="range"]` is separate but uses the same styles.
+- **Suggestion:** Combine these selectors if the styles are identical.
 
 ---
 
 ## 4. Sidebar and Module Spacing
-- `#sidebar { ... gap: 8px; ... }`
-- `.control-module { ... margin: 0; ... }`
-- Media query overrides for `.control-module` width/margin.
-- **Suggestion:** If spacing is consistent, use a variable for gap and remove redundant margin rules.
+- `#sidebar` uses `gap: 8px;` and `.control-module` uses `margin: 0;`.
+- Media query overrides for `.control-module` width/margin are present.
+- **Status:** Good. Spacing is consistent and uses variables. No redundant margin rules.
 
 ---
 
 ## 5. Tooltip Styles
-- `.tooltip { ... }`
-- `.dark-mode .tooltip { ... }`
-- **Suggestion:** If only a few properties differ in dark mode, use the base `.tooltip` for shared styles and override only the necessary properties in `.dark-mode .tooltip`.
+- `.tooltip { ... }` and `.dark-mode .tooltip { ... }` are separate, with `.dark-mode .tooltip` only overriding color and border.
+- **Suggestion:** This is already optimal for dark mode overrides.
 
 ---
 
 ## 6. SVG Element Styles
-- `.main-circle`, `.edo-line`, `.mos-generator-line`, `.mos-highlight-line`
-- **Suggestion:** If they all use only the `stroke` property, you could use an attribute selector or group them if appropriate.
+- `.main-circle`, `.edo-line`, `.mos-generator-line`, `.mos-highlight-line` are grouped and only use `stroke`.
+- **Status:** Good. No further combination needed unless you want to use an attribute selector.
 
 ---
 
 ## 7. Redundant or Overlapping Input Styles
-- `.control-module input[type="number"], ...`
-- `.control-module input[type="checkbox"]`
-- **Suggestion:** If some properties are shared, combine them, and only override the unique ones.
+- `.control-module input[type="number"], ...` and `.control-module input[type="checkbox"]` are separate, but only the checkbox has a unique property.
+- **Status:** Good. No further combination needed.
 
 ---
 
 ## 8. Label and Heading Margins
-- `.control-module h3 { margin-top: 0; ... }`
-- `.control-module label { margin-top: 10px; ... }`
-- `#edo-controls label { margin-top: 10px; margin-bottom: 10px; ... }`
-- **Suggestion:** If the margin values are the same, combine selectors or use a variable.
+- `.control-module h3 { margin-top: 0; ... }`, `.control-module label { margin-top: 10px; ... }`, `#edo-controls label { margin-top: 10px; margin-bottom: 10px; ... }` remain separate.
+- **Suggestion:** If margin values can be unified, combine selectors or use a variable for margin.
 
 ---
 
-## Example of Combining
+## Example of Combining (if desired)
 ```css
-.control-module input[type="number"],
-.control-module input[type="range"],
-.control-module input[type="text"] {
-    /* shared styles */
-}
-.control-module input[type="checkbox"] {
-    /* only unique styles */
-}
 .control-module label,
 #edo-controls label,
 #prime-checkboxes label {
-    /* shared label styles */
+    /* shared label styles if possible */
+}
+.control-module input[type="range"],
+#mos-controls input[type="range"] {
+    /* shared range input styles if possible */
 }
 ```
 
 ---
 
 ## Next Steps
-- Review all label, input, and module styles for shared properties and combine them.
-- Use CSS variables for all spacing and color values.
-- Group related rules together for clarity.
-- Remove any remaining redundant margin or padding rules.
+- Consider unifying label and range input styles if you want even more consolidation.
+- Otherwise, the file is now well-organized and most similar rules are already combined or grouped.
