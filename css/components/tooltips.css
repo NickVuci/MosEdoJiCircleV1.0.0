@@ -8,12 +8,12 @@
     pointer-events: none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     z-index: 1000;
-    transition: opacity var(--transition-fast) ease-in-out, 
-                transform var(--transition-fast) ease-in-out;
+    transition: opacity 100ms ease-out, 
+                transform 100ms ease-out;
     opacity: 0;
     transform: translateY(3px);
     width: auto;
-    display: inline-block;
+    display: none; /* Start as hidden */
     
     /* Base styles with clamp() for responsive scaling */
     font-size: clamp(var(--font-size-sm), 1vw, var(--font-size-lg));
@@ -29,6 +29,7 @@
 .tooltip.visible {
     opacity: 1;
     transform: translateY(0);
+    display: inline-block !important; /* Force display regardless of other styles */
 }
 
 /* Small screens (mobile) */
