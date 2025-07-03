@@ -542,32 +542,147 @@ export function renderEDO(svg, dimensions) {
 }
 ```
 
+## Breaking Changes and Mitigation Strategies
+
+### Critical Breaking Changes
+
+1. **DOM Selector Breaking Changes**:
+   - All existing `getElementById()` calls will fail when elements move into dynamic module content
+   - **Mitigation**: Create a selector adaptation layer that can find elements within module contexts
+
+2. **CSS Conflicts**:
+   - Existing `.module` CSS classes will conflict with new module system styles
+   - **Mitigation**: Namespace existing classes or progressively enhance them
+
+3. **Event System Conflicts**:
+   - Current direct event listeners may interfere with new module event delegation
+   - **Mitigation**: Implement event system migration plan before module activation
+
+4. **State Loss During Migration**:
+   - Current form values will be lost when moving from static to dynamic modules
+   - **Mitigation**: Implement state capture/restore functionality
+
+### Breaking Change Prevention Code
+
+```javascript
+// Breaking change mitigation utilities
+export class ModuleMigrationHelper {
+  static captureCurrentState() {
+    return {
+      edo: {
+        value: document.getElementById('edo-input')?.value || '12',
+        showLines: document.getElementById('edo-lines')?.checked || true,
+        primeColors: document.getElementById('prime-colors-checkbox')?.checked || false
+      },
+      ji: {
+        selectedPrimes: Array.from(document.querySelectorAll('#prime-checkboxes input:checked'))
+          .map(cb => cb.value),
+        oddLimit: document.getElementById('odd-limit-input')?.value || '15'
+      },
+      mos: {
+        enabled: document.getElementById('mos-toggle')?.checked || false,
+        generator: document.getElementById('mos-generator-input')?.value || '701.955',
+        stacks: document.getElementById('mos-stacks-input')?.value || '6'
+      }
+    };
+  }
+  
+  static restoreStateToModules(state) {
+    // Restore state after modules are created
+    const edoModule = getModuleById('edo');
+    if (edoModule && state.edo) {
+      const edoInput = edoModule.contentElement.querySelector('#edo-input');
+      if (edoInput) edoInput.value = state.edo.value;
+      // ... restore other edo settings
+    }
+    // ... restore ji and mos settings
+  }
+  
+  static createCompatibilitySelectors() {
+    // Create wrapper functions that work with both old and new systems
+    return {
+      getElementById: (id) => {
+        // Try direct lookup first
+        let element = document.getElementById(id);
+        if (element) return element;
+        
+        // Try within module content areas
+        const modules = document.querySelectorAll('.module__content');
+        for (const module of modules) {
+          element = module.querySelector(`#${id}`);
+          if (element) return element;
+        }
+        return null;
+      }
+    };
+  }
+}
+```
+
+### Safe Migration Approach
+
+1. **Phase 0: Pre-Migration Safety**:
+   - Capture current application state
+   - Create DOM selector compatibility layer
+   - Test all existing functionality still works
+
+2. **Phase 1: Parallel Implementation**:
+   - Build new module system alongside existing system
+   - Don't remove old system until new system is fully functional
+   - Use feature flags to toggle between systems
+
+3. **Phase 2: Gradual Migration**:
+   - Migrate one module at a time (start with least complex)
+   - Validate functionality after each module migration
+   - Keep rollback capability at each step
+
+4. **Phase 3: Legacy Cleanup**:
+   - Remove old system only after new system is fully validated
+   - Clean up compatibility layers
+   - Optimize new system
+```
+
 ## Implementation Timeline
 
-### Week 1: Core Structure
-- Create the module system base classes
-- Implement the expand/collapse functionality
-- Update CSS for module styling
-- Create basic module definitions
+### Week 0: Safety and Preparation
+- Complete all items in PreModuleBigEdit checklist
+- Implement state capture/restore utilities
+- Create DOM selector compatibility layer
+- Set up parallel development environment
+- Create comprehensive test plan for existing functionality
 
-### Week 2: Drag and Drop
-- Implement drag-and-drop functionality
-- Integrate with state management
+### Week 1: Core Structure (Non-Breaking)
+- Create the module system base classes (without activating)
+- Implement the expand/collapse functionality (in isolation)
+- Update CSS for module styling (with namespacing to avoid conflicts)
+- Create basic module definitions (without replacing existing system)
+- Test parallel system alongside existing system
+
+### Week 2: Safe Integration
+- Implement one module at a time (start with EDO)
+- Use feature flags to toggle between old and new systems
+- Validate full functionality after each module
+- Implement drag-and-drop functionality (as enhancement only)
 - Add visual feedback for drag operations
 - Ensure keyboard accessibility
 
-### Week 3: Rendering Integration
+### Week 3: Progressive Migration
+- Migrate remaining modules (JI, then MOS)
 - Update rendering system to work with module order
 - Integrate module visibility with expansion state
 - Ensure proper group management in SVG
 - Add proper layer management
+- Keep rollback capability available
 
-### Week 4: Testing and Refinement
-- Test all interactions
-- Fix edge cases
+### Week 4: Testing, Cleanup, and Optimization
+- Comprehensive testing of all interactions
+- Fix edge cases and breaking change regressions
+- Remove old system only after full validation
+- Clean up compatibility layers
 - Optimize drag performance
 - Ensure accessibility compliance
-- Add documentation
+- Add comprehensive documentation
+- Final testing on all target browsers and devices
 
 ## Technical Challenges
 
@@ -586,6 +701,22 @@ export function renderEDO(svg, dimensions) {
 4. **Accessibility**:
    - Ensuring keyboard navigation for module ordering
    - Providing proper ARIA attributes for state changes
+
+5. **Breaking Change Management**:
+   - DOM selector compatibility during migration
+   - CSS class conflicts between old and new systems
+   - Event system conflicts and memory leaks
+   - State preservation during system transition
+
+6. **Cross-Browser Compatibility**:
+   - HTML5 Drag and Drop API limitations on mobile
+   - CSS Grid/Flexbox fallbacks for older browsers
+   - Performance differences across browsers
+
+7. **Error Recovery**:
+   - Handling module system failures gracefully
+   - Providing fallback to static layout if dynamic system fails
+   - Error boundaries for individual module failures
 
 ## Benefits
 
