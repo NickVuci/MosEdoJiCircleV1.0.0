@@ -10,7 +10,10 @@
     border-radius: var(--border-radius-sm);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-normal);
-    transition: all var(--transition-fast) var(--transition-timing-default);
+    /* Change from 'all' to specific properties */
+    transition: 
+        border-color var(--transition-fast) var(--transition-timing-default),
+        box-shadow var(--transition-fast) var(--transition-timing-default);
 }
 
 /* Form Element States */
@@ -64,7 +67,7 @@ input[type="radio"].form-control {
     color: var(--text-color);
     border: 1px solid var(--module-border);
     font-size: var(--font-size-sm);
-    transition: border-color var(--transition-fast) var(--transition-timing-default);
+    /* Remove transition to prevent delay when switching themes */
     border-radius: var(--border-radius-sm);
 }
 
