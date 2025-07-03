@@ -3,8 +3,55 @@
     position: absolute;
     background-color: var(--control-background);
     color: var(--text-color);
-    padding: var(--space-xs);
     border: 1px solid var(--module-border);
     border-radius: var(--border-radius-sm);
     pointer-events: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    transition: opacity var(--transition-fast) ease-in-out, 
+                transform var(--transition-fast) ease-in-out;
+    opacity: 0;
+    transform: translateY(3px);
+    width: auto;
+    display: inline-block;
+    
+    /* Base styles with clamp() for responsive scaling */
+    font-size: clamp(var(--font-size-sm), 1vw, var(--font-size-lg));
+    padding: clamp(var(--space-xs), 0.5vw, var(--space-md));
+    line-height: var(--line-height-tight);
+    
+    /* These will help with sizing relative to content */
+    box-sizing: content-box;
+    white-space: nowrap;
+    max-width: min(90vw, 400px); /* Prevent extremely wide tooltips */
+}
+
+.tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Small screens (mobile) */
+@media (max-width: 480px) {
+    .tooltip {
+        padding: var(--space-sm);
+        font-size: var(--font-size-md);
+        line-height: var(--line-height-tight);
+    }
+}
+
+/* Medium screens (tablets) */
+@media (min-width: 481px) and (max-width: 1024px) {
+    .tooltip {
+        padding: calc(var(--space-xs) + 1px) var(--space-sm);
+        font-size: var(--font-size-md);
+    }
+}
+
+/* Large screens (desktop) */
+@media (min-width: 1025px) {
+    .tooltip {
+        padding: var(--space-sm) var(--space-md);
+        font-size: var(--font-size-lg);
+    }
 }

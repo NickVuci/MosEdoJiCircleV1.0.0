@@ -112,18 +112,47 @@ export function parseInput(value, {
  * @param {function} getText - Callback (d) => string for tooltip HTML/text.
  */
 export function attachTooltipHandlers(selection, getText) {
+  // Keep track of current tooltip target for accessibility
+  let currentId = 0;
+  
   selection
     .on('mouseover', function(event, d) {
-      const tooltip = d3.select('#tooltip');
-      tooltip.style('display', 'block')
-        .html(getText(d));
-      // Position tooltip initially
+      // Generate a unique ID for this element if it doesn't have one
+      if (!this.id) {
+        this.id = `tooltip-trigger-${currentId++}`;
+      }
+      
+      const tooltipId = 'tooltip';
+      const tooltip = d3.select(`#${tooltipId}`);
+      const content = getText(d);
+      
+      // Get container dimensions for responsive sizing calculations
       const visualizationDiv = document.getElementById('visualization');
+      const containerWidth = visualizationDiv.offsetWidth;
+      
+      // Set CSS class based on container size for responsive sizing
+      tooltip.classed('small-screen', containerWidth < 480)
+             .classed('medium-screen', containerWidth >= 480 && containerWidth < 1025)
+             .classed('large-screen', containerWidth >= 1025);
+      
+      // Set content and accessibility attributes
+      tooltip
+        .html(content)
+        .attr('aria-hidden', 'false')
+        .classed('visible', true)
+        .style('display', 'block');
+      
+      // Connect tooltip to triggering element
+      d3.select(this)
+        .attr('aria-describedby', tooltipId);
+      
+      // Position tooltip initially with improved positioning
       const rect = visualizationDiv.getBoundingClientRect();
       const mouseX = event.clientX - rect.left;
       const mouseY = event.clientY - rect.top;
-      tooltip.style('left', `${mouseX + 15}px`)
-        .style('top', `${mouseY + 15}px`);
+      
+      // Calculate position to keep tooltip in view
+      positionTooltip(tooltip.node(), mouseX, mouseY, visualizationDiv);
     })
     .on('mousemove', function(event) {
       const tooltip = d3.select('#tooltip');
@@ -131,12 +160,100 @@ export function attachTooltipHandlers(selection, getText) {
       const rect = visualizationDiv.getBoundingClientRect();
       const mouseX = event.clientX - rect.left;
       const mouseY = event.clientY - rect.top;
-      tooltip.style('left', `${mouseX + 15}px`)
-        .style('top', `${mouseY + 15}px`);
+      
+      // Update position as mouse moves
+      positionTooltip(tooltip.node(), mouseX, mouseY, visualizationDiv);
     })
     .on('mouseout', function() {
-      d3.select('#tooltip').style('display', 'none');
+      const tooltip = d3.select('#tooltip');
+      
+      // Hide tooltip with animation
+      tooltip
+        .classed('visible', false)
+        .attr('aria-hidden', 'true');
+        
+      // Remove connection to element
+      d3.select(this).attr('aria-describedby', null);
+      
+      // Hide completely after animation completes
+      setTimeout(() => {
+        if (!tooltip.classed('visible')) {
+          tooltip.style('display', 'none');
+        }
+      }, 300); // Match the CSS transition duration
+    })
+    
+    // Add touch support
+    .on('touchstart', function(event, d) {
+      // Prevent scrolling on touch
+      event.preventDefault();
+      
+      // Toggle tooltip visibility
+      const isVisible = d3.select('#tooltip').style('display') !== 'none';
+      
+      // Hide all tooltips first
+      d3.select('#tooltip')
+        .classed('visible', false)
+        .attr('aria-hidden', 'true')
+        .style('display', 'none');
+      
+      // If wasn't visible before, show it
+      if (!isVisible) {
+        // Simulate mouseover
+        const mouseEvent = new MouseEvent('mouseover', {
+          clientX: event.touches[0].clientX,
+          clientY: event.touches[0].clientY
+        });
+        this.dispatchEvent(mouseEvent);
+      }
     });
+    
+  /**
+   * Helper function to position tooltip intelligently within viewport
+   * @param {HTMLElement} tooltip - The tooltip DOM element
+   * @param {number} x - Mouse X position
+   * @param {number} y - Mouse Y position
+   * @param {HTMLElement} container - The container element
+   */
+  function positionTooltip(tooltip, x, y, container) {
+    if (!tooltip) return;
+    
+    // Ensure tooltip content is measured after content is set
+    // Set a brief timeout to allow the tooltip content to render
+    setTimeout(() => {
+      const padding = 10;
+      const tooltipWidth = tooltip.offsetWidth;
+      const tooltipHeight = tooltip.offsetHeight;
+      const containerWidth = container.offsetWidth;
+      const containerHeight = container.offsetHeight;
+      
+      // Adjust offset based on screen size - larger screens get larger offsets
+      const baseOffset = Math.max(10, Math.min(20, containerWidth / 100));
+      
+      // Default position with offset based on container size
+      let posX = x + baseOffset;
+      let posY = y + baseOffset;
+      
+      // Adjust if tooltip would extend beyond right edge
+      if (posX + tooltipWidth > containerWidth - padding) {
+        posX = x - tooltipWidth - baseOffset;
+      }
+      
+      // Adjust if tooltip would extend beyond bottom edge
+      if (posY + tooltipHeight > containerHeight - padding) {
+        posY = y - tooltipHeight - baseOffset;
+      }
+      
+      // Ensure tooltip doesn't go off the left or top edges
+      posX = Math.max(padding, posX);
+      posY = Math.max(padding, posY);
+      
+      // Apply position
+      const tooltip$ = d3.select(tooltip);
+      tooltip$.style('left', `${posX}px`)
+              .style('top', `${posY}px`);
+    }, 10); // Brief delay to allow content rendering
+  }
 }
 
 /**
