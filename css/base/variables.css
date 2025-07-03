@@ -35,6 +35,9 @@
     --transition-timing-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     --transition-timing-smooth: cubic-bezier(0.25, 0.1, 0.25, 1.0);
     
+    /* Component-specific transitions */
+    --tooltip-transition-duration: 100ms;   /* Used for both CSS and JS timing */
+    
     /* Typography variables */
     --font-size-xs: 0.75rem;    /* 12px at 16px base */
     --font-size-sm: 0.875rem;   /* 14px at 16px base */

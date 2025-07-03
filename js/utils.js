@@ -108,6 +108,9 @@ export function parseInput(value, {
 
 /**
  * Attach tooltip event handlers to a D3 selection.
+ * Manages tooltip display, positioning, and accessibility for both mouse and touch interactions.
+ * Uses CSS transitions for smooth animations with matching JS timeout durations.
+ * 
  * @param {d3.Selection} selection - The D3 selection (e.g., circles, lines).
  * @param {function} getText - Callback (d) => string for tooltip HTML/text.
  */
@@ -180,7 +183,7 @@ export function attachTooltipHandlers(selection, getText) {
         if (!tooltip.classed('visible')) {
           tooltip.style('display', 'none');
         }
-      }, 300); // Match the CSS transition duration
+      }, 100); // Match --tooltip-transition-duration from CSS
     })
     
     // Add touch support
@@ -189,16 +192,26 @@ export function attachTooltipHandlers(selection, getText) {
       event.preventDefault();
       
       // Toggle tooltip visibility
-      const isVisible = d3.select('#tooltip').style('display') !== 'none';
+      const tooltip = d3.select('#tooltip');
+      const isVisible = tooltip.classed('visible');
       
-      // Hide all tooltips first
-      d3.select('#tooltip')
-        .classed('visible', false)
-        .attr('aria-hidden', 'true')
-        .style('display', 'none');
-      
-      // If wasn't visible before, show it
-      if (!isVisible) {
+      if (isVisible) {
+        // Hide tooltip with animation
+        tooltip
+          .classed('visible', false)
+          .attr('aria-hidden', 'true');
+          
+        // Remove connection to element
+        d3.select(this).attr('aria-describedby', null);
+        
+        // Hide completely after animation completes
+        setTimeout(() => {
+          if (!tooltip.classed('visible')) {
+            tooltip.style('display', 'none');
+          }
+        }, 100); // Match --tooltip-transition-duration from CSS
+      } else {
+        // If wasn't visible before, show it
         // Simulate mouseover
         const mouseEvent = new MouseEvent('mouseover', {
           clientX: event.touches[0].clientX,
@@ -218,41 +231,38 @@ export function attachTooltipHandlers(selection, getText) {
   function positionTooltip(tooltip, x, y, container) {
     if (!tooltip) return;
     
-    // Ensure tooltip content is measured after content is set
-    // Set a brief timeout to allow the tooltip content to render
-    setTimeout(() => {
-      const padding = 10;
-      const tooltipWidth = tooltip.offsetWidth;
-      const tooltipHeight = tooltip.offsetHeight;
-      const containerWidth = container.offsetWidth;
-      const containerHeight = container.offsetHeight;
-      
-      // Adjust offset based on screen size - larger screens get larger offsets
-      const baseOffset = Math.max(10, Math.min(20, containerWidth / 100));
-      
-      // Default position with offset based on container size
-      let posX = x + baseOffset;
-      let posY = y + baseOffset;
-      
-      // Adjust if tooltip would extend beyond right edge
-      if (posX + tooltipWidth > containerWidth - padding) {
-        posX = x - tooltipWidth - baseOffset;
-      }
-      
-      // Adjust if tooltip would extend beyond bottom edge
-      if (posY + tooltipHeight > containerHeight - padding) {
-        posY = y - tooltipHeight - baseOffset;
-      }
-      
-      // Ensure tooltip doesn't go off the left or top edges
-      posX = Math.max(padding, posX);
-      posY = Math.max(padding, posY);
-      
-      // Apply position
-      const tooltip$ = d3.select(tooltip);
-      tooltip$.style('left', `${posX}px`)
-              .style('top', `${posY}px`);
-    }, 10); // Brief delay to allow content rendering
+    // The tooltip is already visible so we can measure it directly
+    const padding = 10;
+    const tooltipWidth = tooltip.offsetWidth;
+    const tooltipHeight = tooltip.offsetHeight;
+    const containerWidth = container.offsetWidth;
+    const containerHeight = container.offsetHeight;
+    
+    // Adjust offset based on screen size - larger screens get larger offsets
+    const baseOffset = Math.max(10, Math.min(20, containerWidth / 100));
+    
+    // Default position with offset based on container size
+    let posX = x + baseOffset;
+    let posY = y + baseOffset;
+    
+    // Adjust if tooltip would extend beyond right edge
+    if (posX + tooltipWidth > containerWidth - padding) {
+      posX = x - tooltipWidth - baseOffset;
+    }
+    
+    // Adjust if tooltip would extend beyond bottom edge
+    if (posY + tooltipHeight > containerHeight - padding) {
+      posY = y - tooltipHeight - baseOffset;
+    }
+    
+    // Ensure tooltip doesn't go off the left or top edges
+    posX = Math.max(padding, posX);
+    posY = Math.max(padding, posY);
+    
+    // Apply position
+    const tooltip$ = d3.select(tooltip);
+    tooltip$.style('left', `${posX}px`)
+            .style('top', `${posY}px`);
   }
 }
 

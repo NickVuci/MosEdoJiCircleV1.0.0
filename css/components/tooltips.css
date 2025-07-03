@@ -1,19 +1,24 @@
 /* Tooltip Styles */
 .tooltip {
+    /* Positioning */
     position: absolute;
+    z-index: 1000;
+    
+    /* Appearance */
     background-color: var(--control-background);
     color: var(--text-color);
     border: 1px solid var(--module-border);
     border-radius: var(--border-radius-sm);
-    pointer-events: none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    transition: opacity 100ms ease-out, 
-                transform 100ms ease-out;
+    
+    /* Animation & Visibility */
+    transition: opacity var(--tooltip-transition-duration) ease-out, 
+                transform var(--tooltip-transition-duration) ease-out;
     opacity: 0;
     transform: translateY(3px);
+    pointer-events: none; /* Allow clicking through tooltips */
     width: auto;
-    display: none; /* Start as hidden */
+    display: none; /* Hidden by default, display:block is set by JS */
     
     /* Base styles with clamp() for responsive scaling */
     font-size: clamp(var(--font-size-sm), 1vw, var(--font-size-lg));
@@ -29,7 +34,7 @@
 .tooltip.visible {
     opacity: 1;
     transform: translateY(0);
-    display: inline-block !important; /* Force display regardless of other styles */
+    display: block; /* Changed from inline-block with !important */
 }
 
 /* Small screens (mobile) */

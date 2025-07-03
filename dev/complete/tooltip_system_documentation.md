@@ -1,20 +1,20 @@
 # Tooltip System Documentation
 
 ## Overview
-The toolt### Responsive Behavior
+The toolt## Responsive Behavior
 
-#### Small Screens (< 480px)
+### Small Screens (< 480px)
 - Larger relative font size for readability
 - Compact padding to preserve space
 - Positioned to avoid edge clipping
 - Show/hide on tap for touch devices
 
-#### Medium Screens (481px - 1024px)
+### Medium Screens (481px - 1024px)
 - Balanced font size and padding
 - Moderate offset from cursor
 - Follow cursor movement with optimized positioning
 
-#### Large Screens (> 1025px)
+### Large Screens (> 1025px)
 - Increased padding and font size
 - Proportionally sized to content
 - Dynamic offset based on screen dimensions
@@ -92,6 +92,19 @@ Dark mode styling is automatically applied when the `.dark-mode` class is presen
 2. Use HTML formatting for better readability (e.g., `<br>` for line breaks)
 3. For complex information, consider linking to more detailed views instead
 4. Test on both desktop and mobile devices
+5. Ensure timing consistency between CSS transitions and JS timeouts
+
+## Technical Details
+
+### Animation and Timing
+- Animation duration is defined in CSS using the `--tooltip-transition-duration` variable (100ms)
+- JavaScript uses the same duration for hiding tooltips after animations
+- This ensures consistent behavior when moving between tooltips
+
+### Positioning Logic
+- Tooltips are positioned relative to the cursor with a smart offset
+- Boundary detection prevents tooltips from extending outside the viewport
+- Offset scales proportionally with screen size for better UX on larger displays
 
 ---
 
