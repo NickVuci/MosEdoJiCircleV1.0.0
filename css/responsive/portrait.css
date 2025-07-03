@@ -10,7 +10,7 @@
         max-width: 100vw;
         min-width: 0;
         height: auto;
-        max-height: 40vh;
+        max-height: 33vh;
         border-right: none;
         border-bottom: 1px solid var(--module-border);
         flex-direction: row;
