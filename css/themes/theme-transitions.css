@@ -1,0 +1,26 @@
+/* Theme transition optimization */
+.theme-transition {
+    transition: background-color var(--transition-medium), 
+                color var(--transition-medium), 
+                border-color var(--transition-medium);
+}
+
+/* Prevent button color transitions during theme change */
+.btn {
+    /* Override the general transition to be more specific */
+    transition: transform var(--transition-fast) var(--transition-timing-default);
+}
+
+.btn:hover {
+    transition: background-color var(--transition-fast) var(--transition-timing-default);
+}
+
+/* Add specific transitions back for active states */
+.btn:active {
+    transition: transform var(--transition-fast) var(--transition-timing-default);
+}
+
+/* Override color and background transitions for dark mode toggle specifically */
+#dark-mode-button {
+    transition: none; /* Remove transitions completely for this button */
+}

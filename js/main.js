@@ -61,10 +61,9 @@ function updateVisualizations() {
     }
 }
 
-// Set default mode to dark mode on page load
-document.body.classList.add('dark-mode');
+// The default mode is now set in the HTML with class="dark-mode" on the body tag
 
-// Set the dark mode button text to 'Light Mode'
+// Set the dark mode button text to match the current mode (Light Mode by default in dark mode)
 const darkModeButton = document.getElementById('dark-mode-button');
 darkModeButton.textContent = 'Light Mode';
 

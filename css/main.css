@@ -21,6 +21,7 @@
 
 /* Themes */
 @import url('themes/dark-mode.css');
+@import url('themes/theme-transitions.css');
 
 /* Responsive */
 @import url('responsive/landscape.css');
