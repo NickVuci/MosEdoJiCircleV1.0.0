@@ -1,1 +1,13 @@
 /* Landscape-specific styles */
+
+@media (min-aspect-ratio: 1.05/1) {
+    #main-wrapper {
+        flex-direction: row-reverse;
+    }
+
+    #sidebar {
+        border-right: none;
+        border-left: 1px solid var(--module-border);
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05);
+    }
+}

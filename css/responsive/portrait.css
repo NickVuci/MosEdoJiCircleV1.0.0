@@ -1,6 +1,6 @@
 @media (max-aspect-ratio: 1.05/1) {
     #main-wrapper {
-        flex-direction: column;
+        flex-direction: column-reverse;
         min-height: 0;
         height: 100vh;
     }
@@ -12,11 +12,13 @@
         height: auto;
         max-height: 33vh;
         border-right: none;
-        border-bottom: 1px solid var(--module-border);
+        border-top: 1px solid var(--module-border);
+        border-bottom: none;
         flex-direction: row;
         overflow-x: auto;
         overflow-y: hidden;
         position: static;
+        bottom: 0;
         top: auto;
         z-index: 2;
         padding: var(--space-sm);
@@ -25,6 +27,7 @@
         scroll-snap-type: x proximity;
         scrollbar-width: thin;
         -webkit-overflow-scrolling: touch;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
     }
     
     .module,
@@ -51,7 +54,7 @@
     #sidebar::after {
         content: "";
         position: absolute;
-        top: 0;
+        bottom: 0;
         right: 0;
         height: 100%;
         width: 20px;
