@@ -1,6 +1,6 @@
 /* ================= RESPONSIVE LAYOUT SYSTEM ================= */
 /* Single source of truth for all layout and responsive behavior */
-/* Mobile-first approach with progressive enhancement */
+/* Mobile-first approach with landscape/portrait adaptive behavior */
 
 /* ===== MOBILE BASE (DEFAULT) ===== */
 /* All base styles optimized for mobile devices */
@@ -102,22 +102,23 @@
 /* Mobile last module margin - removed as no longer needed */
 /* No special margin needed for last module in vertical layout */
 
-/* ===== TABLET ENHANCEMENT ===== */
-/* Progressive enhancement for tablet-sized screens */
-@media (min-width: 768px) {
-    /* Main Layout: Switch to side-by-side */
+/* ===== LANDSCAPE MODE (WIDE SCREENS) ===== */
+/* When aspect ratio is wider than tall - sidebar on RIGHT side */
+@media (min-aspect-ratio: 1.05/1) {
+    /* Main Layout: Switch to side-by-side with sidebar on RIGHT */
     #main-wrapper {
-        flex-direction: row; /* Tablet: side-by-side layout */
+        flex-direction: row-reverse; /* Landscape: sidebar on RIGHT side */
     }
     
-    /* Sidebar: Transition to desktop-like vertical sidebar */
+    /* Sidebar: Vertical layout on the right */
     #sidebar {
         width: var(--sidebar-width-tablet, 250px); /* Use responsive token */
         min-width: 180px;
         max-width: 320px;
         height: 100vh;
         max-height: 100vh;
-        border-right: 1px solid var(--module-border);
+        border-left: 1px solid var(--module-border); /* Left border for right-side sidebar */
+        border-right: none;
         border-top: none;
         border-bottom: none;
         flex-direction: column;
@@ -128,13 +129,13 @@
         bottom: auto;
         scroll-snap-type: none;
         scrollbar-width: auto;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05); /* Left shadow for right-side sidebar */
         gap: var(--module-spacing-tablet, var(--space-sm)); /* Use responsive spacing */
     }
     
-    /* Main Content: Full height on tablet */
+    /* Main Content: Full height in landscape */
     #main-content {
-        height: 100vh; /* Tablet: full viewport height */
+        height: 100vh; /* Landscape: full viewport height */
     }
     
     /* Remove mobile-specific styles */
@@ -147,31 +148,31 @@
         scroll-snap-align: none;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
-    
-    /* Remove mobile scroll indicator - not needed */
-    /* No special indicator needed for tablet vertical layout */
 }
 
-/* ===== DESKTOP ENHANCEMENT ===== */
-/* Additional enhancements for desktop screens */
-@media (min-width: 1024px) {
-    /* Desktop-specific optimizations can go here */
-    /* Currently inherits tablet styles, which work well for desktop */
-}
-
-/* ===== LARGE DESKTOP ENHANCEMENT ===== */
-/* Wide screen optimizations */
-@media (min-width: 1200px) {
-    /* Landscape mode: Sidebar on right for better UX */
+/* ===== PORTRAIT MODE (TALL SCREENS) ===== */
+/* When aspect ratio is taller than wide - keep mobile layout */
+@media (max-aspect-ratio: 1.05/1) {
+    /* Portrait mode keeps mobile layout - controls at bottom */
     #main-wrapper {
-        flex-direction: row-reverse; /* Large desktop: sidebar on right */
+        flex-direction: column-reverse; /* Portrait: controls at bottom */
     }
     
+    /* Sidebar stays at bottom in portrait mode */
+    #sidebar {
+        /* Inherits mobile styles - already defined above */
+        border-top: 1px solid var(--module-border);
+        border-left: none;
+        border-right: none;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+    }
+}
+
+/* ===== LARGE LANDSCAPE SCREENS ===== */
+/* Extra wide screens get larger sidebar */
+@media (min-aspect-ratio: 1.5/1) and (min-width: 1200px) {
     #sidebar {
         width: var(--sidebar-width-large, 320px); /* Use responsive token */
-        border-right: none;
-        border-left: 1px solid var(--module-border);
-        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05);
         gap: var(--space-md); /* Larger spacing for big screens */
     }
 }
@@ -179,8 +180,8 @@
 /* ===== RESPONSIVE MODULE ENHANCEMENTS ===== */
 /* Module-specific responsive behavior */
 
-/* Mobile: Vertical stacking modules */
-@media (max-width: 767px) {
+/* Portrait mode: Vertical stacking modules */
+@media (max-aspect-ratio: 1.05/1) {
     .module,
     .control-module {
         /* Vertical stacking - already handled in base mobile styles */
@@ -188,8 +189,8 @@
     }
 }
 
-/* Tablet+: Vertical stacking modules */
-@media (min-width: 768px) {
+/* Landscape mode: Vertical stacking modules in sidebar */
+@media (min-aspect-ratio: 1.05/1) {
     .module,
     .control-module {
         flex-shrink: 1;
@@ -228,23 +229,12 @@
 }
 
 /* ===== ORIENTATION SPECIFIC ADJUSTMENTS ===== */
-/* Fine-tune for device orientation */
+/* Fine-tune for device orientation and aspect ratio */
 
-/* Portrait phones: Optimize for vertical module layout */
-@media (max-width: 767px) and (orientation: portrait) {
+/* Portrait mode: Optimize for vertical screens */
+@media (max-aspect-ratio: 1.05/1) {
     #sidebar {
-        max-height: 50vh; /* Balanced for portrait */
-    }
-    
-    #main-content {
-        height: 50vh;
-    }
-}
-
-/* Landscape phones: Optimize for wider screens with vertical modules */
-@media (max-width: 767px) and (orientation: landscape) {
-    #sidebar {
-        max-height: 60vh; /* More space for landscape */
+        max-height: 60vh; /* Balanced for portrait mode */
     }
     
     #main-content {
@@ -252,11 +242,32 @@
     }
 }
 
+/* Landscape mode: Optimize for wider screens */
+@media (min-aspect-ratio: 1.05/1) {
+    #sidebar {
+        /* Full height sidebar in landscape */
+        height: 100vh;
+        max-height: 100vh;
+    }
+    
+    #main-content {
+        height: 100vh;
+    }
+}
+
+/* Small landscape screens: Adjust for mobile landscape */
+@media (min-aspect-ratio: 1.05/1) and (max-height: 600px) {
+    #sidebar {
+        min-width: 160px; /* Narrower sidebar for small landscape */
+        width: 200px;
+    }
+}
+
 /* ===== PERFORMANCE OPTIMIZATIONS ===== */
 /* Responsive performance enhancements */
 
-/* Mobile: Lighter shadows and simpler effects */
-@media (max-width: 767px) {
+/* Portrait mode: Lighter shadows and simpler effects */
+@media (max-aspect-ratio: 1.05/1) {
     #sidebar {
         box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
     }
@@ -267,10 +278,10 @@
     }
 }
 
-/* Desktop: Richer shadows and effects */
-@media (min-width: 1024px) {
+/* Landscape mode: Richer shadows and effects */
+@media (min-aspect-ratio: 1.05/1) {
     #sidebar {
-        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1); /* Left shadow for right-side sidebar */
     }
     
     .module,
