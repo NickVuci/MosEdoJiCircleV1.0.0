@@ -38,7 +38,7 @@
 }
 
 /* Small screens (mobile) */
-@media (max-width: 480px) {
+@media (max-width: 767px) {
     .tooltip {
         padding: var(--space-sm);
         font-size: var(--font-size-md);
@@ -47,7 +47,7 @@
 }
 
 /* Medium screens (tablets) */
-@media (min-width: 481px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1023px) {
     .tooltip {
         padding: calc(var(--space-xs) + 1px) var(--space-sm);
         font-size: var(--font-size-md);
@@ -55,7 +55,7 @@
 }
 
 /* Large screens (desktop) */
-@media (min-width: 1025px) {
+@media (min-width: 1024px) {
     .tooltip {
         padding: var(--space-sm) var(--space-md);
         font-size: var(--font-size-lg);

@@ -1,6 +1,6 @@
-/* Landscape-specific styles */
+/* Desktop and tablet landscape-specific styles */
 
-@media (min-aspect-ratio: 1.05/1) {
+@media (min-width: 768px) {
     #main-wrapper {
         flex-direction: row-reverse;
     }

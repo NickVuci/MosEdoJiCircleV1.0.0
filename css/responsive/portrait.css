@@ -1,4 +1,4 @@
-@media (max-aspect-ratio: 1.05/1) {
+@media (max-width: 767px) {
     #main-wrapper {
         flex-direction: column-reverse;
         min-height: 0;
@@ -50,7 +50,7 @@
         height: 100%;
     }
     
-    /* Add a scroll indicator for portrait mode */
+    /* Add a scroll indicator for mobile mode */
     #sidebar::after {
         content: "";
         position: absolute;
