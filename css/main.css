@@ -4,10 +4,8 @@
 @import url('base/variables.css');
 @import url('base/reset.css');
 
-/* Layout */
-@import url('layout/grid.css');
-@import url('layout/sidebar.css');
-@import url('layout/main-content.css');
+/* Layout - Consolidated responsive layout system */
+@import url('layout/responsive-layout.css');
 
 /* Components */
 @import url('components/buttons.css');
@@ -22,7 +20,3 @@
 /* Themes */
 @import url('themes/dark-mode.css');
 @import url('themes/theme-transitions.css');
-
-/* Responsive */
-@import url('responsive/landscape.css');
-@import url('responsive/portrait.css');

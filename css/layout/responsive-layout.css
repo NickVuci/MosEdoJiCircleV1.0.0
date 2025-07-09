@@ -1,0 +1,302 @@
+/* ================= RESPONSIVE LAYOUT SYSTEM ================= */
+/* Single source of truth for all layout and responsive behavior */
+/* Mobile-first approach with progressive enhancement */
+
+/* ===== MOBILE BASE (DEFAULT) ===== */
+/* All base styles optimized for mobile devices */
+
+/* Main Layout Container */
+#main-wrapper {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column-reverse; /* Mobile: controls at bottom */
+    height: 100vh;
+    min-height: 0;
+}
+
+/* Sidebar - Mobile: Horizontal bottom bar */
+#sidebar {
+    /* Mobile-first defaults */
+    width: 100vw;
+    max-width: 100vw;
+    min-width: 0;
+    height: auto;
+    max-height: 33vh;
+    background: var(--control-background);
+    border-right: none;
+    border-top: 1px solid var(--module-border);
+    border-bottom: none;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+    box-sizing: border-box;
+    z-index: 2;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: static;
+    bottom: 0;
+    top: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Main Content Area */
+#main-content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    height: 67vh; /* Mobile: 100vh - 33vh sidebar */
+}
+
+/* Controls Section */
+#controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: var(--control-background);
+    padding: var(--space-sm);
+}
+
+/* Visualization Section */
+#visualization {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex: 1;
+    min-height: 0;
+}
+
+#visualization svg {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+/* Mobile Module Styles */
+.module,
+.control-module {
+    min-width: 200px;
+    max-width: 250px;
+    width: 200px;
+    margin: 0 var(--space-xs);
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile scroll indicator */
+#sidebar::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 20px;
+    background: linear-gradient(to right, transparent, var(--control-background) 80%);
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+/* Mobile last module margin */
+#sidebar .module:last-child,
+#sidebar .control-module:last-child {
+    margin-right: var(--space-md);
+}
+
+/* ===== TABLET ENHANCEMENT ===== */
+/* Progressive enhancement for tablet-sized screens */
+@media (min-width: 768px) {
+    /* Main Layout: Switch to side-by-side */
+    #main-wrapper {
+        flex-direction: row; /* Tablet: side-by-side layout */
+    }
+    
+    /* Sidebar: Transition to desktop-like vertical sidebar */
+    #sidebar {
+        width: 250px;
+        min-width: 180px;
+        max-width: 320px;
+        height: 100vh;
+        max-height: 100vh;
+        border-right: 1px solid var(--module-border);
+        border-top: none;
+        border-bottom: none;
+        flex-direction: column;
+        overflow-x: visible;
+        overflow-y: auto;
+        position: sticky;
+        top: 0;
+        bottom: auto;
+        scroll-snap-type: none;
+        scrollbar-width: auto;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Main Content: Full height on tablet */
+    #main-content {
+        height: 100vh; /* Tablet: full viewport height */
+    }
+    
+    /* Remove mobile-specific styles */
+    .module,
+    .control-module {
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        margin: 0 0 var(--space-sm) 0;
+        scroll-snap-align: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Remove mobile scroll indicator */
+    #sidebar::after {
+        display: none;
+    }
+    
+    /* Reset mobile last module margin */
+    #sidebar .module:last-child,
+    #sidebar .control-module:last-child {
+        margin-right: 0;
+    }
+}
+
+/* ===== DESKTOP ENHANCEMENT ===== */
+/* Additional enhancements for desktop screens */
+@media (min-width: 1024px) {
+    /* Desktop-specific optimizations can go here */
+    /* Currently inherits tablet styles, which work well for desktop */
+}
+
+/* ===== LARGE DESKTOP ENHANCEMENT ===== */
+/* Wide screen optimizations */
+@media (min-width: 1200px) {
+    /* Landscape mode: Sidebar on right for better UX */
+    #main-wrapper {
+        flex-direction: row-reverse; /* Large desktop: sidebar on right */
+    }
+    
+    #sidebar {
+        border-right: none;
+        border-left: 1px solid var(--module-border);
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05);
+    }
+}
+
+/* ===== RESPONSIVE MODULE ENHANCEMENTS ===== */
+/* Module-specific responsive behavior */
+
+/* Mobile: Horizontal scrolling modules */
+@media (max-width: 767px) {
+    /* Ensure modules stay in horizontal layout */
+    .module,
+    .control-module {
+        flex-shrink: 0;
+        scroll-snap-align: start;
+    }
+}
+
+/* Tablet+: Vertical stacking modules */
+@media (min-width: 768px) {
+    .module,
+    .control-module {
+        flex-shrink: 1;
+        scroll-snap-align: none;
+    }
+}
+
+/* ===== ACCESSIBILITY ENHANCEMENTS ===== */
+/* Responsive accessibility improvements */
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    #sidebar {
+        scroll-behavior: auto;
+        -webkit-overflow-scrolling: auto;
+    }
+    
+    .module,
+    .control-module {
+        scroll-snap-align: none;
+    }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+    #sidebar {
+        border-color: var(--text-color);
+        box-shadow: none;
+    }
+    
+    .module,
+    .control-module {
+        border-color: var(--text-color);
+        box-shadow: none;
+    }
+}
+
+/* ===== ORIENTATION SPECIFIC ADJUSTMENTS ===== */
+/* Fine-tune for device orientation */
+
+/* Portrait phones: Optimize for one-handed use */
+@media (max-width: 767px) and (orientation: portrait) {
+    #sidebar {
+        max-height: 35vh; /* Slightly taller for portrait */
+    }
+    
+    #main-content {
+        height: 65vh;
+    }
+}
+
+/* Landscape phones: Optimize for wider screens */
+@media (max-width: 767px) and (orientation: landscape) {
+    #sidebar {
+        max-height: 40vh; /* Taller for landscape */
+    }
+    
+    #main-content {
+        height: 60vh;
+    }
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+/* Responsive performance enhancements */
+
+/* Mobile: Lighter shadows and simpler effects */
+@media (max-width: 767px) {
+    #sidebar {
+        box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .module,
+    .control-module {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Desktop: Richer shadows and effects */
+@media (min-width: 1024px) {
+    #sidebar {
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .module,
+    .control-module {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+}
