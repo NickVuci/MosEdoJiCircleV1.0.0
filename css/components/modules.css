@@ -147,7 +147,7 @@
 /* Touch-friendly interactions for mobile */
 @media (max-width: 767px) {
     .module__header {
-        min-height: 44px; /* iOS minimum touch target */
+        min-height: var(--touch-target-size); /* Responsive touch target */
         padding: var(--space-md);
         background: linear-gradient(135deg, 
             var(--background-color) 0%, 
@@ -187,11 +187,11 @@
         font-weight: bold;
     }
     
-    /* Smooth content transitions */
+    /* Smooth content transitions using responsive timing */
     .module__content {
-        transition: max-height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                    opacity 0.2s ease-out,
-                    padding 0.3s ease-out;
+        transition: max-height var(--transition-slow) cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                    opacity var(--transition-medium) ease-out,
+                    padding var(--transition-slow) ease-out;
     }
     
     /* Collapsed state refinements */

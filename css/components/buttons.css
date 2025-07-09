@@ -63,4 +63,53 @@
     margin-bottom: var(--space-sm);
 }
 
+/* ===== RESPONSIVE BUTTON ENHANCEMENTS ===== */
+/* Touch-friendly button sizes for mobile */
+@media (max-width: 767px) {
+    .btn {
+        min-height: var(--touch-target-size); /* Responsive touch target */
+        padding: var(--space-sm) var(--space-md);
+        font-size: var(--font-size-md);
+        /* Add tap highlight */
+        -webkit-tap-highlight-color: var(--tap-highlight-color);
+    }
+    
+    .btn--small {
+        min-height: calc(var(--touch-target-size) * 0.8); /* Smaller but still accessible */
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--font-size-sm);
+    }
+    
+    .btn--large {
+        min-height: calc(var(--touch-target-size) * 1.2); /* Larger touch target */
+        padding: var(--space-md) var(--space-lg);
+        font-size: var(--font-size-lg);
+    }
+}
+
+/* Tablet optimizations */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .btn {
+        min-height: var(--touch-target-size); /* Still touch-friendly on tablets */
+    }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1024px) {
+    .btn {
+        min-height: var(--touch-target-size); /* Smaller for mouse interaction */
+        transition: all var(--transition-medium) var(--transition-timing-default); /* Smoother animations */
+    }
+    
+    /* Enhanced hover effects for desktop */
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn:active {
+        transform: translateY(0);
+    }
+}
+
 /* Note: The #dark-mode-button will inherit styles from the .btn class */

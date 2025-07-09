@@ -128,3 +128,54 @@ input[type="radio"].form-control {
 .form-message.success {
     color: #00cc66;
 }
+
+/* ===== RESPONSIVE FORM ENHANCEMENTS ===== */
+/* Touch-friendly form controls for mobile */
+@media (max-width: 767px) {
+    .form-control {
+        min-height: var(--touch-target-size); /* Responsive touch target */
+        padding: var(--space-sm);
+        font-size: var(--font-size-md); /* Prevent zoom on iOS */
+        border-radius: var(--border-radius-md);
+        /* Add tap highlight */
+        -webkit-tap-highlight-color: var(--tap-highlight-color);
+    }
+    
+    /* Larger checkboxes and radio buttons for mobile */
+    input[type="checkbox"].form-control,
+    input[type="radio"].form-control {
+        width: 20px;
+        height: 20px;
+        min-height: auto; /* Override default min-height */
+    }
+    
+    /* Range inputs get special treatment */
+    input[type="range"].form-control {
+        min-height: var(--touch-target-size);
+        padding: var(--space-sm) 0;
+    }
+}
+
+/* Tablet optimizations */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .form-control {
+        min-height: var(--touch-target-size); /* Still touch-friendly */
+        font-size: var(--font-size-md);
+    }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1024px) {
+    .form-control {
+        min-height: var(--touch-target-size); /* Smaller for mouse precision */
+        transition: 
+            border-color var(--transition-medium) var(--transition-timing-default),
+            box-shadow var(--transition-medium) var(--transition-timing-default);
+    }
+    
+    /* Enhanced focus states for desktop */
+    .form-control:focus {
+        transform: translateY(-1px);
+        box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
