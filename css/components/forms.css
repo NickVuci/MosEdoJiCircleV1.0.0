@@ -131,7 +131,7 @@ input[type="radio"].form-control {
 
 /* ===== RESPONSIVE FORM ENHANCEMENTS ===== */
 /* Touch-friendly form controls for mobile */
-@media (max-width: 767px) {
+@media (max-aspect-ratio: 1.05/1) {
     .form-control {
         min-height: var(--touch-target-size); /* Responsive touch target */
         padding: var(--space-sm);
@@ -157,7 +157,7 @@ input[type="radio"].form-control {
 }
 
 /* Tablet optimizations */
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-aspect-ratio: 1.05/1) and (max-aspect-ratio: 1.5/1) {
     .form-control {
         min-height: var(--touch-target-size); /* Still touch-friendly */
         font-size: var(--font-size-md);
@@ -165,7 +165,7 @@ input[type="radio"].form-control {
 }
 
 /* Desktop optimizations */
-@media (min-width: 1024px) {
+@media (min-aspect-ratio: 1.5/1) {
     .form-control {
         min-height: var(--touch-target-size); /* Smaller for mouse precision */
         transition: 

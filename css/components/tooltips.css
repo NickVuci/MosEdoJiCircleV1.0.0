@@ -37,8 +37,8 @@
     display: block; /* Changed from inline-block with !important */
 }
 
-/* Small screens (mobile) */
-@media (max-width: 767px) {
+/* Portrait/Mobile screens */
+@media (max-aspect-ratio: 1.05/1) {
     .tooltip {
         padding: var(--space-sm);
         font-size: var(--font-size-md);
@@ -46,16 +46,16 @@
     }
 }
 
-/* Medium screens (tablets) */
-@media (min-width: 768px) and (max-width: 1023px) {
+/* Standard landscape/tablet screens */
+@media (min-aspect-ratio: 1.05/1) and (max-aspect-ratio: 1.5/1) {
     .tooltip {
         padding: calc(var(--space-xs) + 1px) var(--space-sm);
         font-size: var(--font-size-md);
     }
 }
 
-/* Large screens (desktop) */
-@media (min-width: 1024px) {
+/* Wide landscape/desktop screens */
+@media (min-aspect-ratio: 1.5/1) {
     .tooltip {
         padding: var(--space-sm) var(--space-md);
         font-size: var(--font-size-lg);

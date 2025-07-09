@@ -65,7 +65,7 @@
 
 /* ===== RESPONSIVE BUTTON ENHANCEMENTS ===== */
 /* Touch-friendly button sizes for mobile */
-@media (max-width: 767px) {
+@media (max-aspect-ratio: 1.05/1) {
     .btn {
         min-height: var(--touch-target-size); /* Responsive touch target */
         padding: var(--space-sm) var(--space-md);

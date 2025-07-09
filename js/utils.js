@@ -370,3 +370,114 @@ export function throttleAnimationFrame(func) {
     }
   };
 }
+
+/**
+ * Responsive mode detection utility functions
+ * These provide a consistent way to check responsive modes across the codebase
+ */
+
+/**
+ * Check if device is in portrait mode (mobile-like)
+ * @returns {boolean} True if the device is in portrait mode
+ */
+export function isPortraitMode() {
+  return window.matchMedia('(max-aspect-ratio: 1.05/1)').matches;
+}
+
+/**
+ * Check if device is in standard landscape mode (tablet-like)
+ * @returns {boolean} True if the device is in standard landscape mode
+ */
+export function isStandardLandscapeMode() {
+  return window.matchMedia('(min-aspect-ratio: 1.05/1) and (max-aspect-ratio: 1.5/1)').matches;
+}
+
+/**
+ * Check if device is in wide landscape mode (desktop-like)
+ * @returns {boolean} True if the device is in wide landscape mode
+ */
+export function isWideLandscapeMode() {
+  return window.matchMedia('(min-aspect-ratio: 1.5/1)').matches;
+}
+
+/**
+ * Check if device is in extra wide landscape mode (large desktop)
+ * @returns {boolean} True if the device is in extra wide landscape mode
+ */
+export function isExtraWideLandscapeMode() {
+  return window.matchMedia('(min-aspect-ratio: 1.5/1) and (min-width: 1200px)').matches;
+}
+
+/**
+ * Get the current aspect ratio mode
+ * @returns {string} The current mode: 'portrait', 'standardLandscape', or 'wideLandscape'
+ */
+export function getCurrentAspectRatioMode() {
+  if (isPortraitMode()) {
+    return 'portrait';
+  } else if (isWideLandscapeMode()) {
+    return 'wideLandscape';
+  } else {
+    return 'standardLandscape';
+  }
+}
+
+/**
+ * Create a listener for aspect ratio changes
+ * @param {Function} callback - Function to call when aspect ratio changes
+ * @returns {Function} Function to remove the listeners
+ */
+export function onAspectRatioChange(callback) {
+  const portraitMQ = window.matchMedia('(max-aspect-ratio: 1.05/1)');
+  const wideLandscapeMQ = window.matchMedia('(min-aspect-ratio: 1.5/1)');
+  
+  // Current mode (initial)
+  let currentMode = getCurrentAspectRatioMode();
+  
+  // Function to check and update mode
+  const checkMode = () => {
+    let newMode = getCurrentAspectRatioMode();
+                   
+    if (newMode !== currentMode) {
+      const oldMode = currentMode;
+      currentMode = newMode;
+      callback(newMode, oldMode);
+    }
+  };
+  
+  // Set up listeners
+  portraitMQ.addEventListener('change', checkMode);
+  wideLandscapeMQ.addEventListener('change', checkMode);
+  
+  // Fallback for older browsers
+  window.addEventListener('resize', throttleAnimationFrame(checkMode));
+  
+  // Return function to remove listeners
+  return () => {
+    portraitMQ.removeEventListener('change', checkMode);
+    wideLandscapeMQ.removeEventListener('change', checkMode);
+    window.removeEventListener('resize', checkMode);
+  };
+}
+
+/**
+ * Execute a callback with the current aspect ratio mode
+ * @param {Object} callbacks - Object with callback functions for each mode
+ * @param {Function} callbacks.portrait - Function to call in portrait mode
+ * @param {Function} callbacks.standardLandscape - Function to call in standard landscape mode
+ * @param {Function} callbacks.wideLandscape - Function to call in wide landscape mode
+ * @param {Function} callbacks.any - Function to call in any mode (will run after mode-specific callback)
+ */
+export function withAspectRatioMode(callbacks) {
+  const currentMode = getCurrentAspectRatioMode();
+  
+  // Call the mode-specific callback if it exists
+  if (callbacks[currentMode] && typeof callbacks[currentMode] === 'function') {
+    callbacks[currentMode]();
+  }
+  
+  // Call the 'any' callback if it exists
+  if (callbacks.any && typeof callbacks.any === 'function') {
+    callbacks.any(currentMode);
+  }
+}

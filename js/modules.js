@@ -4,7 +4,7 @@
 class ModuleManager {
     constructor() {
         this.modules = [];
-        this.isMobile = window.innerWidth <= 767;
+        this.isMobile = window.matchMedia('(max-aspect-ratio: 1.05/1)').matches;
         this.init();
     }
 
@@ -48,9 +48,9 @@ class ModuleManager {
     }
 
     updateAccordionState() {
-        const isMobile = window.innerWidth <= 767;
+        const isMobile = window.matchMedia('(max-aspect-ratio: 1.05/1)').matches;
         
-        // On mobile, we can optionally start some modules collapsed to save space
+        // In portrait mode, we can optionally start some modules collapsed to save space
         // For now, keep all expanded unless user explicitly collapses them
         this.modules.forEach(moduleData => {
             if (isMobile && moduleData.isCollapsed) {
@@ -112,16 +112,29 @@ class ModuleManager {
     }
 
     handleResponsiveChanges() {
-        // Update accordion behavior on resize
-        window.addEventListener('resize', () => {
+        // Create media query for portrait mode
+        const portraitMQ = window.matchMedia('(max-aspect-ratio: 1.05/1)');
+        
+        // Add listener for aspect ratio changes
+        portraitMQ.addEventListener('change', (e) => {
             const wasMobile = this.isMobile;
-            this.isMobile = window.innerWidth <= 767;
+            this.isMobile = e.matches;
             
             if (wasMobile !== this.isMobile) {
                 this.updateAccordionState();
             }
         });
-    }
+        
+        // Fallback for browsers that don't support addEventListener on matchMedia
+        window.addEventListener('resize', () => {
+            const wasMobile = this.isMobile;
+            this.isMobile = window.matchMedia('(max-aspect-ratio: 1.05/1)').matches;
+            
+            if (wasMobile !== this.isMobile) {
+                this.updateAccordionState();
+            }
+        });
+    }   
 
     bindEventListeners() {
         // Handle click events on module headers

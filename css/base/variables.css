@@ -70,53 +70,47 @@
     --module-spacing-mobile: var(--space-sm);
 }
 
-/* ===== TABLET ENHANCEMENTS ===== */
-/* Progressive enhancement for tablet-sized screens */
-@media (min-width: 768px) {
+/* ===== LANDSCAPE ENHANCEMENTS ===== */
+/* Progressive enhancement for landscape orientation (tablets, desktops) */
+@media (min-aspect-ratio: 1.05/1) {
     :root {
-        /* ===== TABLET SPACING ===== */
-        /* Standard spacing for comfortable tablet use */
+        /* ===== LANDSCAPE SPACING ===== */
+        /* Standard spacing for comfortable landscape use */
         --space-xs: 4px; 
         --space-sm: 8px;
         --space-md: 16px;
         --space-lg: 24px;
         --space-xl: 32px;
         
-        /* ===== TABLET BORDER RADIUS ===== */
-        /* Standard radius for tablet */
+        /* ===== LANDSCAPE BORDER RADIUS ===== */
+        /* Standard radius for landscape */
         --border-radius-sm: 3px;
         --border-radius-md: 5px;
         --border-radius-lg: 8px;
         
-        /* ===== TABLET TYPOGRAPHY ===== */
-        /* Larger text for better tablet readability */
-        --font-size-xxl: 1.5rem;    /* 24px - larger for tablets */
+        /* ===== LANDSCAPE TYPOGRAPHY ===== */
+        /* Larger text for better landscape readability */
+        --font-size-xxl: 1.5rem;    /* 24px - larger for landscape */
         
-        /* ===== TABLET INTERACTION TOKENS ===== */
+        /* ===== LANDSCAPE INTERACTION TOKENS ===== */
         /* Mixed touch/mouse interaction */
-        --touch-target-size: 40px;  /* Slightly smaller for tablets */
+        --touch-target-size: 40px;  /* Slightly smaller for landscape */
         --interactive-area: 44px;
         
-        /* ===== TABLET PERFORMANCE ===== */
-        /* Standard transitions for tablets */
+        /* ===== LANDSCAPE PERFORMANCE ===== */
+        /* Standard transitions for landscape */
         --transition-fast: 150ms;
         --transition-medium: 250ms;
         --transition-slow: 350ms;
         --tooltip-transition-duration: 100ms;
         
-        /* Line heights - standard for tablets */
+        /* Line heights - standard for landscape */
         --line-height-tight: 1.2;
         
-        /* ===== TABLET LAYOUT TOKENS ===== */
+        /* ===== LANDSCAPE LAYOUT TOKENS ===== */
         --sidebar-width-tablet: 250px;
         --module-spacing-tablet: var(--space-sm);
-    }
-}
-
-/* ===== DESKTOP OPTIMIZATIONS ===== */
-/* Enhanced tokens for desktop screens */
-@media (min-width: 1024px) {
-    :root {
+        
         /* ===== DESKTOP INTERACTION TOKENS ===== */
         /* Mouse-optimized interaction */
         --touch-target-size: 32px;  /* Smaller for precise mouse input */
@@ -134,20 +128,20 @@
     }
 }
 
-/* ===== LARGE DESKTOP ENHANCEMENTS ===== */
-/* Premium experience for large screens */
-@media (min-width: 1200px) {
+/* ===== WIDE LANDSCAPE ENHANCEMENTS ===== */
+/* Premium experience for wide landscape screens (larger desktops) */
+@media (min-aspect-ratio: 1.5/1) and (min-width: 1200px) {
     :root {
-        /* ===== LARGE DESKTOP SPACING ===== */
+        /* ===== WIDE LANDSCAPE SPACING ===== */
         /* Generous spacing for large screens */
         --space-lg: 28px;
         --space-xl: 36px;
         
-        /* ===== LARGE DESKTOP TYPOGRAPHY ===== */
+        /* ===== WIDE LANDSCAPE TYPOGRAPHY ===== */
         /* Enhanced typography for large screens */
         --font-size-xxl: 1.625rem;  /* 26px - larger for big screens */
         
-        /* ===== LARGE DESKTOP LAYOUT ===== */
+        /* ===== WIDE LANDSCAPE LAYOUT ===== */
         --sidebar-width-large: 320px;  /* Even wider for large screens */
     }
 }
