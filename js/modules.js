@@ -74,6 +74,9 @@ class ModuleManager {
         moduleData.element.classList.add('module--collapsed');
         moduleData.header.setAttribute('aria-expanded', 'false');
         
+        // Debug: Log the collapse
+        console.log('Collapsing module:', moduleData.element.id || moduleData.element.className);
+        
         // Announce to screen readers
         this.announceStateChange(moduleData, 'collapsed');
     }
@@ -82,6 +85,9 @@ class ModuleManager {
         moduleData.isCollapsed = false;
         moduleData.element.classList.remove('module--collapsed');
         moduleData.header.setAttribute('aria-expanded', 'true');
+        
+        // Debug: Log the expand
+        console.log('Expanding module:', moduleData.element.id || moduleData.element.className);
         
         // Announce to screen readers
         this.announceStateChange(moduleData, 'expanded');

@@ -77,10 +77,38 @@
 
 /* Collapsed content */
 .module--collapsed .module__content {
-    max-height: 0;
-    opacity: 0;
-    padding-top: 0;
+    max-height: 0 !important;
+    opacity: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+    border: none !important;
+    transition: max-height var(--transition-medium) var(--transition-timing-default),
+                opacity var(--transition-fast) var(--transition-timing-default);
+}
+
+/* Ensure all child elements are completely hidden when collapsed */
+.module--collapsed .module__content * {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    max-height: 0 !important;
+}
+
+/* Collapsed module - remove all extra spacing */
+.module--collapsed {
     padding-bottom: 0;
+    min-height: auto;
+    overflow: hidden;
+}
+
+/* Collapsed header - remove bottom margin and border, reset negative margins */
+.module--collapsed .module__header {
+    margin: calc(-1 * var(--space-md)) calc(-1 * var(--space-md)) 0 calc(-1 * var(--space-md));
+    border-bottom: none;
+    border-radius: var(--border-radius-md);
 }
 
 /* Module Footer */
@@ -194,14 +222,16 @@
                     padding var(--transition-slow) ease-out;
     }
     
-    /* Collapsed state refinements */
-    .module--collapsed .module__header {
-        border-bottom: none;
-        border-radius: var(--border-radius-md);
-    }
-    
+    /* Mobile collapsed state - additional refinements */
     .module--collapsed .module__content {
         border-top: none;
+        visibility: hidden;
+        opacity: 0;
+    }
+    
+    .module--collapsed .module__content * {
+        visibility: hidden;
+        opacity: 0;
     }
 }
 
