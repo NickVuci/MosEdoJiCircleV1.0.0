@@ -24,6 +24,19 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    transition: background-color var(--transition-fast) var(--transition-timing-default);
+}
+
+.module__header:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.module__header:focus {
+    outline: 2px solid var(--link-color);
+    outline-offset: -2px;
 }
 
 .module__title {
@@ -34,9 +47,40 @@
     flex-grow: 1;
 }
 
+/* Accordion indicator */
+.module__header::after {
+    content: "▼";
+    position: absolute;
+    right: var(--space-md);
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform var(--transition-fast) var(--transition-timing-default);
+    color: var(--text-color);
+    font-size: var(--font-size-sm);
+    opacity: 0.7;
+}
+
+/* Collapsed state */
+.module--collapsed .module__header::after {
+    transform: translateY(-50%) rotate(-90deg);
+}
+
 /* Module Content */
 .module__content {
     padding: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-medium) var(--transition-timing-default),
+                opacity var(--transition-fast) var(--transition-timing-default);
+    max-height: 1000px; /* Large enough for any content */
+    opacity: 1;
+}
+
+/* Collapsed content */
+.module--collapsed .module__content {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 /* Module Footer */
@@ -97,4 +141,95 @@
     line-height: var(--line-height-tight);
     padding-bottom: var(--space-xs);
     border-bottom: 1px solid var(--module-border);
+}
+
+/* ================= Mobile Accordion Enhancements ================= */
+/* Touch-friendly interactions for mobile */
+@media (max-width: 767px) {
+    .module__header {
+        min-height: 44px; /* iOS minimum touch target */
+        padding: var(--space-md);
+        background: linear-gradient(135deg, 
+            var(--background-color) 0%, 
+            rgba(0, 0, 0, 0.02) 100%);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    .module__header:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease-out;
+    }
+    
+    .module__header:hover {
+        background: linear-gradient(135deg, 
+            rgba(0, 0, 0, 0.02) 0%, 
+            rgba(0, 0, 0, 0.05) 100%);
+    }
+    
+    .module__title {
+        font-size: var(--font-size-md);
+        font-weight: 600;
+        color: var(--text-color);
+    }
+    
+    /* Enhanced accordion indicator for mobile */
+    .module__header::after {
+        font-size: var(--font-size-md);
+        opacity: 0.9;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    
+    /* Smooth content transitions */
+    .module__content {
+        transition: max-height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                    opacity 0.2s ease-out,
+                    padding 0.3s ease-out;
+    }
+    
+    /* Collapsed state refinements */
+    .module--collapsed .module__header {
+        border-bottom: none;
+        border-radius: var(--border-radius-md);
+    }
+    
+    .module--collapsed .module__content {
+        border-top: none;
+    }
+}
+
+/* ================= Accessibility Support ================= */
+/* Screen reader only class for accessibility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus visible for module headers */
+.module__header:focus-visible {
+    outline: 2px solid var(--link-color);
+    outline-offset: -2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .module__header,
+    .module__content,
+    .module__header::after {
+        transition: none;
+    }
 }

@@ -14,31 +14,31 @@
     min-height: 0;
 }
 
-/* Sidebar - Mobile: Horizontal bottom bar */
+/* Sidebar - Mobile: Vertical stacking container */
 #sidebar {
     /* Mobile-first defaults */
     width: 100vw;
     max-width: 100vw;
     min-width: 0;
     height: auto;
-    max-height: 33vh;
+    max-height: 60vh; /* Increased to accommodate vertical stacking */
     background: var(--control-background);
     border-right: none;
     border-top: 1px solid var(--module-border);
     border-bottom: none;
     display: flex;
-    flex-direction: row;
+    flex-direction: column; /* Changed from row to column for vertical stacking */
     align-items: stretch;
     padding: var(--space-sm);
     gap: var(--space-sm);
     box-sizing: border-box;
     z-index: 2;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow-x: hidden; /* Changed from auto to hidden */
+    overflow-y: auto; /* Changed from hidden to auto */
     position: static;
     bottom: 0;
     top: auto;
-    scroll-snap-type: x proximity;
+    scroll-snap-type: y proximity; /* Changed from x to y */
     scrollbar-width: thin;
     -webkit-overflow-scrolling: touch;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
@@ -52,7 +52,7 @@
     min-width: 0;
     min-height: 0;
     overflow: hidden;
-    height: 67vh; /* Mobile: 100vh - 33vh sidebar */
+    height: 40vh; /* Mobile: Adjusted for taller sidebar */
 }
 
 /* Controls Section */
@@ -87,36 +87,20 @@
     max-width: 100%;
 }
 
-/* Mobile Module Styles */
+/* Mobile Module Styles - Vertical stacking instead of horizontal scrolling */
 .module,
 .control-module {
-    min-width: 200px;
-    max-width: 250px;
-    width: 200px;
-    margin: 0 var(--space-xs);
+    width: 100%;
+    margin: 0 0 var(--space-sm) 0;
     flex-shrink: 0;
-    scroll-snap-align: start;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Mobile scroll indicator */
-#sidebar::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    height: 100%;
-    width: 20px;
-    background: linear-gradient(to right, transparent, var(--control-background) 80%);
-    pointer-events: none;
-    opacity: 0.8;
-}
+/* Mobile scroll indicator - removed as no longer needed for vertical layout */
+/* #sidebar::after removed - vertical layout doesn't need horizontal scroll indicator */
 
-/* Mobile last module margin */
-#sidebar .module:last-child,
-#sidebar .control-module:last-child {
-    margin-right: var(--space-md);
-}
+/* Mobile last module margin - removed as no longer needed */
+/* No special margin needed for last module in vertical layout */
 
 /* ===== TABLET ENHANCEMENT ===== */
 /* Progressive enhancement for tablet-sized screens */
@@ -163,16 +147,8 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     
-    /* Remove mobile scroll indicator */
-    #sidebar::after {
-        display: none;
-    }
-    
-    /* Reset mobile last module margin */
-    #sidebar .module:last-child,
-    #sidebar .control-module:last-child {
-        margin-right: 0;
-    }
+    /* Remove mobile scroll indicator - not needed */
+    /* No special indicator needed for tablet vertical layout */
 }
 
 /* ===== DESKTOP ENHANCEMENT ===== */
@@ -200,13 +176,12 @@
 /* ===== RESPONSIVE MODULE ENHANCEMENTS ===== */
 /* Module-specific responsive behavior */
 
-/* Mobile: Horizontal scrolling modules */
+/* Mobile: Vertical stacking modules */
 @media (max-width: 767px) {
-    /* Ensure modules stay in horizontal layout */
     .module,
     .control-module {
-        flex-shrink: 0;
-        scroll-snap-align: start;
+        /* Vertical stacking - already handled in base mobile styles */
+        scroll-snap-align: start; /* For vertical scroll snap */
     }
 }
 
@@ -252,25 +227,25 @@
 /* ===== ORIENTATION SPECIFIC ADJUSTMENTS ===== */
 /* Fine-tune for device orientation */
 
-/* Portrait phones: Optimize for one-handed use */
+/* Portrait phones: Optimize for vertical module layout */
 @media (max-width: 767px) and (orientation: portrait) {
     #sidebar {
-        max-height: 35vh; /* Slightly taller for portrait */
+        max-height: 50vh; /* Balanced for portrait */
     }
     
     #main-content {
-        height: 65vh;
+        height: 50vh;
     }
 }
 
-/* Landscape phones: Optimize for wider screens */
+/* Landscape phones: Optimize for wider screens with vertical modules */
 @media (max-width: 767px) and (orientation: landscape) {
     #sidebar {
-        max-height: 40vh; /* Taller for landscape */
+        max-height: 60vh; /* More space for landscape */
     }
     
     #main-content {
-        height: 60vh;
+        height: 40vh;
     }
 }
 
