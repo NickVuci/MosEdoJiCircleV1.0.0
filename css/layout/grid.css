@@ -2,7 +2,14 @@
 #main-wrapper {
     flex: 1 0 auto;
     display: flex;
-    flex-direction: row;
-    height: 100%;
+    flex-direction: column-reverse; /* Mobile default: controls at bottom */
+    height: 100vh;
     min-height: 0;
+}
+
+/* Desktop enhancement: side-by-side layout */
+@media (min-width: 768px) {
+    #main-wrapper {
+        flex-direction: row; /* Desktop: sidebar on left, content on right */
+    }
 }
