@@ -3,7 +3,18 @@
 import { renderEDO } from './edo.js';
 import { renderJI } from './ji.js';
 import { renderMOS, convertToCents } from './mos.js';
-import { showError, clearError, ensureGroup, clearGroup, throttleAnimationFrame } from './utils.js';
+import { 
+  showError, 
+  clearError, 
+  ensureGroup, 
+  clearGroup, 
+  throttleAnimationFrame,
+  isPortraitMode,
+  isStandardLandscapeMode,
+  isWideLandscapeMode,
+  isExtraWideLandscapeMode,
+  onAspectRatioChange
+} from './utils.js';
 
 // Get the visualization container
 const container = document.getElementById('visualization');
@@ -110,7 +121,25 @@ function updateDimensions() {
   // Recalculate center and radius
   centerX = width / 2;
   centerY = height / 2;
-  radius = Math.min(width, height) / 2 - 50;
+  
+  // Adjust radius based on aspect ratio mode
+  const isPortrait = isPortraitMode();
+  const isWideLandscape = isWideLandscapeMode();
+  
+  // Base radius calculation
+  let radiusBase = Math.min(width, height) / 2;
+  
+  // Apply aspect-ratio specific adjustments
+  if (isPortrait) {
+    // Portrait mode - slightly smaller radius for better mobile fit
+    radius = radiusBase - 40;
+  } else if (isWideLandscape) {
+    // Wide landscape mode - more generous padding for desktop
+    radius = radiusBase - 60;
+  } else {
+    // Standard landscape mode - balanced for tablets
+    radius = radiusBase - 50;
+  }
   
   // Update the main circle position and size immediately for smooth resizing
   svg.select('.main-circle')
@@ -119,12 +148,16 @@ function updateDimensions() {
     .attr('r', radius);
     
   // Update all visualizations with new dimensions
-  // During active resizing, this could be too expensive, so we might want to
-  // debounce the full update in a real-world high-complexity visualization
   updateVisualizations();
 }
 
-// Add window resize listener using the throttleAnimationFrame utility for smooth resizing
+// Add aspect ratio change listener for responsive layout updates
+const removeAspectRatioListener = onAspectRatioChange((newMode, oldMode) => {
+  console.log(`Layout mode changed from ${oldMode} to ${newMode}`);
+  updateDimensions();
+});
+
+// Keep window resize listener for dimension changes that don't affect aspect ratio
 const throttledUpdateDimensions = throttleAnimationFrame(updateDimensions);
 window.addEventListener('resize', throttledUpdateDimensions);
 

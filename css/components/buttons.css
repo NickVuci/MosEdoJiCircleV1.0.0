@@ -87,15 +87,15 @@
     }
 }
 
-/* Tablet optimizations */
-@media (min-width: 768px) and (max-width: 1023px) {
+/* Standard landscape/tablet optimizations */
+@media (min-aspect-ratio: 1.05/1) and (max-aspect-ratio: 1.5/1) {
     .btn {
         min-height: var(--touch-target-size); /* Still touch-friendly on tablets */
     }
 }
 
-/* Desktop optimizations */
-@media (min-width: 1024px) {
+/* Wide landscape/desktop optimizations */
+@media (min-aspect-ratio: 1.5/1) {
     .btn {
         min-height: var(--touch-target-size); /* Smaller for mouse interaction */
         transition: all var(--transition-medium) var(--transition-timing-default); /* Smoother animations */
