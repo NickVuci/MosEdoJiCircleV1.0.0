@@ -65,8 +65,8 @@
     
     /* ===== MOBILE LAYOUT TOKENS ===== */
     /* Mobile-specific layout values */
-    --sidebar-height-mobile: 60vh;
-    --content-height-mobile: 40vh;
+    --sidebar-height-mobile: 320px; /* Fixed height instead of percentage-based */
+    --content-height-mobile: calc(100vh - 320px); /* Calculated from sidebar height */
     --module-spacing-mobile: var(--space-sm);
 }
 
