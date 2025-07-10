@@ -441,6 +441,17 @@ export function onAspectRatioChange(callback) {
     if (newMode !== currentMode) {
       const oldMode = currentMode;
       currentMode = newMode;
+      
+      // Reset sidebar scroll position when layout changes
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) {
+        // Use setTimeout to ensure layout has settled before scrolling
+        setTimeout(() => { 
+          sidebar.scrollTop = 0;
+        }, 10);
+      }
+      
+      // Call the original callback
       callback(newMode, oldMode);
     }
   };
@@ -449,6 +460,15 @@ export function onAspectRatioChange(callback) {
   portraitMQ.addEventListener('change', checkMode);
   wideLandscapeMQ.addEventListener('change', checkMode);
   
+  // Fullscreen change listener
+  document.addEventListener('fullscreenchange', () => {
+    // Reset sidebar scroll position after fullscreen change
+    setTimeout(() => {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) sidebar.scrollTop = 0;
+    }, 100);
+  });
+  
   // Fallback for older browsers
   window.addEventListener('resize', throttleAnimationFrame(checkMode));
   
@@ -456,6 +476,7 @@ export function onAspectRatioChange(callback) {
   return () => {
     portraitMQ.removeEventListener('change', checkMode);
     wideLandscapeMQ.removeEventListener('change', checkMode);
+    document.removeEventListener('fullscreenchange', checkMode);
     window.removeEventListener('resize', checkMode);
   };
 }

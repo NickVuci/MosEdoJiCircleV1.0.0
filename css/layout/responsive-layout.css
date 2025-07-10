@@ -11,6 +11,12 @@
         /* This forces a layout recalculation */
         min-height: 100vh;
     }
+    /* Reset scrolling behavior to prevent UI inconsistencies */
+    #sidebar {
+        scroll-behavior: auto;
+        overflow-anchor: none;
+        contain: paint; /* Improve repaint performance */
+    }
 }
 
 /* ===== MOBILE BASE (DEFAULT) ===== */
@@ -54,6 +60,8 @@
     scrollbar-width: thin;
     -webkit-overflow-scrolling: touch;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+    will-change: transform; /* Optimize for transform changes */
+    contain: content; /* Improve layout performance */
 }
 
 /* Main Content Area */
